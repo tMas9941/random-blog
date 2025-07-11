@@ -19,6 +19,7 @@ const create = async (req, res, next) => {
 			email,
 			password,
 		});
+		if (!newUser) throw HttpError("Error during registration!", 405);
 		res.status(200).json(newUser);
 	} catch (error) {
 		next(error);

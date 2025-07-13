@@ -1,1 +1,32 @@
 @import "tailwindcss";
+
+/* day */
+/* --text: #050d10;
+--background: #f0f6fa;
+--primary: #4da2c7;
+--secondary: #8e9edc;
+--accent: #777fd4; */
+
+/* night
+--text: #eff7fa;
+--background: #050b0f;
+--primary: #388eb2;
+--secondary: #233271;
+--accent: #2b3388; */
+
+@theme static {
+	--color-black: #000;
+	--color-white: #fff;
+
+	--color-text: #050d10;
+	--color-background: #f0f6fa;
+	--color-primary: #4da2c7;
+	--color-secondary: #8e9edc;
+	--color-accent: #777fd4;
+
+	--color-n-text: #eff7fa;
+	--color-n-background: #050b0f;
+	--color-n-primary: #388eb2;
+	--color-n-secondary: #233271;
+	--color-n-accent: #2b3388;
+}

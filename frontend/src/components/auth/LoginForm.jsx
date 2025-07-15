@@ -7,7 +7,7 @@ import { Form, Formik } from "formik";
 import Button from "../buttons/Button.jsx";
 import { Login } from "../../global/userData.js";
 import AuthStatusMsg from "./AuthStatusMsg.jsx";
-import authValidation from "../../validations/AuthValidation.js";
+import loginValidation from "../../validations/loginValidation.js";
 import FormField from "../misc/FormField.jsx";
 
 export default function LoginForm({ close }) {
@@ -17,7 +17,7 @@ export default function LoginForm({ close }) {
 		dispatch({ newState: LOGIN_STATES.FETCH_START });
 
 		try {
-			await authValidation.validate({ username: data.username, password: data.password });
+			// await loginValidation.validate({ username: data.username, password: data.password });
 			const loginData = await Login(data);
 			dispatch({ newState: LOGIN_STATES.FETCH_SUCCESS });
 			setTimeout(() => close(), 600);
@@ -35,7 +35,7 @@ export default function LoginForm({ close }) {
 		<div className="relative text-text min-h-10 min-w-80">
 			<AuthStatusMsg state={state} />
 
-			<Formik initialValues={{ username: "", password: "" }} validationSchema={authValidation} onSubmit={handleSubmit}>
+			<Formik initialValues={{ username: "", password: "" }} validationSchema={loginValidation} onSubmit={handleSubmit}>
 				<Form
 					className={
 						"relative p-3 [&>input]:border [&>input]:border-secondary [&>input]:rounded flex flex-col gap-2 " +

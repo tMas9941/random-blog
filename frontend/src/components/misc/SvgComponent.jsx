@@ -4,14 +4,7 @@ export default function SvgComponent({ name, size = 50 }) {
 	switch (name) {
 		case "success":
 			return (
-				<svg
-					width={size}
-					height={size}
-					viewBox="0 0 512 512"
-					version="1.1"
-					xmlns="http://www.w3.org/2000/svg"
-					xmlns:xlink="http://www.w3.org/1999/xlink"
-				>
+				<svg width={size} height={size} viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
 					<title>success</title>
 					<g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
 						<g id="add-copy" fill="#008c17" transform="translate(42.666667, 42.666667)">

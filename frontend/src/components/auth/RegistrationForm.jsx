@@ -1,17 +1,18 @@
 import React, { useReducer } from "react";
 import { REG_STATES, registrationReducer } from "../../hooks/reducers/regReducer.js";
 import { Registration } from "../../global/userData.js";
+import { Form, Formik } from "formik";
 
 // Components
 import Button from "../buttons/Button";
 import AuthStatusMsg from "./AuthStatusMsg.jsx";
+import FormField from "../misc/FormField.jsx";
+import registrationValidation from "../../validations/registrationValidation.js";
 
 export default function RegistrationForm({ close }) {
 	const [state, dispatch] = useReducer(registrationReducer, REG_STATES.INIT);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		const data = Object.fromEntries(new FormData(e.target).entries());
+	const handleSubmit = async (data) => {
 		dispatch({ newState: REG_STATES.FETCH_START });
 		try {
 			await Registration(data);
@@ -23,10 +24,36 @@ export default function RegistrationForm({ close }) {
 
 		setTimeout(() => dispatch({ newState: REG_STATES.INIT }), 1300);
 	};
-	console.log("render FORM");
+
 	return (
-		<div className="text-text min-h-10 min-w-80 p-3">
-			<form
+		<div className="relative text-text min-h-10 min-w-80 ">
+			<AuthStatusMsg state={state} />
+			<Formik
+				initialValues={{ username: "", email: "", password: "", passwordAgain: "" }}
+				validationSchema={registrationValidation}
+				onSubmit={handleSubmit}
+			>
+				<Form
+					className={
+						"relative p-3 [&>input]:border [&>input]:border-secondary [&>input]:rounded flex flex-col gap-2 " +
+						(state.lockForm && " [&>div]:opacity-0 pointer-events-none")
+					}
+				>
+					<h2 className="text-4xl font-bold mb-5">Registration</h2>
+					<FormField name="username" type="text" />
+					<FormField name="email" type="text" />
+					<FormField name="password" type="password" />
+					<FormField text="password again" name="passwordAgain" type="password" />
+					<Button
+						disabled={state.lockForm}
+						text={"Create account"}
+						type={"submit"}
+						className={"mt-5 min-h-10 bg-primary text-n-text rounded"}
+					></Button>
+				</Form>
+			</Formik>
+
+			{/* <form
 				className={
 					"relative [&>input]:border [&>input]:border-secondary [&>input]:rounded flex flex-col gap-2 " +
 					(state.lockForm && " [&>input]:opacity-0 [&>label]:opacity-0 [&>div]:opacity-100 pointer-events-none")
@@ -50,7 +77,7 @@ export default function RegistrationForm({ close }) {
 					type={"submit"}
 					className={"mt-5 min-h-10 bg-primary text-n-text rounded"}
 				></Button>
-			</form>
+			</form> */}
 		</div>
 	);
 }

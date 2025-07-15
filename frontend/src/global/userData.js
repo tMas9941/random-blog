@@ -2,7 +2,9 @@ import authService from "../services/auth.service.js";
 import Signal from "../utils/signal.js";
 import { jwtDecode } from "jwt-decode";
 
-export const userSignal = new Signal(localStorage.getItem("user"));
+// localStorage.setItem("user", "");
+
+export const userSignal = new Signal(localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")));
 
 export const Login = async (data) => {
 	// login and get token from backend and decode it
@@ -10,9 +12,11 @@ export const Login = async (data) => {
 		const token = await authService.login(data);
 		const decodedToken = jwtDecode(token);
 		userSignal.changeValue(decodedToken);
-		localStorage.setItem("user", decodedToken);
+		console.log("new user ____________: ", decodedToken);
+		localStorage.setItem("user", JSON.stringify(decodedToken));
 		return decodedToken;
 	} catch (error) {
+		console.log("error");
 		throw error;
 	}
 };
@@ -21,7 +25,6 @@ export const Registration = async (data) => {
 	try {
 		await authService.registration(data);
 		const newUser = await Login(data);
-		console.log("new user  :", newUser);
 		return newUser;
 	} catch (error) {
 		throw error;

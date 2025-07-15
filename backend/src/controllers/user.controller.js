@@ -4,7 +4,7 @@ import HttpError from "../utils/HttpError.js";
 const list = async (req, res, next) => {
 	try {
 		const users = await userService.list();
-		if (!users) throw HttpError("Users not found!", 404);
+		if (!users) throw new HttpError("Users not found!", 404);
 		res.status(200).send(users);
 	} catch (error) {
 		next(error);
@@ -12,14 +12,14 @@ const list = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-	const { name, email, password } = req.body;
+	const { username, email, password } = req.body;
 	try {
 		const newUser = await userService.create({
-			name,
+			username,
 			email,
 			password,
 		});
-		if (!newUser) throw HttpError("Error during registration!", 405);
+		if (!newUser) throw new HttpError("Error during registration!", 405);
 		res.status(200).json(newUser);
 	} catch (error) {
 		next(error);

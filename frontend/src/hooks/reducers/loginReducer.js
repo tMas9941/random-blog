@@ -1,4 +1,4 @@
-export const REG_STATES = {
+export const LOGIN_STATES = {
 	INIT: {
 		lockForm: false,
 		loading: false,
@@ -9,14 +9,13 @@ export const REG_STATES = {
 	FETCH_SUCCESS: {
 		loading: false,
 		fetchStatus: true,
-		message: "Registration successfull!",
+		message: "Successful login!",
 	},
 	FETCH_FAILED: {
 		loading: false,
 		fetchStatus: false,
-		message: "Registration failed!",
 	},
 };
-export const registrationReducer = (state, { newState, addValue }) => {
+export const loginReducer = (state, { newState, addValue }) => {
 	return { ...state, ...newState, ...addValue };
 };

@@ -8,4 +8,5 @@ const list = () => {
 	const list = prisma.post.findMany();
 	return list;
 };
+
 export default { create, list };

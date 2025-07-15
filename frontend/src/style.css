@@ -15,8 +15,10 @@
 --accent: #2b3388; */
 
 @theme static {
-	--color-black: #000;
-	--color-white: #fff;
+	--color-black: #000000;
+	--color-white: #ffffff;
+	--color-success: #008c17;
+	--color-warning: #ff0000;
 
 	--color-text: #050d10;
 	--color-background: #f0f6fa;

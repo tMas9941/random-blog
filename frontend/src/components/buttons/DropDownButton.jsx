@@ -32,6 +32,7 @@ export default function DropDownButton({ text, dropDownComponent }) {
 				</svg>
 			</Button>
 			{
+				// POPUP MENU
 				<div
 					className={`relative z-20 ${
 						showPopup ? "opacity-100 " : "opacity-0 pointer-events-none"

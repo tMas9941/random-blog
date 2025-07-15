@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import HeaderButton from "../buttons/HeaderButton";
 import DropDownButton from "../buttons/DropDownButton";
 import RegistrationForm from "../auth/RegistrationForm";
+import LoginForm from "../auth/LoginForm";
 
 // Signal
 import useSignal from "../../hooks/useSignal";
@@ -33,10 +34,10 @@ export default function Header() {
 				<HeaderButton text={"Forum"} onClick={() => navigate("/forum")} location={location} />
 				<HeaderButton text={"Profile"} onClick={() => navigate("/profile")} location={location} />
 			</div>
-			<Button text={user.username} />
-			<p className="text-white">text supposod to be here :{user.username}</p>
+
 			<div className="relative flex px-3">
-				<DropDownButton text={"login"} dropDownComponent={<RegistrationForm />} />
+				<Button text={user.username} />
+				<DropDownButton text={"log in"} dropDownComponent={<LoginForm />} />
 				<DropDownButton text={"registration"} dropDownComponent={<RegistrationForm />} />
 			</div>
 		</nav>

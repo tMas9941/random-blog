@@ -4,8 +4,7 @@ import { Registration } from "../../global/userData.js";
 
 // Components
 import Button from "../buttons/Button";
-import Loader from "../misc/loader/Loader.jsx";
-import SvgComponent from "../misc/SvgComponent.jsx";
+import AuthStatusMsg from "./AuthStatusMsg.jsx";
 
 export default function RegistrationForm({ close }) {
 	const [state, dispatch] = useReducer(registrationReducer, REG_STATES.INIT);
@@ -19,7 +18,7 @@ export default function RegistrationForm({ close }) {
 			dispatch({ newState: REG_STATES.FETCH_SUCCESS });
 			setTimeout(() => close(), 1100);
 		} catch (error) {
-			dispatch({ newState: REG_STATES.FETCH_FAILED });
+			dispatch({ newState: REG_STATES.FETCH_FAILED, addValue: { message: error.error } });
 		}
 
 		setTimeout(() => dispatch({ newState: REG_STATES.INIT }), 1300);
@@ -35,7 +34,7 @@ export default function RegistrationForm({ close }) {
 				onSubmit={handleSubmit}
 			>
 				<h2 className="text-4xl font-bold mb-5">Registration</h2>
-				<StatusMsg state={state} />
+				<AuthStatusMsg state={state} />
 
 				<label>Username:</label>
 				<input type="text" name="username"></input>
@@ -53,22 +52,5 @@ export default function RegistrationForm({ close }) {
 				></Button>
 			</form>
 		</div>
-	);
-}
-
-function StatusMsg({ state }) {
-	return (
-		state.lockForm && (
-			<>
-				<div className="absolute w-full h-full flex flex-col justify-center items-center">
-					{state.loading ? (
-						<Loader className={"round-loader !text-primary scale-150"}></Loader>
-					) : (
-						<SvgComponent name={state.fetchStatus ? "success" : "failed"} size={150} />
-					)}
-					<p className="text-xl">{state.message}</p>
-				</div>
-			</>
-		)
 	);
 }

@@ -8,6 +8,8 @@ import Home from "./pages/Home.jsx";
 import Forum from "./pages/Posts.jsx";
 import Profile from "./pages/Profile.jsx";
 import AddPost from "./pages/AddPost.jsx";
+// components
+import AuthUser from "./components/misc/auth/AuthUser.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -16,7 +18,7 @@ const router = createBrowserRouter([
 		children: [
 			{ path: "/home", element: <Home /> },
 			{ path: "/posts", element: <Forum /> },
-			{ path: "/posts/add", element: <AddPost /> },
+			{ path: "/posts/add", element: <AuthUser component={<AddPost />} /> },
 			{ path: "/profile", element: <Profile /> },
 		],
 	},

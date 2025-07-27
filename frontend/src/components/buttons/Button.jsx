@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Button({ children, text, className, onClick, type = "button", disabled }) {
+export default function Button({ children, text, className, onClick, type = "button", disabled, title }) {
 	return (
 		<button
 			disabled={disabled}
@@ -11,6 +11,7 @@ export default function Button({ children, text, className, onClick, type = "but
 			} ${className}`}
 			onClick={onClick}
 			type={type}
+			title={title}
 		>
 			{children}
 			{text}

@@ -5,8 +5,9 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 // Routes
 import App from "./App.jsx";
 import Home from "./pages/Home.jsx";
-import Forum from "./pages/Forum.jsx";
+import Forum from "./pages/Posts.jsx";
 import Profile from "./pages/Profile.jsx";
+import AddPost from "./pages/AddPost.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -14,7 +15,8 @@ const router = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ path: "/home", element: <Home /> },
-			{ path: "/forum", element: <Forum /> },
+			{ path: "/posts", element: <Forum /> },
+			{ path: "/posts/add", element: <AddPost /> },
 			{ path: "/profile", element: <Profile /> },
 		],
 	},

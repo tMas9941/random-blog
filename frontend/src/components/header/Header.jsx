@@ -3,22 +3,23 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 // Components
 import HeaderButton from "../buttons/HeaderButton";
-import DropDownButton from "../buttons/DropDownButton";
+import UserMenuButton from "../buttons/UserMenuButton";
 import RegistrationForm from "../auth/RegistrationForm";
 import LoginForm from "../auth/LoginForm";
 
 // Signal
 import useSignal from "../../hooks/useSignal";
-import { userSignal } from "../../global/userData";
+import { Logout, userSignal } from "../../global/userData";
 import Button from "../buttons/Button";
+import PopupWindow from "../popup/PopupWindow";
+import useUserMenu from "../../hooks/useUserMenu";
 
 export default function Header() {
-	const user = useSignal(userSignal, "header");
-	console.log("user HEADER : ", user);
 	const navigate = useNavigate();
 	const location = useLocation();
 	return (
 		<nav className="fixed h-12 bg-text text-n-text w-full flex justify-between items-center gap-1 ">
+			{/* LEFT SIDE */}
 			<div className="flex">
 				<div className="block me-5">
 					<svg height={50} width="70" fill="white" onClick={() => navigate("/home")} className="cursor-pointer">
@@ -31,15 +32,27 @@ export default function Header() {
 					</svg>
 				</div>
 				<HeaderButton text={"Home"} onClick={() => navigate("/home")} location={location} />
-				<HeaderButton text={"Forum"} onClick={() => navigate("/forum")} location={location} />
+				<HeaderButton text={"Posts"} onClick={() => navigate("/posts")} location={location} />
 				<HeaderButton text={"Profile"} onClick={() => navigate("/profile")} location={location} />
 			</div>
-
-			<div className="relative flex px-3">
-				<Button text={user.username} />
-				<DropDownButton text={"log in"} dropDownComponent={<LoginForm />} />
-				<DropDownButton text={"registration"} dropDownComponent={<RegistrationForm />} />
-			</div>
+			{/* RIGHT SIDE */}
+			<UserMenu />
 		</nav>
+	);
+}
+
+function UserMenu() {
+	const user = useSignal(userSignal, "header");
+	const userMenu = useUserMenu();
+
+	return (
+		<div className="relative flex pe-3">
+			{user && <Button text={user?.username} onClick={() => Logout()} />}
+			{!user && <UserMenuButton text={"login"} onClick={userMenu.set} />}
+			{!user && <UserMenuButton text={"registration"} onClick={userMenu.set} />}
+
+			<PopupWindow popupComponent={<LoginForm />} userMenu={userMenu} text={"login"} />
+			<PopupWindow popupComponent={<RegistrationForm />} userMenu={userMenu} text={"registration"} />
+		</div>
 	);
 }

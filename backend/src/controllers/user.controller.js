@@ -11,19 +11,4 @@ const list = async (req, res, next) => {
 	}
 };
 
-const create = async (req, res, next) => {
-	const { username, email, password } = req.body;
-	try {
-		const newUser = await userService.create({
-			username,
-			email,
-			password,
-		});
-		if (!newUser) throw new HttpError("Error during registration!", 405);
-		res.status(200).json(newUser);
-	} catch (error) {
-		next(error);
-	}
-};
-
-export default { list, create };
+export default { list };

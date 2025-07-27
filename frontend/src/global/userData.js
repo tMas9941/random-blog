@@ -10,13 +10,12 @@ export const Login = async (data) => {
 	// login and get token from backend and decode it
 	try {
 		const token = await authService.login(data);
+		console.log("token ? ", token);
 		const decodedToken = jwtDecode(token);
 		userSignal.changeValue(decodedToken);
-		console.log("new user ____________: ", decodedToken);
 		localStorage.setItem("user", JSON.stringify(decodedToken));
 		return decodedToken;
 	} catch (error) {
-		console.log("error");
 		throw error;
 	}
 };
@@ -29,4 +28,11 @@ export const Registration = async (data) => {
 	} catch (error) {
 		throw error;
 	}
+};
+
+export const Logout = () => {
+	console.log("logout ", userSignal.value);
+	userSignal.changeValue(null);
+	localStorage.setItem("user", null);
+	console.log("logout ", userSignal.value);
 };

@@ -10,9 +10,11 @@ const BCRYPT_COST = 12;
 
 const registration = async (req, res, next) => {
 	const { username, email, password } = req.body;
-	console.log(" req.body ", req.body);
-	const hashedPassword = await bcrypt.hash(password, BCRYPT_COST);
+
 	try {
+		if (await userService.findByUsername(username)) throw new HttpError("Username already used!", 403);
+		if (await userService.findByEmail(email)) throw new HttpError("E-mail already used!", 403);
+		const hashedPassword = await bcrypt.hash(password, BCRYPT_COST);
 		const newUser = await userService.create({
 			username,
 			email,

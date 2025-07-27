@@ -6,6 +6,7 @@ const create = ({ authorId, title, content }) => {
 };
 const list = () => {
 	const list = prisma.post.findMany();
+	console.log("lsit  ", list);
 	return list;
 };
 

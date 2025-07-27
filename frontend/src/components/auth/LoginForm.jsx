@@ -13,18 +13,21 @@ import FormField from "../misc/FormField.jsx";
 export default function LoginForm({ close }) {
 	const [state, dispatch] = useReducer(loginReducer, LOGIN_STATES.INIT);
 
-	const handleSubmit = async (data) => {
+	const handleSubmit = async (data, { resetForm }) => {
 		dispatch({ newState: LOGIN_STATES.FETCH_START });
 
 		try {
-			// await loginValidation.validate({ username: data.username, password: data.password });
-			const loginData = await Login(data);
+			await Login(data);
 			dispatch({ newState: LOGIN_STATES.FETCH_SUCCESS });
-			setTimeout(() => close(), 600);
+			setTimeout(() => {
+				close();
+				resetForm();
+			}, 700);
 		} catch (error) {
+			console.log("error : ", error);
 			dispatch({
 				newState: LOGIN_STATES.FETCH_FAILED,
-				addValue: { message: error.error },
+				addValue: { message: error?.message },
 			});
 		}
 

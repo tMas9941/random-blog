@@ -5,6 +5,9 @@ import { jwtDecode } from "jwt-decode";
 // localStorage.setItem("user", "");
 
 export const userSignal = new Signal(localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")));
+export const darkModeSignal = new Signal(
+	(localStorage.getItem("darkMode") && Boolean(JSON.parse(localStorage.getItem("darkMode")))) || false
+);
 
 export const Login = async (data) => {
 	// login and get token from backend and decode it
@@ -35,4 +38,9 @@ export const Logout = () => {
 	userSignal.changeValue(null);
 	localStorage.setItem("user", null);
 	console.log("logout ", userSignal.value);
+};
+
+export const toggleDarkMode = () => {
+	darkModeSignal.changeValue(!darkModeSignal.value);
+	localStorage.setItem("darkMode", darkModeSignal.value);
 };

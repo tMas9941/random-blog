@@ -15,6 +15,7 @@ const create = async (req, res, next) => {
 const list = async (req, res, next) => {
 	try {
 		const list = await postService.list();
+		console.log("lsit  ", list);
 		if (!list) throw new HttpError("Error during post query!", 405);
 		res.status(200).send(list);
 	} catch (error) {

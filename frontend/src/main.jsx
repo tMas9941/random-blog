@@ -7,9 +7,9 @@ import App from "./App.jsx";
 import Home from "./pages/Home.jsx";
 import Forum from "./pages/Posts.jsx";
 import Profile from "./pages/Profile.jsx";
-import AddPost from "./pages/AddPost.jsx";
+import CreatePost from "./pages/CreatePost.jsx";
 // components
-import AuthUser from "./components/misc/auth/AuthUser.jsx";
+import AuthUser from "./components/auth/AuthUser.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
 		children: [
 			{ path: "/home", element: <Home /> },
 			{ path: "/posts", element: <Forum /> },
-			{ path: "/posts/add", element: <AuthUser component={<AddPost />} /> },
+			{ path: "/posts/create", element: <AuthUser component={<CreatePost />} /> },
 			{ path: "/profile", element: <Profile /> },
 		],
 	},

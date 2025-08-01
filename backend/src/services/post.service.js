@@ -5,7 +5,7 @@ const create = ({ authorId, title, content }) => {
 	return newPost;
 };
 const list = () => {
-	const list = prisma.post.findMany();
+	const list = prisma.post.findMany({ include: { author: { select: { username: true } } } });
 	console.log("lsit  ", list);
 	return list;
 };

@@ -24,10 +24,10 @@ const TopSection = () => {
 		<div className="flex justify-between">
 			<h1 className="text-4xl font-bold mb-10">Posts</h1>
 			<ColorButton
-				text={"Add post"}
+				text={"Create post"}
 				disabled={!user}
-				title={!user && "Log-in to add post!"}
-				onClick={() => navigate("/posts/add")}
+				title={user ? "Create new post" : "Log-in to create new post!"}
+				onClick={() => navigate("/posts/create")}
 			/>
 		</div>
 	);

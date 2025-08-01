@@ -1,6 +1,6 @@
 import React from "react";
-import { userSignal } from "../../../global/userData";
-import useSignal from "../../../hooks/useSignal";
+import { userSignal } from "../../global/userData";
+import useSignal from "../../hooks/useSignal";
 
 export default function AuthUser({ component }) {
 	const user = useSignal(userSignal, "authUserComponent");

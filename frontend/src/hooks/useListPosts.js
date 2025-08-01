@@ -14,6 +14,6 @@ export default function useListPost() {
 			})();
 		}
 	}, []);
-	console.log("return  ", list);
+
 	return list;
 }

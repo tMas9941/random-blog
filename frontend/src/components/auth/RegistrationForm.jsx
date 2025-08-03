@@ -5,7 +5,7 @@ import { Form, Formik } from "formik";
 
 // Components
 import Button from "../buttons/Button";
-import AuthStatusMsg from "./AuthStatusMsg.jsx";
+import FormStatusMsg from "./FormStatusMsg.jsx";
 import FormField from "../misc/FormField.jsx";
 import registrationValidation from "../../validations/registrationValidation.js";
 
@@ -29,8 +29,8 @@ export default function RegistrationForm({ close }) {
 	};
 
 	return (
-		<div className="relative text-text min-h-10 min-w-80 ">
-			<AuthStatusMsg state={state} />
+		<div className="relative min-h-10 min-w-80 ">
+			<FormStatusMsg state={state} />
 			<Formik
 				initialValues={{ username: "", email: "", password: "", passwordAgain: "" }}
 				validationSchema={registrationValidation}

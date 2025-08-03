@@ -6,7 +6,7 @@ import { Form, Formik } from "formik";
 // Components
 import Button from "../buttons/Button.jsx";
 import { Login } from "../../global/userData.js";
-import AuthStatusMsg from "./AuthStatusMsg.jsx";
+import FormStatusMsg from "./FormStatusMsg.jsx";
 import loginValidation from "../../validations/loginValidation.js";
 import FormField from "../misc/FormField.jsx";
 
@@ -35,8 +35,8 @@ export default function LoginForm({ close }) {
 	};
 
 	return (
-		<div className="relative text-text min-h-10 min-w-80">
-			<AuthStatusMsg state={state} />
+		<div className="relative bg-inherit text-inherit min-h-10 min-w-80">
+			<FormStatusMsg state={state} />
 
 			<Formik initialValues={{ username: "", password: "" }} validationSchema={loginValidation} onSubmit={handleSubmit}>
 				<Form

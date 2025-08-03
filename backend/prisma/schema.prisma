@@ -15,35 +15,66 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
+model Posts {
     id String @id @default(cuid())
-    authorId String
     title String
     content String
     created DateTime @default(now())
 
-    author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    comments Comment[]
+    authorId String
+    author Users @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    
+    comments Comments[]
+    posts PostTags[] 
+    votes Votes[]
 }
-model User {
+model Users {
     id String @id @default(cuid())
     username String @unique
     email String    @unique
     created DateTime @default(now())
     password String
 
-    posts Post[]
-    comments Comment[]
+    posts Posts[]
+    comments Comments[]
+    
 }
 
-model Comment {
+model Comments {
     id String @id @default(cuid())
-    userId String
-    postId String
     created DateTime @default(now())
+    content String
 
-    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    postId String
+    post Posts @relation(fields: [postId], references: [id], onDelete: Cascade)
+    userId String
+    user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
- 
+    votes Votes[]
+}
+
+model Tags {
+    id String @id @default(cuid())
+    created DateTime @default(now())
+    name String
+    posts PostTags[]  
+}
+
+model PostTags {
+    postId  String  @id
+    tagId  String
+    post   Posts @relation( fields: [postId], references: [id])
+    tag    Tags    @relation( fields: [tagId], references: [id])
+}
+
+model Votes {
+    id String @id @default(cuid())
+    created DateTime @default(now())
+    positive Boolean
+
+    commentId String?
+    votedComment Comments? @relation( fields: [commentId], references: [id])
+
+    postId String?
+    votedPost Posts? @relation( fields: [postId], references: [id])
 }

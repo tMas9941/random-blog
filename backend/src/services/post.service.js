@@ -1,13 +1,12 @@
 import prisma from "../models/prisma-client.js";
 
-const create = ({ authorId, title, content }) => {
-	const newPost = prisma.posts.create({ data: { authorId, title, content } });
-	console.log("create  ", newPost);
+const create = async ({ authorId, title, content }) => {
+	const newPost = await prisma.posts.create({ data: { authorId, title, content } });
 	return newPost;
 };
-const list = () => {
-	const list = prisma.posts.findMany({ include: { author: { select: { username: true } } } });
 
+const list = async () => {
+	const list = await prisma.posts.findMany({ include: { author: { select: { username: true } } } });
 	return list;
 };
 

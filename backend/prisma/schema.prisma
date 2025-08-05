@@ -23,7 +23,7 @@ model Posts {
 
     authorId String
     author Users @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    
+
     comments Comments[]
     posts PostTags[] 
     votes Votes[]
@@ -54,17 +54,18 @@ model Comments {
 }
 
 model Tags {
-    id String @id @default(cuid())
+    name String @id
     created DateTime @default(now())
-    name String
-    posts PostTags[]  
+    posts PostTags[]
 }
 
 model PostTags {
-    postId  String  @id
-    tagId  String
-    post   Posts @relation( fields: [postId], references: [id])
-    tag    Tags    @relation( fields: [tagId], references: [id])
+    postId  String 
+    tagName  String
+    post   Posts @relation( fields: [postId], references: [id] , onDelete: Cascade)
+    tag    Tags @relation( fields: [tagName], references: [name], onDelete: Cascade)
+
+    @@id([postId, tagName])
 }
 
 model Votes {

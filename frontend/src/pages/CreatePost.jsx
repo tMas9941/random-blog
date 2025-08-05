@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useRef } from "react";
 import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +10,8 @@ import postService from "../services/post.service";
 import { userSignal } from "../global/userData";
 import { CREATE_STATES, createPostReducer } from "../hooks/reducers/createPostReducer";
 import FormStatusMsg from "../components/auth/FormStatusMsg";
+import TagBlock from "../components/posts/TagBlock";
+import TagField from "../components/posts/TagField";
 
 export default function CreatePost() {
 	return (
@@ -24,15 +26,23 @@ export default function CreatePost() {
 const TIMEOUT = 2000;
 const CreateForm = () => {
 	const [state, dispatch] = useReducer(createPostReducer, CREATE_STATES.INIT);
+	const tagsRef = useRef([]);
 	const navigate = useNavigate();
-
+	console.log("tags  ", tagsRef.current);
 	const handleSubmit = async (data) => {
+		// detect empty tag container
+		if (tagsRef.current.length === 0) {
+			dispatch({ newState: CREATE_STATES.TAGS_ERROR });
+			return;
+		}
+		// start uploading new post
 		dispatch({ newState: CREATE_STATES.FETCH_START });
 		try {
-			await postService.create({ ...data, userId: userSignal.value.id });
+			await postService.create({ ...data, userId: userSignal.value.id, tags: tagsRef.current });
 			dispatch({ newState: CREATE_STATES.FETCH_SUCCESS });
 			setTimeout(() => {
-				navigate("/posts");
+				// navigate("/posts");
+				dispatch({ newState: CREATE_STATES.INIT });
 			}, TIMEOUT);
 		} catch (error) {
 			dispatch({
@@ -67,7 +77,13 @@ const CreateForm = () => {
 						placeholder={"Share your thoughts..."}
 						className="h-[15em]"
 					/>
-					<FormField name="tags" type="text" />
+					<TagField
+						name="tags"
+						type="text"
+						tagsRef={tagsRef}
+						tagMessage={state.tagMessage}
+						clearMessage={() => dispatch({ newState: CREATE_STATES.INIT })}
+					/>
 					<div className="flex justify-between !opacity-100">
 						<ColorButton
 							disabled={state.lockForm}

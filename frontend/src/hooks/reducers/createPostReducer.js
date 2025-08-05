@@ -1,5 +1,6 @@
 export const CREATE_STATES = {
 	INIT: {
+		tagMessage: null,
 		lockForm: false,
 		loading: false,
 		fetchStatus: null,
@@ -16,6 +17,7 @@ export const CREATE_STATES = {
 		fetchStatus: false,
 		message: "Posting failed!",
 	},
+	TAGS_ERROR: { tagMessage: "Need to add atleast one tag!" },
 };
 export const createPostReducer = (state, { newState, addValue }) => {
 	console.log({ ...state, ...newState, ...addValue });

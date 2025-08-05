@@ -9,7 +9,6 @@ const postValidation = yup.object({
 		.string()
 		.min(MIN_CONTENT, `Minimum ${MIN_CONTENT} characters!`)
 		.required(`Minimum ${MIN_CONTENT} characters!`),
-	tags: yup.string().required(`Required`),
 });
 
 export default postValidation;

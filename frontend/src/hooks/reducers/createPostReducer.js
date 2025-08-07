@@ -20,6 +20,5 @@ export const CREATE_STATES = {
 	TAGS_ERROR: { tagMessage: "Need to add atleast one tag!" },
 };
 export const createPostReducer = (state, { newState, addValue }) => {
-	console.log({ ...state, ...newState, ...addValue });
 	return { ...state, ...newState, ...addValue };
 };

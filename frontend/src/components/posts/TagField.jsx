@@ -3,14 +3,15 @@ import TagBlock from "./TagBlock";
 import { useRef, useState } from "react";
 
 const MAX_TAGS = 5;
-
+const MAX_TAG_LENGTH = 30;
 export default function TagField({ name, text, className = "", tagsRef, tagMessage, clearMessage }) {
 	const [tags, setTags] = useState([...tagsRef.current]);
 	const inputRef = useRef();
 	const handeleInput = (e) => {
 		e.preventDefault();
-
-		if ([",", "#"].some((divider) => e.target.value.includes(divider))) {
+		// e.stopPropagation();
+		console.log("enter handeleInput", e.target.value);
+		if ([",", "#"].some((divider) => e.target.value.includes(divider)) || e.keyCode == 13) {
 			addTag(e);
 			e.target.value = "";
 		}
@@ -18,22 +19,26 @@ export default function TagField({ name, text, className = "", tagsRef, tagMessa
 	};
 
 	const addTag = (event) => {
-		// split tags by "#" and "," , then remove recurring values
-		let newTags = [...event.target.value.split(/[,#]+/)].filter((tag) => tag !== "" && !tags.includes(tag));
+		// split tags by "#" and ","
+		// remove recurring values, limit tag length and tag count
+		let newTags = [...event.target.value.split(/[,#]+/)].filter(
+			(tag, index) =>
+				tag !== "" && !tags.includes(tag) && tags.length + index < MAX_TAGS && tag.length <= MAX_TAG_LENGTH
+		);
 		newTags = [...tags, ...newTags];
 		setTags(newTags);
 		tagsRef.current = newTags;
 		if (newTags.length >= MAX_TAGS) {
 			inputRef.current.hidden = true;
-			event.target.valeu = "";
 		}
 	};
+
 	const removeTag = (tagToRemove) => {
 		const newTags = tags.filter((tag) => tag !== tagToRemove);
 		setTags(newTags);
 		tagsRef.current = newTags;
 		clearMessage();
-		inputRef.current.hidden = false;
+		if (tagsRef.current.length < MAX_TAGS) inputRef.current.hidden = false;
 	};
 
 	return (
@@ -56,7 +61,12 @@ export default function TagField({ name, text, className = "", tagsRef, tagMessa
 					ref={inputRef}
 					type="text"
 					placeholder={"Add new tag..."}
+					onKeyDown={(e) => e.key === "Enter" && handeleInput(e)}
 					onKeyUp={handeleInput}
+					onBlur={(event) => {
+						event.target.value += ",";
+						handeleInput(event);
+					}}
 					className={"text-inherit w-full bg-secondary/10 p-1 !outline-none my-1 text-gray-500 " + +className}
 				/>
 			</div>

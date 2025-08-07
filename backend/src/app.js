@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json } from "express";
 import cors from "cors";
 
 import errorHandler from "./middlewares/error-handler.middleware.js";
@@ -16,7 +16,7 @@ const app = express();
 
 app.use(cors({ origin: FRONTEND_URL }));
 
-app.use(express.json());
+app.use(json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);

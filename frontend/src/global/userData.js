@@ -34,10 +34,8 @@ export const Registration = async (data) => {
 };
 
 export const Logout = () => {
-	console.log("logout ", userSignal.value);
 	userSignal.changeValue(null);
 	localStorage.setItem("user", null);
-	console.log("logout ", userSignal.value);
 };
 
 export const toggleDarkMode = () => {

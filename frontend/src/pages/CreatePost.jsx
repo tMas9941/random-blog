@@ -10,7 +10,7 @@ import postService from "../services/post.service";
 import { userSignal } from "../global/userData";
 import { CREATE_STATES, createPostReducer } from "../hooks/reducers/createPostReducer";
 import FormStatusMsg from "../components/auth/FormStatusMsg";
-import TagBlock from "../components/posts/TagBlock";
+
 import TagField from "../components/posts/TagField";
 
 export default function CreatePost() {
@@ -28,9 +28,10 @@ const CreateForm = () => {
 	const [state, dispatch] = useReducer(createPostReducer, CREATE_STATES.INIT);
 	const tagsRef = useRef([]);
 	const navigate = useNavigate();
-	console.log("tags  ", tagsRef.current);
+
 	const handleSubmit = async (data) => {
 		// detect empty tag container
+		console.log(" HANDLE SUBMIT");
 		if (tagsRef.current.length === 0) {
 			dispatch({ newState: CREATE_STATES.TAGS_ERROR });
 			return;
@@ -61,6 +62,10 @@ const CreateForm = () => {
 			<Formik
 				initialValues={{ title: "", content: "", tags: "" }}
 				validationSchema={postValidation}
+				onKeydown={(e) => {
+					console.log("prevent");
+					return e.preventDefault();
+				}}
 				onSubmit={handleSubmit}
 			>
 				<Form
@@ -91,7 +96,16 @@ const CreateForm = () => {
 							text={"Cancel"}
 							onClick={() => navigate("/posts")}
 						></ColorButton>
-						<ColorButton disabled={state.lockForm} className="mt-5" text={"Publish"} type={"submit"}></ColorButton>
+						<ColorButton
+							disabled={state.lockForm}
+							className="mt-5"
+							text={"Publish"}
+							type={"submit"}
+							onKeydown={(e) => {
+								console.log("prevent");
+								return e.preventDefault();
+							}}
+						></ColorButton>
 					</div>
 				</Form>
 			</Formik>

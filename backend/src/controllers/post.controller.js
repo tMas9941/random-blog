@@ -23,8 +23,10 @@ const create = async (req, res, next) => {
 };
 
 const list = async (req, res, next) => {
+	const { limit, page } = req.query;
+	console.log("limit ", req.query, "req.data: ", req.data, req.params, req.body, req.limit, { limit, page });
 	try {
-		const list = await postService.list();
+		const list = await postService.list({ limit, page });
 		if (!list) throw new HttpError("Error during post query!", 405);
 		res.status(200).send(list);
 	} catch (error) {

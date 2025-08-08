@@ -7,10 +7,10 @@ const MAX_TAG_LENGTH = 30;
 export default function TagField({ name, text, className = "", tagsRef, tagMessage, clearMessage }) {
 	const [tags, setTags] = useState([...tagsRef.current]);
 	const inputRef = useRef();
+
 	const handeleInput = (e) => {
 		e.preventDefault();
-		// e.stopPropagation();
-		console.log("enter handeleInput", e.target.value);
+
 		if ([",", "#"].some((divider) => e.target.value.includes(divider)) || e.keyCode == 13) {
 			addTag(e);
 			e.target.value = "";
@@ -63,10 +63,6 @@ export default function TagField({ name, text, className = "", tagsRef, tagMessa
 					placeholder={"Add new tag..."}
 					onKeyDown={(e) => e.key === "Enter" && handeleInput(e)}
 					onKeyUp={handeleInput}
-					onBlur={(event) => {
-						event.target.value += ",";
-						handeleInput(event);
-					}}
 					className={"text-inherit w-full bg-secondary/10 p-1 !outline-none my-1 text-gray-500 " + +className}
 				/>
 			</div>

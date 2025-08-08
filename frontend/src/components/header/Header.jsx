@@ -10,12 +10,14 @@ import LoginForm from "../auth/LoginForm";
 // Signal
 import useSignal from "../../hooks/useSignal";
 import { Logout, userSignal } from "../../global/userData";
-import Button from "../buttons/Button";
+
 import PopupWindow from "../popup/PopupWindow";
 import useUserMenu from "../../hooks/useUserMenu";
 import DarkModeSwitch from "../buttons/DarkModeSwitch";
 import ColorButton from "../buttons/ColorButton";
 import SvgComponent from "../misc/SvgComponent";
+import DropDownButton from "../buttons/dropdown/DropDownButton";
+import DropDownItem from "../buttons/dropdown/DropDownItem";
 
 export default function Header() {
 	const navigate = useNavigate();
@@ -44,11 +46,16 @@ function UserMenu({ navigate }) {
 	const userMenu = useUserMenu();
 
 	return (
-		<div className="relative flex items-center pe-3 gap-5">
+		<div className="relative h-full flex items-center pe-3 gap-5">
 			{/* TODO add user dropdown button with logout, edit prfile, etc... */}
-			{user && <Button text={user?.username} onClick={() => Logout()} />}
-			{!user && <UserMenuButton text={"login"} onClick={userMenu.set} />}
-			{!user && <UserMenuButton text={"registration"} onClick={userMenu.set} />}
+			{user && (
+				<DropDownButton text={user.username}>
+					<DropDownItem text={"Profile"} />
+					<DropDownItem text={"Log out"} onClick={Logout} />
+				</DropDownButton>
+			)}
+			{!user && <UserMenuButton text={"login"} userMenu={userMenu} />}
+			{!user && <UserMenuButton text={"registration"} userMenu={userMenu} />}
 			<DarkModeSwitch />
 			{user && (
 				<ColorButton onClick={() => navigate("/posts/create")} className="rounded-full">

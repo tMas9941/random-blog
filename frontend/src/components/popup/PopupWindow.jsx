@@ -15,19 +15,19 @@ export default function PopupWindow({ popupComponent, userMenu, text }) {
 	return (
 		<div
 			ref={selfRef}
-			className={`relative z-10 ${
+			className={`absolute z-10 top-0 right-0 ${
 				userMenu.value.active === text ? "opacity-100 " : "opacity-0 pointer-events-none "
 			}  transition-[opacity] duration-100  mt-11`}
 		>
 			{<div style={{ left: left }} className="absolute  border-10 border-transparent border-b-background "></div>}
+
 			<div
-				className={`absolute right-4 p-5 w-fit h-fit mt-[20px] rounded-lg border-1 border-white/30 ${
+				className={`p-5 w-fit h-fit mt-[20px] rounded-lg border-1 border-white/30 ${
 					darkMode ? "bg-n-background text-n-text" : "bg-background text-text"
 				}`}
 			>
 				{/* bind the  close popup  function to the passed component */}
 				{AddExtraProps(popupComponent, { close: userMenu.reset })}
-
 				{/* detect click out of popup */}
 				<div
 					className="fixed -z-1 left-0 top-0 h-full w-full bg-black/30 backdrop-blur-[1px]"

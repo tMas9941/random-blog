@@ -4,20 +4,19 @@ import { useLocation, useNavigate } from "react-router-dom";
 // Components
 import HeaderButton from "../buttons/HeaderButton";
 import UserMenuButton from "../buttons/UserMenuButton";
-import RegistrationForm from "../auth/RegistrationForm";
-import LoginForm from "../auth/LoginForm";
 
 // Signal
 import useSignal from "../../hooks/useSignal";
 import { Logout, userSignal } from "../../global/userData";
 
-import PopupWindow from "../popup/PopupWindow";
 import useUserMenu from "../../hooks/useUserMenu";
 import DarkModeSwitch from "../buttons/DarkModeSwitch";
 import ColorButton from "../buttons/ColorButton";
 import SvgComponent from "../misc/SvgComponent";
-import DropDownButton from "../buttons/dropdown/DropDownButton";
-import DropDownItem from "../buttons/dropdown/DropDownItem";
+import DropDownButton, { DropDownItem } from "../buttons/dropdown/DropDownButton";
+import PopupWindow from "../popup/PopupWindow";
+import RegistrationForm from "../auth/RegistrationForm";
+import LoginForm from "../auth/LoginForm";
 
 export default function Header() {
 	const navigate = useNavigate();
@@ -25,8 +24,8 @@ export default function Header() {
 
 	return (
 		<nav className="z-10 fixed h-13 bg-text text-n-text w-full border-b border-background/40">
-			{/* LEFT SIDE */}
 			<div className="flex h-full max-w-[1500px] px-10 mx-auto flex justify-between items-center gap-1 ">
+				{/* LEFT SIDE */}
 				<div className="flex h-full items-center">
 					<SvgComponent name={"logo"} onClick={() => navigate("/home")} className={"me-10"} />
 
@@ -46,11 +45,10 @@ function UserMenu({ navigate }) {
 	const userMenu = useUserMenu();
 
 	return (
-		<div className="relative h-full flex items-center pe-3 gap-5">
-			{/* TODO add user dropdown button with logout, edit prfile, etc... */}
+		<div className="relative h-full flex items-center pe-3 gap-5 ">
 			{user && (
-				<DropDownButton text={user.username}>
-					<DropDownItem text={"Profile"} />
+				<DropDownButton text={user.username} avatar={true}>
+					<DropDownItem text={"Profile"} onClick={() => navigate("/profile")} />
 					<DropDownItem text={"Log out"} onClick={Logout} />
 				</DropDownButton>
 			)}
@@ -63,8 +61,8 @@ function UserMenu({ navigate }) {
 					<SvgComponent name={"pen"} size={20} className={"ms-3"} />
 				</ColorButton>
 			)}
-			<PopupWindow popupComponent={<LoginForm />} userMenu={userMenu} text={"login"} />
 			<PopupWindow popupComponent={<RegistrationForm />} userMenu={userMenu} text={"registration"} />
+			<PopupWindow popupComponent={<LoginForm />} userMenu={userMenu} text={"login"} />
 		</div>
 	);
 }

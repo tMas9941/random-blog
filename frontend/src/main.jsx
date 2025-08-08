@@ -19,7 +19,7 @@ const router = createBrowserRouter([
 			{ path: "/home", element: <Home /> },
 			{ path: "/posts", element: <Forum /> },
 			{ path: "/posts/create", element: <AuthUser component={<CreatePost />} /> },
-			{ path: "/profile", element: <Profile /> },
+			{ path: "/profile", element: <AuthUser component={<Profile />} /> },
 		],
 	},
 	{

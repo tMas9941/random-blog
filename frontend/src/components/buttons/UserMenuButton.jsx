@@ -1,4 +1,6 @@
 import React, { useRef } from "react";
+
+// Components
 import Button from "./Button";
 import SvgComponent from "../misc/SvgComponent";
 
@@ -11,7 +13,7 @@ export default function UserMenuButton({ text, userMenu }) {
 		userMenu.set({ active: text, pos: svgRef.current.getBoundingClientRect().left });
 	};
 	return (
-		<div id={"DDButton" + text} className="flex flex-col ">
+		<>
 			<Button text={text.toUpperCase()} className={className} onClick={handleClick}>
 				<SvgComponent
 					ref={svgRef}
@@ -20,6 +22,6 @@ export default function UserMenuButton({ text, userMenu }) {
 					className={`${userMenu.value.active === text ? "rotate-270" : "rotate-90"}`}
 				/>
 			</Button>
-		</div>
+		</>
 	);
 }

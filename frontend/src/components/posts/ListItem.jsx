@@ -2,6 +2,7 @@ import React from "react";
 import TagBlock from "./TagBlock";
 
 import convertTimeStringToDate from "../../utils/convertTimeStringToDate";
+import VoteButton from "../vote/VoteButton";
 
 export default function ListItem({ data }) {
 	if (!data) return <></>;
@@ -15,6 +16,9 @@ export default function ListItem({ data }) {
 					{data.tags.map((tag) => (
 						<TagBlock key={tag.tagName} name={tag.tagName} />
 					))}
+				</div>
+				<div>
+					<VoteButton />
 				</div>
 			</div>
 			<div>

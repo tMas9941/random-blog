@@ -36,9 +36,7 @@ const TopSection = () => {
 const CHUNK_SIZE = 6;
 const PostsList = () => {
 	const page = useScrollDetect();
-	// const list = useListPost();
 
-	console.log("RENDER LIST____________________________________________", page);
 	return (
 		<div className="flex flex-col border-y border-accent/50 divide-y-1 divide-accent/50 ">
 			{[...Array(page)].map((i, index) => (

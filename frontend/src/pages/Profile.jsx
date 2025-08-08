@@ -3,6 +3,8 @@ import useSignal from "../hooks/useSignal";
 import { userSignal } from "../global/userData";
 import convertTimeStringToDate from "../utils/convertTimeStringToDate";
 import Avatar from "../components/misc/Avatar";
+import ProfileMenuButton from "../components/profile/ProfileMenuButton";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 export default function Profile() {
 	const user = useSignal(userSignal, "profilePage");
@@ -27,9 +29,9 @@ function ProfileSide({ user }) {
 					<div>
 						<h2 className="text-xl font-bold">{user.username}</h2>
 
-						<p className="font-md">
+						<p className="font-md truncate">
 							{created.date}
-							<span className="text-[gray]"> - {daysDifference} days</span>
+							<span className="text-[gray] "> - {daysDifference} days</span>
 						</p>
 						<p>{user.email}</p>
 					</div>
@@ -40,5 +42,16 @@ function ProfileSide({ user }) {
 }
 
 function ActivitySide({ user }) {
-	return <div>activity</div>;
+	const location = useLocation();
+	const navigate = useNavigate();
+	return (
+		<div className="w-full ">
+			<div className="flex h-12 w-full border-b border-background/40">
+				<ProfileMenuButton text={"posts"} location={location} onClick={() => navigate("/profile/posts")} />
+				<ProfileMenuButton text={"upvotes"} location={location} onClick={() => navigate("/profile/upvotes")} />
+				<ProfileMenuButton text={"comments"} location={location} onClick={() => navigate("/profile/comments")} />
+			</div>
+			<Outlet />
+		</div>
+	);
 }

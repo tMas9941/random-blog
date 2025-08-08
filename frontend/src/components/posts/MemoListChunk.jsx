@@ -4,7 +4,7 @@ import ListItem from "./ListItem";
 import postService from "../../services/post.service";
 import Loader from "../misc/loader/Loader";
 
-const MemoListChunk = memo(function ListChunk({ size = 5, index = 1 }) {
+const MemoListChunk = memo(function ListChunk({ size = 5, index = 1, where }) {
 	const [list, setList] = useState();
 	const loading = useRef(false);
 
@@ -12,7 +12,7 @@ const MemoListChunk = memo(function ListChunk({ size = 5, index = 1 }) {
 		if (!loading.current) {
 			loading.current = true;
 			(async () => {
-				const data = await postService.list({ limit: size, page: index });
+				const data = await postService.list({ limit: size, page: index, where });
 				setList(data);
 			})();
 		}

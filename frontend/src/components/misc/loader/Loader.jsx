@@ -4,5 +4,5 @@ import "./round-loader.css";
 import "./line-loader.css";
 
 export default function Loader({ className }) {
-	return <div className={className}>Loader</div>;
+	return <div className={"h-10 " + className}>Loader</div>;
 }

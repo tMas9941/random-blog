@@ -15,7 +15,7 @@ export default function DropDownButton({ children, text, avatar = false }) {
 		<div className={"w-fit h-full z-10"}>
 			<Button
 				className={`h-full flex gap-2 hover:bg-secondary/30 `}
-				text={avatar ? "" : text}
+				text={!avatar && text}
 				onClick={toggleDropDownMenu}
 			>
 				{/* <SvgComponent name={"singleArrow"} size={20} className={`${toggled ? "rotate-270 " : "rotate-90 "}`} /> */}

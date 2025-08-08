@@ -8,6 +8,11 @@ import Home from "./pages/Home.jsx";
 import Forum from "./pages/Posts.jsx";
 import Profile from "./pages/Profile.jsx";
 import CreatePost from "./pages/CreatePost.jsx";
+// Router Profile
+import ProfilePosts from "./components/profile/ProfilePosts.jsx";
+import ProfileUpvotes from "./components/profile/ProfileUpvotes.jsx";
+import ProfileComments from "./components/profile/ProfileComments.jsx";
+
 // components
 import AuthUser from "./components/auth/AuthUser.jsx";
 
@@ -23,9 +28,9 @@ const router = createBrowserRouter([
 				path: "/profile",
 				element: <AuthUser component={<Profile />} />,
 				children: [
-					{ path: "/profile/posts", element: <Home /> },
-					{ path: "/profile/upvotes", element: <Home /> },
-					{ path: "/profile/comments", element: <Home /> },
+					{ path: "/profile/posts", element: <ProfilePosts /> },
+					{ path: "/profile/upvotes", element: <ProfileUpvotes /> },
+					{ path: "/profile/comments", element: <ProfileComments /> },
 				],
 			},
 		],

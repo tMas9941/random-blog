@@ -23,16 +23,19 @@ const create = async (req, res, next) => {
 };
 
 const list = async (req, res, next) => {
-	let { limit, page, where } = req.query;
-	console.log({ limit, page, where }, req.query);
+	let { limit, page, where, userId } = req.query;
+	console.log({ limit, page, where, userId });
 	if (where) where = JSON.parse(where);
 	try {
-		const list = await postService.list({ limit, page, where });
+		const list = await postService.list({ limit, page, where, userId });
+		console.log("list ", list);
 		if (!list) throw new HttpError("Error during post query!", 405);
 		res.status(200).send(list);
 	} catch (error) {
 		next(error);
 	}
 };
+
+function userLikedPosts(list) {}
 
 export default { create, list };

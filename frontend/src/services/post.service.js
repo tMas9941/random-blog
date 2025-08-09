@@ -1,7 +1,6 @@
 import axiosInstance from "./axios.instance";
 
 const list = async (data) => {
-	console.log("data service  :  ", data);
 	try {
 		const response = await axiosInstance.get("/post/list", { params: data });
 		return response.data;

@@ -7,6 +7,14 @@ import VoteButton from "../vote/VoteButton";
 export default function ListItem({ data }) {
 	if (!data) return <></>;
 	const convertedDate = convertTimeStringToDate(data.created);
+	console.log("ListItem data ", data.votes, data.title, data.id);
+	// let voted = data.votes.find((vote) => {
+	// 	console.log(" vote  ", vote, data.id, " === ", vote.postId);
+	// 	return data.id === vote.postId;
+	// });
+	// console.log("__________________________________voted ", voted);
+	// voted = voted.positive;
+	// console.log("__________________________________voted ", voted);
 	return (
 		<div className="w-full py-5 flex justify-between gap-10">
 			<div>
@@ -18,7 +26,7 @@ export default function ListItem({ data }) {
 					))}
 				</div>
 				<div>
-					<VoteButton />
+					<VoteButton postId={data.id} />
 				</div>
 			</div>
 			<div>

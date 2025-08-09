@@ -3,22 +3,23 @@ import { memo, useEffect, useRef, useState } from "react";
 import ListItem from "./ListItem";
 import postService from "../../services/post.service";
 import Loader from "../misc/loader/Loader";
+import { userSignal } from "../../global/userData";
 
 const MemoListChunk = memo(function ListChunk({ size = 5, index = 1, where }) {
 	const [list, setList] = useState();
 	const loading = useRef(false);
-
+	// TODO remove extra render and fetching
 	useEffect(() => {
 		if (!loading.current) {
 			loading.current = true;
 			(async () => {
-				const data = await postService.list({ limit: size, page: index, where });
+				const data = await postService.list({ limit: size, page: index, where, userId: userSignal.value.id });
 				setList(data);
 			})();
 		}
 		return () => (loading.current = false);
 	}, [index]);
-
+	console.log("RENDER CHUNK ", index);
 	if (!list) return <Loader className={"line-loader mx-auto !text-accent"} />;
 
 	return (

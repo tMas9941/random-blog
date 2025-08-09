@@ -5,11 +5,15 @@ const create = async ({ authorId, title, content }) => {
 	return newPost;
 };
 
-const list = async ({ limit, page, where }) => {
+const list = async ({ limit, page, where, userId }) => {
 	const list = await prisma.posts.findMany({
 		skip: limit && page && (page - 1) * limit,
 		take: limit && Number(limit),
-		include: { author: { select: { username: true } }, tags: { select: { tagName: true } } },
+		include: {
+			author: { select: { username: true } },
+			tags: { select: { tagName: true } },
+			votes: { where: { userId } },
+		},
 		where: where,
 		orderBy: { created: "desc" },
 	});

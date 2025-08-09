@@ -24,9 +24,9 @@ model Posts {
     authorId String
     author Users @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-    comments Comments[]
     tags PostTags[] 
-    votes Votes[]
+    comments Comments[] 
+    votes PostVotes[]
 }
 model Users {
     id String @id @default(cuid())
@@ -37,7 +37,9 @@ model Users {
 
     posts Posts[]
     comments Comments[]
-    
+
+    postVotes PostVotes[]
+    commentVotes CommentVotes[]
 }
 
 model Comments {
@@ -45,13 +47,20 @@ model Comments {
     created DateTime @default(now())
     content String
 
-    postId String
-    post Posts @relation(fields: [postId], references: [id], onDelete: Cascade)
     userId String
     user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    votes Votes[]
+    postId String?
+    post Posts? @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+    commentId String?
+    comment Comments? @relation("CommentOnComment",fields: [commentId], references: [id], onDelete: Cascade)
+
+    votes CommentVotes[]
+    comments Comments[] @relation("CommentOnComment")
 }
+
+
 
 model Tags {
     name String @id
@@ -68,14 +77,29 @@ model PostTags {
     @@id([postId, tagName])
 }
 
-model Votes {
-    id String @id @default(cuid())
+model PostVotes {
     created DateTime @default(now())
     positive Boolean
 
-    commentId String?
-    votedComment Comments? @relation( fields: [commentId], references: [id])
+    userId String
+    user Users @relation( fields: [userId], references: [id],onDelete: Cascade)
 
-    postId String?
-    votedPost Posts? @relation( fields: [postId], references: [id])
+    postId String
+    post Posts @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+   @@id([userId, postId])
+}
+
+model CommentVotes {
+    created DateTime @default(now())
+    positive Boolean
+
+    userId String
+    user Users @relation( fields: [userId], references: [id])
+
+    commentId String
+    comment Comments @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+    @@id([userId, commentId])
+   
 }

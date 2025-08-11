@@ -1,5 +1,11 @@
 import React from "react";
+import PostsList from "../posts/PostsList";
+import { userSignal } from "../../global/userData";
 
 export default function ProfileUpvotes() {
-	return <div>ProfileUpvotes</div>;
+	return (
+		<>
+			<PostsList where={{ votes: { some: { userId: userSignal.value.id } } }} />
+		</>
+	);
 }

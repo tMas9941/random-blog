@@ -28,8 +28,7 @@ const create = async (req, res, next) => {
 const list = async (req, res, next) => {
 	let { limit, page, where, userId = "" } = req.query;
 	if (where) where = JSON.parse(where);
-	const bench = benchmark("list");
-	console.log("ENTER");
+
 	try {
 		const list = await postService.list({ limit, page, where, userId });
 		if (!list) throw new HttpError("Error during post query!", 405);
@@ -39,8 +38,7 @@ const list = async (req, res, next) => {
 				return { ...post, voteResult: await getEvaluatedVoteCount(post.id) };
 			})
 		);
-		console.log("newList ", newList);
-		bench.stop();
+
 		res.status(200).send(newList);
 	} catch (error) {
 		next(error);

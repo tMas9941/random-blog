@@ -4,22 +4,27 @@ import ListItem from "./ListItem";
 import postService from "../../services/post.service";
 import Loader from "../misc/loader/Loader";
 import { userSignal } from "../../global/userData";
+import useSignal from "../../hooks/useSignal";
 
 const MemoListChunk = memo(function ListChunk({ size = 5, index = 1, where }) {
 	const [list, setList] = useState();
+	const user = useSignal(userSignal, "MemoListChunk" + index);
 	const loading = useRef(false);
 	// TODO remove extra render and fetching
+	// TODO fix chunk page wrongly increasing
+
 	useEffect(() => {
+		console.log("useEffect", loading, index);
 		if (!loading.current) {
 			loading.current = true;
 			(async () => {
-				const data = await postService.list({ limit: size, page: index, where, userId: userSignal.value.id });
+				const data = await postService.list({ limit: size, page: index, where, userId: user?.id });
 				setList(data);
 			})();
 		}
 		return () => (loading.current = false);
-	}, [index]);
-	console.log("RENDER CHUNK ", index);
+	}, [index, user]);
+
 	if (!list) return <Loader className={"line-loader mx-auto !text-accent"} />;
 
 	return (

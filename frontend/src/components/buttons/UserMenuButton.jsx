@@ -19,7 +19,7 @@ export default function UserMenuButton({ text, userMenu }) {
 					ref={svgRef}
 					name={"singleArrow"}
 					size={20}
-					className={`${userMenu.value.active === text ? "rotate-270" : "rotate-90"}`}
+					className={`${userMenu.value.active === text ? "rotate-270" : "rotate-90"} fill-n-text`}
 				/>
 			</Button>
 		</>

@@ -2,9 +2,9 @@ import postVoteService, { findVote } from "../services/post-vote.service.js";
 import HttpError from "../utils/HttpError.js";
 
 const create = async (req, res, next) => {
-	const { positive, userId, postId } = req.body;
+	const { vote, userId, postId } = req.body;
 	try {
-		const create = await postVoteService.create({ positive, userId, postId });
+		const create = await postVoteService.create({ vote, userId, postId });
 		if (!create) throw new HttpError("Error during voting!", 405);
 
 		res.status(200).send(create);
@@ -26,9 +26,9 @@ const destroy = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-	const { userId, postId, positive } = req.body;
+	const { vote, userId, postId } = req.body;
 	try {
-		const create = await postVoteService.update({ userId, postId, positive });
+		const create = await postVoteService.update({ vote, userId, postId });
 		if (!create) throw new HttpError("Error during voting!", 405);
 
 		res.status(200).send(create);

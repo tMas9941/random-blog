@@ -68,6 +68,8 @@ model Tags {
     posts PostTags[]
 }
 
+
+
 model PostTags {
     postId  String 
     tagName  String
@@ -79,7 +81,7 @@ model PostTags {
 
 model PostVotes {
     created DateTime @default(now())
-    positive Boolean
+    vote Int
 
     userId String
     user Users @relation( fields: [userId], references: [id],onDelete: Cascade)

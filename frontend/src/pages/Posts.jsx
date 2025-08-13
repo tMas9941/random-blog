@@ -4,8 +4,6 @@ import useSignal from "../hooks/useSignal";
 
 // Components
 import ColorButton from "../components/buttons/ColorButton";
-import { useEffect, useState } from "react";
-import MemoListChunk from "../components/posts/MemoListChunk";
 import PostsList from "../components/posts/PostsList";
 
 export default function Posts() {
@@ -14,7 +12,6 @@ export default function Posts() {
 		<div className="w-full ">
 			<TopSection />
 			<PostsList />
-			{/* <ScrollDetector elementID={"postDiv"} /> */}
 		</div>
 	);
 }

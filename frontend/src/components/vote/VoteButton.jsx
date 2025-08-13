@@ -20,21 +20,19 @@ export default function VoteButton({ postId, vote = 0, voteResult }) {
 	};
 
 	return (
-		<div
-			className={
-				"flex p-0 mt-5 border w-fit border-[gray]/30 bg-secondary/20  items-center rounded overflow-hidden  bg-[red]"
-			}
-		>
+		<div className={"flex p-0 mt-5  w-fit items-center rounded [&>*]:rounded "}>
 			<ButtonComp
 				text={positiveVotes}
 				voteValue={1}
 				changeVoteResult={changeVoteResult}
 				disabled={!userId}
-				className={voted > 0 ? "bg-primary/60" : "bg-primary/25"}
+				activeClass={"fill-primary text-primary"}
+				voted={voted}
 			/>
+			{/* success : 008c17 */}
 			<span
 				style={{ color: `color-mix(in srgb, #ff0000 ${100 - voteRatio}%, #008c17  ${voteRatio}%)` }}
-				className="min-w-17 px-1 text-center text-2xl font-bold [&>span]:font-semibold  brightness-150"
+				className="min-w-10 px-1 text-center text-2xl font-bold [&>span]:font-semibold brightness-150"
 			>
 				{totalVotes > 0 ? Math.floor(voteRatio) : ""}
 				<span className="text-lg"> %</span>
@@ -44,23 +42,26 @@ export default function VoteButton({ postId, vote = 0, voteResult }) {
 				voteValue={-1}
 				changeVoteResult={changeVoteResult}
 				disabled={!userId}
-				className={voted < 0 ? "bg-primary/60" : "bg-primary/25"}
+				activeClass={"fill-secondary text-secondary"}
+				voted={voted}
 			/>
 		</div>
 	);
 }
 
-function ButtonComp({ text, voteValue, changeVoteResult, disabled, className }) {
+function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, activeClass }) {
 	return (
 		<Button
 			disabled={disabled}
 			title={disabled ? "Must login to vote!" : ""}
-			className={"hover:bg-primary hover:text-n-text hover:fill-n-text " + className}
+			className={` text-xl  ${
+				voted === voteValue ? activeClass : "fill-[gray]/10 stroke-[gray]/60 text-[gray]/60 stroke-1"
+			}  [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold`}
 			onClick={() => changeVoteResult(voteValue)}
 		>
-			{voteValue > 0 && <span className="me-2">{`${text}`}</span>}
-			<SvgComponent name={"singleArrow"} size={25} className={voteValue > 0 ? "rotate-90 " : "rotate-270 "} />
-			{voteValue < 0 && <span className="ms-2">{`${text}`}</span>}
+			{voteValue > 0 && <span>{`${text}`}</span>}
+			<SvgComponent name={"nextArrow"} size={35} className={voteValue < 0 && "rotate-180 "} />
+			{voteValue < 0 && <span>{`${text}`}</span>}
 		</Button>
 	);
 }

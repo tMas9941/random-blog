@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MemoListChunk from "./MemoListChunk";
 
-const CHUNK_SIZE = 6;
+const CHUNK_SIZE = 5;
 export default function PostsList({ where }) {
-	const page = useScrollDetect();
+	const chunkContainerRef = useRef();
+	const page = useScrollDetect(chunkContainerRef);
 	return (
-		<div className="flex flex-col border-y border-accent/50 divide-y-1 divide-accent/50 ">
+		<div ref={chunkContainerRef} className="flex flex-col border-y border-accent/50 divide-y-1 divide-accent/50 ">
 			{[...Array(page)].map((none, index) => (
 				<MemoListChunk key={index + 1} index={index + 1} size={CHUNK_SIZE} where={JSON.stringify(where)} />
 			))}
@@ -13,7 +14,7 @@ export default function PostsList({ where }) {
 	);
 }
 
-function useScrollDetect() {
+function useScrollDetect(chunkContainerRef) {
 	// detect scroll changes
 	// if scroll position reaches bottom => increase page
 	const [page, setPage] = useState(1);
@@ -24,8 +25,11 @@ function useScrollDetect() {
 	}, []);
 
 	function scrollChanged() {
-		const newPage = document.documentElement.scrollHeight - window.scrollY - document.documentElement.clientHeight;
-		if (newPage <= 0) setPage((page) => page + 1);
+		// calculate scroll position
+		const scrollPosition =
+			document.documentElement.scrollHeight - window.scrollY - document.documentElement.clientHeight;
+		// if scroll at bottom and container is full >> increase page
+		if (scrollPosition <= 0 && chunkContainerRef.current?.children.length === page * CHUNK_SIZE) setPage(page + 1);
 	}
 
 	return page;

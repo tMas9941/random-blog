@@ -45,4 +45,16 @@ const list = async (req, res, next) => {
 	}
 };
 
-export default { create, list };
+const getByid = async (req, res, next) => {
+	let { id, userId } = req.query;
+	console.log({ id, userId });
+	try {
+		const response = await postService.getById({ id, userId });
+		if (!response) throw new HttpError("Error during fetching post!", 405);
+		const responseWithVotes = { ...response, voteResult: await getEvaluatedVoteCount(response.id) };
+		res.status(200).send(responseWithVotes);
+	} catch (error) {
+		next(error);
+	}
+};
+export default { create, list, getByid };

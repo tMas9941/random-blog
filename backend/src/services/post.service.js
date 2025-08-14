@@ -20,4 +20,18 @@ const list = async ({ limit, page, where, userId }) => {
 	return list;
 };
 
-export default { create, list };
+const getById = async ({ id, userId }) => {
+	console.log("service id ", id);
+	const post = await prisma.posts.findUnique({
+		where: { id },
+		include: {
+			author: { select: { username: true } },
+			tags: { select: { tagName: true } },
+			votes: { where: { userId } },
+		},
+	});
+	console.log("response post :  ", post);
+	return post;
+};
+
+export default { create, list, getById };

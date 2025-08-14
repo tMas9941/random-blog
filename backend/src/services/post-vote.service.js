@@ -28,6 +28,7 @@ export async function findVote(where) {
 
 export async function getEvaluatedVoteCount(postId) {
 	const res = await prisma.postVotes.findMany({ where: { postId } });
+	// vote => positive votes
 	const evaluatedVoteCount = { vote: res.filter((vote) => vote.vote > 0).length, total: res.length };
 	return evaluatedVoteCount;
 }

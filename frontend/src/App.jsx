@@ -9,7 +9,9 @@ function App() {
 	return (
 		<div
 			className={` ${
-				darkMode ? "bg-n-background text-n-text fill-n-text" : "bg-background text-text fill-text"
+				darkMode
+					? "bg-n-background text-n-text fill-n-text stroke-n-text"
+					: "bg-background text-text fill-text stroke-text"
 			} min-h-screen `}
 		>
 			<Header />

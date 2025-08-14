@@ -8,6 +8,7 @@ const list = async (data) => {
 		throw error.response ? error.response.data : error;
 	}
 };
+
 const create = async (data) => {
 	try {
 		const response = await axiosInstance.post("/post/create", data);
@@ -16,4 +17,15 @@ const create = async (data) => {
 		throw error.response ? error.response.data : error;
 	}
 };
-export default { list, create };
+
+const getById = async (data) => {
+	console.log("service data______________________ ", data);
+	try {
+		const response = await axiosInstance.get("/post/getById", { params: data });
+		return response.data;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export default { list, create, getById };

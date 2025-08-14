@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from "react";
 
-import ListItem from "./ListItem";
+import PostItem from "./PostItem";
 import postService from "../../services/post.service";
 import Loader from "../misc/loader/Loader";
 import { userSignal } from "../../global/userData";
@@ -10,8 +10,6 @@ const MemoListChunk = memo(function ListChunk({ size = 5, index = 1, where }) {
 	const [list, setList] = useState();
 	const user = useSignal(userSignal, "MemoListChunk" + index);
 	const loading = useRef(false);
-	// TODO remove extra render and fetching
-	// TODO fix chunk page wrongly increasing
 
 	useEffect(() => {
 		console.log("useEffect", loading, index);
@@ -25,12 +23,12 @@ const MemoListChunk = memo(function ListChunk({ size = 5, index = 1, where }) {
 		return () => (loading.current = false);
 	}, [index, user]);
 
-	if (!list) return <Loader className={"line-loader mx-auto !text-accent"} />;
+	if (!list) return <Loader className={"round-loader mx-auto !text-accent"} />;
 
 	return (
 		<>
 			{list.map((data, index) => (
-				<ListItem key={index} data={data} />
+				<PostItem key={index} data={data} />
 			))}
 		</>
 	);

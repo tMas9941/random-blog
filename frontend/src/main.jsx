@@ -15,6 +15,7 @@ import ProfileComments from "./components/profile/ProfileComments.jsx";
 
 // components
 import AuthUser from "./components/auth/AuthUser.jsx";
+import PostPage from "./pages/PostPage.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
 		children: [
 			{ path: "/home", element: <Home /> },
 			{ path: "/posts", element: <Forum /> },
+			{ path: "/posts/:id", element: <PostPage /> },
 			{ path: "/posts/create", element: <AuthUser component={<CreatePost />} /> },
 			{
 				path: "/profile",

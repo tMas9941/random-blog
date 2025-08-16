@@ -18,7 +18,7 @@ export default function PostPage() {
 	if (!data) return <Loader className={"round-loader m-auto "} />;
 	return (
 		<div>
-			<PostItem data={data} />
+			<PostItem data={data} showComment={false} />
 			<CommentInput postId={data.id} />
 			<CommentList where={{ postId: data.id }} />
 		</div>

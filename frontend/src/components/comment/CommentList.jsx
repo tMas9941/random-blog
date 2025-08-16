@@ -19,8 +19,6 @@ export default function CommentList({ where }) {
 					where={JSON.stringify(where)}
 					type={CHUNK_TYPE.comment}
 				/>
-				// <MemoListChunk key={index + 1} index={index + 1} size={CHUNK_SIZE} where={JSON.stringify(where)} />
-				// <p>comment {index}</p>
 			))}
 		</div>
 	);

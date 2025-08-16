@@ -17,16 +17,14 @@ const chunkItems = {
 	post: { item: PostItem, service: postService },
 	comment: { item: CommentItem, service: commentService },
 };
-console.log("CHUNK TYPE 1");
 
 export const CHUNK_TYPE = { post: "post", comment: "comment" };
 
-console.log("CHUNK TYPE ", CHUNK_TYPE);
 const ChunkLoader = memo(function Chunk({ size = 5, index = 1, where, type }) {
 	const [list, setList] = useState();
 	const user = useSignal(userSignal, "MemoChunk_" + type + index);
 	const loading = useRef(false);
-	console.log("type _________________", type);
+
 	useEffect(() => {
 		if (!loading.current) {
 			loading.current = true;
@@ -40,7 +38,7 @@ const ChunkLoader = memo(function Chunk({ size = 5, index = 1, where, type }) {
 
 	if (!list) return <Loader className={"round-loader m-auto "} />;
 	const DynamicListItem = chunkItems[type].item;
-	console.log("DynamicListItem ", DynamicListItem, list);
+
 	return (
 		<>
 			{list.map(

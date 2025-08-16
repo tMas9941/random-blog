@@ -14,7 +14,6 @@ export const Login = async (data) => {
 	// login and get token from backend and decode it
 	try {
 		const token = await authService.login(data);
-		console.log("token ? ", token);
 		const decodedToken = jwtDecode(token);
 		userSignal.changeValue(decodedToken);
 		localStorage.setItem("user", JSON.stringify(decodedToken));

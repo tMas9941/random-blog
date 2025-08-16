@@ -1,7 +1,7 @@
 import prisma from "../models/prisma-client.js";
 
 const create = async ({ vote, userId, postId }) => {
-	console.log("create service : ", { vote, userId, postId });
+	console.log("POST create service : ", { vote, userId, postId });
 	const result = await prisma.postVotes.create({ data: { vote, userId, postId } });
 	return result;
 };

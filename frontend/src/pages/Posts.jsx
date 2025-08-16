@@ -7,7 +7,6 @@ import ColorButton from "../components/buttons/ColorButton";
 import PostsList from "../components/posts/PostsList";
 
 export default function Posts() {
-	console.log("RENDER POSTS");
 	return (
 		<div className="w-full ">
 			<TopSection />

@@ -10,6 +10,7 @@ import postRoutes from "./routes/post.routes.js";
 import tagRoutes from "./routes/tag.routes.js";
 import postTagRoutes from "./routes/post-tag.routes.js";
 import postVoteRoutes from "./routes/post-vote.routes.js";
+import commentVoteRoutes from "./routes/comment-vote.routes.js";
 import commentRoutes from "./routes/comment.routes.js";
 
 import { FRONTEND_URL } from "./constants/constants.js";
@@ -26,6 +27,7 @@ app.use("/api/post", postRoutes);
 app.use("/api/tag", tagRoutes);
 app.use("/api/post-tag", postTagRoutes);
 app.use("/api/post-vote", postVoteRoutes);
+app.use("/api/comment-vote", commentVoteRoutes);
 app.use("/api/comment", commentRoutes);
 
 app.use(errorHandler);

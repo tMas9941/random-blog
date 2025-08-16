@@ -5,7 +5,7 @@ import { darkModeSignal } from "./global/userData";
 
 function App() {
 	const darkMode = useSignal(darkModeSignal, "App");
-	console.log("app RENDER");
+
 	return (
 		<div
 			className={` ${

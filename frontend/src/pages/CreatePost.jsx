@@ -31,7 +31,6 @@ const CreateForm = () => {
 
 	const handleSubmit = async (data) => {
 		// detect empty tag container
-		console.log(" HANDLE SUBMIT");
 		if (tagsRef.current.length === 0) {
 			dispatch({ newState: CREATE_STATES.TAGS_ERROR });
 			return;
@@ -63,7 +62,6 @@ const CreateForm = () => {
 				initialValues={{ title: "", content: "", tags: "" }}
 				validationSchema={postValidation}
 				onKeydown={(e) => {
-					console.log("prevent");
 					return e.preventDefault();
 				}}
 				onSubmit={handleSubmit}

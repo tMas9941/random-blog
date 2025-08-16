@@ -1,10 +1,10 @@
-import postVoteService from "../services/post-vote.service.js";
+import commentVoteService from "../services/comment-vote.service.js";
 import HttpError from "../utils/HttpError.js";
 
 const create = async (req, res, next) => {
-	const { vote, userId, postId } = req.body;
+	const { vote, userId, commentId } = req.body;
 	try {
-		const create = await postVoteService.create({ vote, userId, postId });
+		const create = await commentVoteService.create({ vote, userId, commentId });
 		if (!create) throw new HttpError("Error during voting!", 405);
 
 		res.status(200).send(create);
@@ -14,9 +14,9 @@ const create = async (req, res, next) => {
 };
 
 const destroy = async (req, res, next) => {
-	const { userId, postId } = req.body;
+	const { userId, commentId } = req.body;
 	try {
-		const create = await postVoteService.destroy({ userId, postId });
+		const create = await commentVoteService.destroy({ userId, commentId });
 		if (!create) throw new HttpError("Error during voting!", 405);
 
 		res.status(200).send(create);
@@ -26,9 +26,9 @@ const destroy = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-	const { vote, userId, postId } = req.body;
+	const { vote, userId, commentId } = req.body;
 	try {
-		const create = await postVoteService.update({ vote, userId, postId });
+		const create = await commentVoteService.update({ vote, userId, commentId });
 		if (!create) throw new HttpError("Error during voting!", 405);
 
 		res.status(200).send(create);
@@ -38,7 +38,7 @@ const update = async (req, res, next) => {
 };
 const list = async (req, res, next) => {
 	try {
-		const list = await postVoteService.list();
+		const list = await commentVoteService.list();
 		if (!list) throw new HttpError("Error during list query!", 405);
 		res.status(200).send(list);
 	} catch (error) {

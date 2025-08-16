@@ -21,7 +21,6 @@ const list = async ({ limit, page, where, userId }) => {
 };
 
 const getById = async ({ id, userId }) => {
-	console.log("service id ", id);
 	const post = await prisma.posts.findUnique({
 		where: { id },
 		include: {
@@ -30,7 +29,6 @@ const getById = async ({ id, userId }) => {
 			votes: { where: { userId } },
 		},
 	});
-	console.log("response post :  ", post);
 	return post;
 };
 

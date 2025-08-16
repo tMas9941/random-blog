@@ -19,7 +19,6 @@ const create = async (data) => {
 };
 
 const getById = async (data) => {
-	console.log("service data______________________ ", data);
 	try {
 		const response = await axiosInstance.get("/post/getById", { params: data });
 		return response.data;

@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
 import SvgComponent from "../misc/SvgComponent";
 import { userSignal } from "../../global/userData";
-import { castPostVote } from "../../global/voteHandler";
+import { castCommentVote, castPostVote } from "../../global/voteHandler";
 
-export default function VoteButton({ postId, vote = 0, voteResult }) {
+export default function VoteButton({ postId, commentId, vote = 0, voteResult }) {
 	const { voted, setVoted, positiveVotes, negativeVotes, voteRatio, totalVotes } = useVoteResult(vote, voteResult);
 	const userId = userSignal?.value?.id;
 
 	const changeVoteResult = (newVote) => {
 		if (!userId) return;
 
-		castPostVote({ vote: newVote, prevVote: voted, userId, postId });
-		if (newVote === voted) {
-			return setVoted(0);
-		} else {
-			setVoted(newVote);
+		if (postId) {
+			castPostVote({ vote: newVote, prevVote: voted, userId, postId });
+		} else if (commentId) {
+			castCommentVote({ vote: newVote, prevVote: voted, userId, commentId });
 		}
+
+		if (newVote === voted) return setVoted(0);
+		setVoted(newVote);
 	};
 
 	return (
@@ -25,13 +27,12 @@ export default function VoteButton({ postId, vote = 0, voteResult }) {
 				voteValue={1}
 				changeVoteResult={changeVoteResult}
 				disabled={!userId}
-				activeClass={"fill-primary text-primary stroke-primary"}
+				activeClass={"fill-success text-success stroke-success "}
 				voted={voted}
 			/>
-			{/* success : 008c17 */}
 			<span
 				style={{ color: `color-mix(in srgb, #ff0000 ${100 - voteRatio}%, #008c17  ${voteRatio}%)` }}
-				className="min-w-17 px-1 text-center text-2xl font-bold [&>span]:font-semibold brightness-150"
+				className="min-w-17 px-1 text-center text-lg font-bold [&>span]:font-semibold brightness-130"
 			>
 				{totalVotes > 0 ? Math.floor(voteRatio) : ""}
 				{totalVotes > 0 && <span className="text-base"> %</span>}
@@ -41,7 +42,7 @@ export default function VoteButton({ postId, vote = 0, voteResult }) {
 				voteValue={-1}
 				changeVoteResult={changeVoteResult}
 				disabled={!userId}
-				activeClass={"fill-secondary text-secondary stroke-secondary"}
+				activeClass={"fill-warning text-warning stroke-warning "}
 				voted={voted}
 			/>
 		</div>
@@ -53,19 +54,19 @@ function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, active
 		<button
 			disabled={disabled}
 			title={disabled ? "Must login to vote!" : ""}
-			className={`flex px-1 text-lg  ${
+			className={`flex px-1 text-lg items-center brightness-130 ${
 				voted === voteValue ? activeClass + " stroke-1 " : " stroke-1 fill-none "
 			} [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold ${disabled ? " " : "cursor-pointer hover:bg-inherit"}`}
 			onClick={() => changeVoteResult(voteValue)}
 		>
 			{voteValue > 0 && <span>{`${text}`}</span>}
-			<SvgComponent name={"nextArrow"} size={30} className={voteValue < 0 && "rotate-180 "} />
+			<SvgComponent name={"nextArrow"} size={25} className={voteValue < 0 && "rotate-180 "} />
 			{voteValue < 0 && <span>{`${text}`}</span>}
 		</button>
 	);
 }
 
-const useVoteResult = (vote, voteResult) => {
+const useVoteResult = (vote, voteResult = { total: 10, vote: 1 }) => {
 	const [voted, setVoted] = useState(vote);
 
 	const totalVotes = voteResult.total + Math.abs(voted) - Math.abs(vote);

@@ -10,7 +10,6 @@ const list = async (data) => {
 };
 
 const create = async (data) => {
-	console.log("create : ", data);
 	try {
 		const response = await axiosInstance.post("/comment/create", data);
 		return response.data;

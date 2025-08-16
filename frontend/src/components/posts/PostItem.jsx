@@ -6,8 +6,9 @@ import VoteButton from "../vote/VoteButton";
 import Avatar from "../misc/Avatar";
 import { Link } from "react-router-dom";
 import SvgComponent from "../misc/SvgComponent";
+import ButtonContainer from "../buttons/ButtonContainer";
 
-export default function PostItem({ data }) {
+export default function PostItem({ data, showComment = true }) {
 	if (!data) return <></>;
 	const convertedDate = convertTimeStringToDate(data.created);
 
@@ -25,10 +26,10 @@ export default function PostItem({ data }) {
 						<TagBlock key={tag.tagName} name={tag.tagName} />
 					))}
 				</div>
-				<div className="flex gap-4 [&>*]:hover:bg-primary/20 [&>*]:hover:brightness-110 [&>*]:rounded-md  [&>*]:px-3 [&>*]:py-1">
+				<ButtonContainer>
 					<VoteButton postId={data.id} vote={selfVote} voteResult={data.voteResult} />
-					<CommentButton postId={data.id} />
-				</div>
+					{showComment && <CommentButton postId={data.id} />}
+				</ButtonContainer>
 			</div>
 			<div className="min-w-max [&_div]:m-2">
 				<Avatar text={data.author.username} size={60} />

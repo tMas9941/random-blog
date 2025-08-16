@@ -6,13 +6,12 @@ import Loader from "../misc/loader/Loader";
 import { userSignal } from "../../global/userData";
 import useSignal from "../../hooks/useSignal";
 
-const MemoListChunk = memo(function ListChunk({ size = 5, index = 1, where }) {
+const MemoPostChunk = memo(function PostChunk({ size = 5, index = 1, where }) {
 	const [list, setList] = useState();
 	const user = useSignal(userSignal, "MemoListChunk" + index);
 	const loading = useRef(false);
 
 	useEffect(() => {
-		console.log("useEffect", loading, index);
 		if (!loading.current) {
 			loading.current = true;
 			(async () => {
@@ -23,7 +22,7 @@ const MemoListChunk = memo(function ListChunk({ size = 5, index = 1, where }) {
 		return () => (loading.current = false);
 	}, [index, user]);
 
-	if (!list) return <Loader className={"round-loader mx-auto !text-accent"} />;
+	if (!list) return <Loader className={"round-loader m-auto "} />;
 
 	return (
 		<>
@@ -33,4 +32,4 @@ const MemoListChunk = memo(function ListChunk({ size = 5, index = 1, where }) {
 		</>
 	);
 });
-export default MemoListChunk;
+export default MemoPostChunk;

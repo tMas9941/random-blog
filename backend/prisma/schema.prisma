@@ -53,11 +53,11 @@ model Comments {
     postId String?
     post Posts? @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-    commentId String?
+    commentId String? @map("commentId")
     comment Comments? @relation("CommentOnComment",fields: [commentId], references: [id], onDelete: Cascade)
+    comments Comments[] @relation("CommentOnComment")
 
     votes CommentVotes[]
-    comments Comments[] @relation("CommentOnComment")
 }
 
 

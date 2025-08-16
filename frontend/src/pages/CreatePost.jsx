@@ -102,7 +102,6 @@ const CreateForm = () => {
 							text={"Publish"}
 							type={"submit"}
 							onKeydown={(e) => {
-								console.log("prevent");
 								return e.preventDefault();
 							}}
 						></ColorButton>

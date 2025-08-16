@@ -15,7 +15,7 @@ export default function FormField({ name, type = "text", as, text, placeholder, 
 				as={as}
 				placeholder={placeholder}
 				className={
-					"text-inherit border-[gray]/70 peer-has-[div]:border-warning/50 w-full border px-2 p-[3px] !outline-none my-1 text-gray-500 " +
+					"w-full px-2 p-[3px] text-inherit bg-secondary/20 outline-transparent outline-1 focus:outline-primary peer-has-[div]:outline-warning/50 rounded text-gray-500 " +
 					className
 				}
 			/>

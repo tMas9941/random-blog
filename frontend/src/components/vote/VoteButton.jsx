@@ -53,9 +53,9 @@ function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, active
 		<button
 			disabled={disabled}
 			title={disabled ? "Must login to vote!" : ""}
-			className={`flex px-1 text-lg hover:bg-inherit ${
+			className={`flex px-1 text-lg  ${
 				voted === voteValue ? activeClass + " stroke-1 " : " stroke-1 fill-none "
-			} [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold ${disabled ? "!fill-[gray]/40 " : "cursor-pointer"}`}
+			} [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold ${disabled ? " " : "cursor-pointer hover:bg-inherit"}`}
 			onClick={() => changeVoteResult(voteValue)}
 		>
 			{voteValue > 0 && <span>{`${text}`}</span>}

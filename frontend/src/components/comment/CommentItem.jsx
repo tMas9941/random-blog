@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Avatar from "../misc/Avatar";
 import VoteButton from "../vote/VoteButton";
 import ButtonContainer from "../buttons/ButtonContainer";
 
 export default function CommentItem({ data }) {
-	if (!data) return <></>;
-
 	const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
+	const selfVote = data.votes.find((vote) => data.id === vote.commentId)?.vote;
 
 	return (
-		<div className="flex py-3 gap-5 hover:bg-secondary/10">
+		<div className={"flex py-3 gap-5 hover:bg-secondary/10 animate-fade-in "}>
 			<Avatar text={data.user.username} size={40} />
 
 			<div className="flex flex-col gap-1 ">
@@ -21,7 +20,7 @@ export default function CommentItem({ data }) {
 				<p>{data.content}</p>
 
 				<ButtonContainer className={"mt-4"}>
-					<VoteButton commentId={data.id} />
+					<VoteButton commentId={data.id} vote={selfVote} voteResult={data.voteResult} />
 					<button>Reply</button>
 				</ButtonContainer>
 			</div>
@@ -30,6 +29,7 @@ export default function CommentItem({ data }) {
 }
 
 function calculateElapsedTime(time) {
+	if (time < 1000) return "now";
 	const newTime = (divider) => Math.floor(time / divider);
 
 	let times = {
@@ -41,9 +41,8 @@ function calculateElapsedTime(time) {
 		sec: newTime(1000),
 	};
 	let result = Object.entries(times).find((element) => element[1] > 0);
-	if (result[0] === "sec") {
-		result = ["now", ""];
-	} else if (result[1] > 1) {
+
+	if (result[1] > 1) {
 		result[0] += "s";
 	}
 	return `${result[1]} ${result[0]}`;

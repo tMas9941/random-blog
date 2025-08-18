@@ -1,15 +1,21 @@
 import { useRef } from "react";
-import MemoPostChunk from "./MemoPostChunk";
+
 import useScrollDetect from "../../hooks/useScrollDetect";
+import ChunkLoader, { CHUNK_TYPE } from "./ChunkLoader";
 
 const CHUNK_SIZE = 5;
-export default function PostsList({ where }) {
+export default function PostsList({ where, user }) {
 	const chunkContainerRef = useRef();
 	const page = useScrollDetect(chunkContainerRef, CHUNK_SIZE);
+
 	return (
 		<div ref={chunkContainerRef} className="flex flex-col border-y border-accent/50 divide-y-1 divide-accent/50 ">
 			{[...Array(page)].map((none, index) => (
-				<MemoPostChunk key={index + 1} index={index + 1} size={CHUNK_SIZE} where={JSON.stringify(where)} />
+				<ChunkLoader
+					key={index + 1}
+					query={{ limit: CHUNK_SIZE, page: index + 1, where: JSON.stringify(where), userId: user?.id }}
+					type={CHUNK_TYPE.post}
+				/>
 			))}
 		</div>
 	);

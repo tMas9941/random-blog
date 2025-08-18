@@ -20,7 +20,7 @@ const list = async ({ limit, page, where, userId }) => {
 	return list;
 };
 
-const getById = async ({ id, userId }) => {
+const getById = async ({ id, userId = "" }) => {
 	const post = await prisma.posts.findUnique({
 		where: { id },
 		include: {

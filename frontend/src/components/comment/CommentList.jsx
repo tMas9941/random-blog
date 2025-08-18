@@ -4,20 +4,25 @@ import { useRef } from "react";
 
 import useScrollDetect from "../../hooks/useScrollDetect";
 import ChunkLoader, { CHUNK_TYPE } from "../posts/ChunkLoader";
+import Signal from "../../utils/signal";
+import useSignal from "../../hooks/useSignal";
 
-const CHUNK_SIZE = 10;
-export default function CommentList({ where }) {
+export const renderCommentList = new Signal(0);
+
+const CHUNK_SIZE = 5;
+export default function CommentList({ where, user }) {
 	const chunkContainerRef = useRef();
 	const page = useScrollDetect(chunkContainerRef, CHUNK_SIZE);
+	const reRender = useSignal(renderCommentList, "CommentList"); // need to render new comments
+
 	return (
 		<div ref={chunkContainerRef} className="flex flex-col border-y border-accent/50 divide-y-1 divide-accent/50 ">
 			{[...Array(page)].map((none, index) => (
 				<ChunkLoader
 					key={index + 1}
-					index={index + 1}
-					size={CHUNK_SIZE}
-					where={JSON.stringify(where)}
+					query={{ limit: CHUNK_SIZE, page: index + 1, where: JSON.stringify(where), userId: user?.id }}
 					type={CHUNK_TYPE.comment}
+					reRender={reRender}
 				/>
 			))}
 		</div>

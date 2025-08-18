@@ -5,7 +5,7 @@ import { userSignal } from "../../global/userData";
 export default function ProfileUpvotes() {
 	return (
 		<>
-			<PostsList where={{ votes: { some: { userId: userSignal.value.id } } }} />
+			<PostsList where={{ votes: { some: { userId: userSignal.value.id } } }} user={userSignal.value} />
 		</>
 	);
 }

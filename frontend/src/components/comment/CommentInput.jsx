@@ -1,46 +1,52 @@
-import { useRef } from "react";
-
-// Hooks
-import { userSignal } from "../../global/userData";
-import useSignal from "../../hooks/useSignal";
+import { useRef, useState } from "react";
 
 // Components
 import ColorButton from "../buttons/ColorButton";
 import Avatar from "../misc/Avatar";
 import commentService from "../../services/comment.service";
 
-export default function CommentInput({ postId }) {
-	const textRef = useRef();
-	const user = useSignal(userSignal, "CommentInput");
+import { renderCommentList } from "./CommentList";
 
-	if (!user) return <p className="text-lg p-1 rounded bg-secondary/20 text-center my-auto">Login to add comments...</p>;
+export default function CommentInput({ postId, user }) {
+	const textRef = useRef();
+	const container = useRef();
+
+	if (!user)
+		return (
+			<div className="flex items-center justify-center min-h-12 mb-10 text-lg p-1 rounded bg-secondary/20 text-center my-auto ">
+				Login to add comments...
+			</div>
+		);
 
 	const focusClass =
-		"focus-within:[&>textarea]:h-24 focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1";
+		"focus-within:[&>textarea]:h-24 focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";
 
 	const clearText = () => {
 		textRef.current.value = "";
+		document.activeElement.blur();
 	};
 
 	const postComment = async () => {
 		await commentService.create({ userId: user.id, postId, content: textRef.current.value });
+
+		renderCommentList.changeValue(renderCommentList.value + 1);
 		clearText();
 	};
 
 	return (
-		<div className="flex gap-5 mb-10">
+		<div ref={container} id={"inputContainer"} className="flex gap-5 mb-5">
 			<Avatar size={40} />
-			<div className={"flex flex-col gap-2 w-full me-30 " + focusClass}>
+			<div className={"flex flex-col  w-full me-30 " + focusClass}>
 				<textarea
 					ref={textRef}
 					id="commentInput"
 					name="comment"
 					rows="2"
 					maxLength="350"
-					className="peer w-full h-12 bg-secondary/20 p-3 rounded resize-none not-[:placeholder-shown]:h-24 "
+					className="peer w-full h-12 bg-secondary/20 p-3 rounded resize-none not-[:placeholder-shown]:h-24 transition-[height] ease-out duration-150 "
 					placeholder="Add a comment..."
 				></textarea>
-				<div className="gap-5 items-center hidden peer-not-[:placeholder-shown]:flex ">
+				<div className="flex gap-5 items-center opacity-0 scale-y-0 peer-not-[:placeholder-shown]:scale-y-100 peer-not-[:placeholder-shown]:opacity-100 transition-[scale,opacity] ease-out duration-150">
 					<ColorButton
 						className="mt-5 bg-secondary/20 border-2 border-secondary text-secondary disabled:border-white"
 						text={"Cancel"}

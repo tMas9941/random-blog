@@ -5,7 +5,7 @@ import { userSignal } from "../../global/userData";
 export default function ProfilePosts() {
 	return (
 		<>
-			<PostsList where={{ authorId: userSignal.value.id }} />
+			<PostsList where={{ authorId: userSignal.value.id }} user={userSignal.value} />
 		</>
 	);
 }

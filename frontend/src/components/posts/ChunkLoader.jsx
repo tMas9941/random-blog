@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Services
 import postService from "../../services/post.service";
@@ -20,35 +20,30 @@ const chunkItems = {
 
 export const CHUNK_TYPE = { post: "post", comment: "comment" };
 
-const ChunkLoader = memo(function Chunk({ size = 5, index = 1, where, type }) {
+export default function Chunkloader({ index = 1, type, query, reRender }) {
 	const [list, setList] = useState();
-	const user = useSignal(userSignal, "MemoChunk_" + type + index);
 	const loading = useRef(false);
 
 	useEffect(() => {
 		if (!loading.current) {
 			loading.current = true;
 			(async () => {
-				const data = await chunkItems[type].service.list({ limit: size, page: index, where, userId: user?.id });
+				const data = await chunkItems[type].service.list(query);
 				setList(data);
 			})();
 		}
 		return () => (loading.current = false);
-	}, [index, user]);
+	}, [index, reRender]);
 
 	if (!list) return <Loader className={"round-loader m-auto "} />;
+
 	const DynamicListItem = chunkItems[type].item;
 
 	return (
 		<>
-			{list.map(
-				(data, index) => (
-					<DynamicListItem key={index} data={data} />
-				)
-
-				// <PostItem key={index} data={data} />
-			)}
+			{list.map((data) => (
+				<DynamicListItem key={data.id} data={data} />
+			))}
 		</>
 	);
-});
-export default ChunkLoader;
+}

@@ -4,8 +4,8 @@ import { userSignal } from "../../global/userData";
 import { castCommentVote, castPostVote } from "../../global/voteHandler";
 
 export default function VoteButton({ postId, commentId, vote = 0, voteResult }) {
-	const { voted, setVoted, positiveVotes, negativeVotes, voteRatio, totalVotes } = useVoteResult(vote, voteResult);
 	const userId = userSignal?.value?.id;
+	const { voted, setVoted, positiveVotes, negativeVotes, voteRatio, totalVotes } = useVoteResult(vote, voteResult);
 
 	const changeVoteResult = (newVote) => {
 		if (!userId) return;
@@ -66,7 +66,7 @@ function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, active
 	);
 }
 
-const useVoteResult = (vote, voteResult = { total: 10, vote: 1 }) => {
+const useVoteResult = (vote, voteResult = { total: 99999, vote: 99999 }) => {
 	const [voted, setVoted] = useState(vote);
 
 	const totalVotes = voteResult.total + Math.abs(voted) - Math.abs(vote);

@@ -15,7 +15,7 @@ export default function PostItem({ data, showComment = true }) {
 	const selfVote = data.votes.find((vote) => data.id === vote.postId)?.vote;
 
 	return (
-		<div className="w-full py-5 flex justify-between gap-10">
+		<div className="w-full py-5 flex justify-between gap-10 animate-fade-in">
 			<div className="flex flex-col gap-4">
 				<Link to={"/posts/" + data.id} className="text-2xl font-semibold ">
 					{data.title}

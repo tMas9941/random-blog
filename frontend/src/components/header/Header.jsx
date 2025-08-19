@@ -58,7 +58,7 @@ function UserMenu({ navigate }) {
 			{user && (
 				<ColorButton onClick={() => navigate("/posts/create")} className="rounded-full">
 					Post
-					<SvgComponent name={"pen"} size={20} className={"ms-3"} />
+					<SvgComponent name={"pen"} size={20} className={"ms-3 fill-white"} />
 				</ColorButton>
 			)}
 			<PopupWindow popupComponent={<RegistrationForm />} userMenu={userMenu} text={"registration"} />

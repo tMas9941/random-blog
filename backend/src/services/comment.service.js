@@ -17,4 +17,11 @@ const list = async ({ limit, page, where, userId }) => {
 
 	return response;
 };
-export default { create, list };
+
+const getByUserId = async ({ userId }) => {
+	const response = await prisma.comments.findMany({ where: { userId } });
+
+	return response;
+};
+
+export default { create, list, getByUserId };

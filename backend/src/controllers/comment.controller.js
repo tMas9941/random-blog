@@ -30,4 +30,16 @@ const list = async (req, res, next) => {
 		next(error);
 	}
 };
-export default { create, list };
+
+const getByUserId = async (req, res, next) => {
+	const { userId } = req.body;
+	console.log({ userId });
+	try {
+		const response = await commentService.getByUserId({ userId });
+		console.log("response ", response);
+		res.status(200).send(response);
+	} catch (error) {
+		next(error);
+	}
+};
+export default { create, list, getByUserId };

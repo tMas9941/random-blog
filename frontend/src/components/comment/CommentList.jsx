@@ -22,7 +22,7 @@ export default function CommentList({ where, user }) {
 					key={index + 1}
 					query={{ limit: CHUNK_SIZE, page: index + 1, where: JSON.stringify(where), userId: user?.id }}
 					type={CHUNK_TYPE.comment}
-					reRender={reRender}
+					reRender={index === 0 && reRender} // need to render new comments
 				/>
 			))}
 		</div>

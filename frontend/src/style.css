@@ -35,13 +35,12 @@
 	--animate-fade-in: fade-in 0.5s ease-out;
 	@keyframes fade-in {
 		0% {
-			background-color: var(--color-accent);
+			background-color: color-mix(in srgb, var(--color-secondary) 40%, transparent);
 			opacity: 0;
 			visibility: visible;
 		}
 		100% {
 			opacity: 1;
-			visibility: visible;
 		}
 	}
 }

@@ -34,7 +34,7 @@ export default function CommentInput({ postId, user }) {
 	};
 
 	return (
-		<div ref={container} id={"inputContainer"} className="flex gap-5 mb-5">
+		<div ref={container} id={"inputContainer"} className="flex gap-5 mb-10">
 			<Avatar size={40} />
 			<div className={"flex flex-col  w-full me-30 " + focusClass}>
 				<textarea

@@ -30,6 +30,8 @@ export default function VoteButton({ postId, commentId, vote = 0, voteResult }) 
 				activeClass={"fill-success text-success stroke-success "}
 				voted={voted}
 			/>
+			{/* --color-text: #050d10; --color-background: #f0f6fa; --color-primary: #4da2c7; --color-secondary: #8e9edc;
+			--color-accent: #777fd4; */}
 			<span
 				style={{ color: `color-mix(in srgb, #ff0000 ${100 - voteRatio}%, #008c17  ${voteRatio}%)` }}
 				className="min-w-17 px-1 text-center text-lg font-bold [&>span]:font-semibold brightness-130"
@@ -54,8 +56,8 @@ function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, active
 		<button
 			disabled={disabled}
 			title={disabled ? "Must login to vote!" : ""}
-			className={`flex px-1 text-lg items-center brightness-130 ${
-				voted === voteValue ? activeClass + " stroke-1 " : " stroke-1 fill-none "
+			className={`flex px-1 text-lg items-center brightness-130 stroke-accent ${
+				voted === voteValue ? activeClass + " stroke-1  " : " stroke-2 fill-none "
 			} [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold ${disabled ? " " : "cursor-pointer hover:bg-inherit"}`}
 			onClick={() => changeVoteResult(voteValue)}
 		>

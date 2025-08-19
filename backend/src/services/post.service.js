@@ -12,7 +12,12 @@ const list = async ({ limit, page, where, userId }) => {
 		include: {
 			author: { select: { username: true } },
 			tags: { select: { tagName: true } },
-			votes: { where: { userId } },
+			votes: true,
+			_count: {
+				select: {
+					comments: true,
+				},
+			},
 		},
 		where: where,
 		orderBy: { created: "desc" },
@@ -26,9 +31,10 @@ const getById = async ({ id, userId = "" }) => {
 		include: {
 			author: { select: { username: true } },
 			tags: { select: { tagName: true } },
-			votes: { where: { userId } },
+			votes: true,
 		},
 	});
+
 	return post;
 };
 

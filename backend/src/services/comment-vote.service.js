@@ -1,7 +1,7 @@
 import prisma from "../models/prisma-client.js";
 
-const create = async ({ vote, userId, commentId }) => {
-	const result = await prisma.commentVotes.create({ data: { vote, userId, commentId } });
+const create = async ({ value, userId, commentId }) => {
+	const result = await prisma.commentVotes.create({ data: { value, userId, commentId } });
 	return result;
 };
 
@@ -10,10 +10,10 @@ const destroy = async ({ userId, commentId }) => {
 	return result;
 };
 
-const update = async ({ vote, userId, commentId }) => {
+const update = async ({ value, userId, commentId }) => {
 	const result = await prisma.commentVotes.update({
 		where: { userId_commentId: { userId, commentId } },
-		data: { vote },
+		data: { value },
 	});
 	return result;
 };
@@ -26,13 +26,6 @@ const list = async () => {
 export async function fundComment(where) {
 	const res = await prisma.commentVotes.findFirst({ where });
 	return res.id;
-}
-
-export async function getEvaluatedCommentCount(commentId) {
-	const res = await prisma.commentVotes.findMany({ where: { commentId } });
-	// vote => positive votes
-	const evaluatedVoteCount = { vote: res.filter((vote) => vote.vote > 0).length, total: res.length };
-	return evaluatedVoteCount;
 }
 
 export default { create, list, destroy, update };

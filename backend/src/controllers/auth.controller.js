@@ -29,11 +29,14 @@ const registration = async (req, res, next) => {
 
 const login = async (req, res, next) => {
 	const { username, password } = req.body;
+
 	try {
 		const user = await userService.findByUsername(username);
 		if (!user) throw new HttpError("Invalid e-mail or password!", 405);
+
 		const passwordValid = await bcrypt.compare(password, user.password);
 		if (!passwordValid) throw new HttpError("Invalid e-mail or password!", 405);
+
 		const token = jwt.sign(user, JWT_SECRET);
 		res.status(200).json(token);
 	} catch (error) {

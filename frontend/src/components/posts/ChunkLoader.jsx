@@ -4,10 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import postService from "../../services/post.service";
 import commentService from "../../services/comment.service";
 
-// Hooks
-import { userSignal } from "../../global/userData";
-import useSignal from "../../hooks/useSignal";
-
 // Components
 import PostItem from "./PostItem";
 import CommentItem from "../comment/CommentItem";

@@ -3,10 +3,10 @@ import postVoteService from "../services/post-vote.service.js";
 
 export const castPostVote = async (data) => {
 	try {
-		if (data.vote === data.prevVote) {
+		if (data.value === data.prevValue) {
 			return await postVoteService.destroy(data);
 		}
-		if (data.prevVote === 0) {
+		if (data.prevValue === null) {
 			return await postVoteService.create(data);
 		} else {
 			return await postVoteService.update(data);
@@ -18,10 +18,10 @@ export const castPostVote = async (data) => {
 
 export const castCommentVote = async (data) => {
 	try {
-		if (data.vote === data.prevVote) {
+		if (data.value === data.prevValue) {
 			return await commentVoteService.destroy(data);
 		}
-		if (data.prevVote === 0) {
+		if (data.prevValue === null) {
 			return await commentVoteService.create(data);
 		} else {
 			return await commentVoteService.update(data);

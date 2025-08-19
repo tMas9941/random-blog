@@ -24,7 +24,6 @@ export default function LoginForm({ close }) {
 				resetForm();
 			}, 700);
 		} catch (error) {
-			console.log("error : ", error);
 			dispatch({
 				newState: LOGIN_STATES.FETCH_FAILED,
 				addValue: { message: error?.message },

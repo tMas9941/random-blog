@@ -19,7 +19,6 @@ export default function PostItem({ data, showComment = true }) {
 	if (!data) return <></>;
 	const convertedDate = convertTimeStringToDate(data.created);
 	const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
-	const selfVote = data.votes.find((vote) => data.id === vote.postId)?.vote;
 	const selfPost = data.authorId === userSignal.value?.id;
 
 	return (
@@ -48,8 +47,8 @@ export default function PostItem({ data, showComment = true }) {
 				</div>
 			</div>
 			<ButtonContainer>
-				<VoteButton postId={data.id} vote={selfVote} voteResult={data.voteResult} />
-				{showComment && <CommentButton postId={data.id} />}
+				<VoteButton postId={data.id} votes={data.votes} />
+				{showComment && <CommentButton postId={data.id} count={data._count.comments} />}
 				{selfPost && (
 					<>
 						<Button title={"Edit post"} text={"Edit"} className={"ms-auto " + buttonClass}>
@@ -65,9 +64,10 @@ export default function PostItem({ data, showComment = true }) {
 	);
 }
 
-const CommentButton = ({ postId }) => (
+const CommentButton = ({ postId, count }) => (
 	<Link to={"/posts/" + postId + "#comment"} className={buttonClass}>
 		<SvgComponent name={"comment"} size={25} />
-		Comment
+		<span className="mx-1 text-accent font-bold">{count}</span>
+		Comments
 	</Link>
 );

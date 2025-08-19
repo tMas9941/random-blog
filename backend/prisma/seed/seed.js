@@ -8,7 +8,6 @@ async function readFile(filename, trim = false) {
 	try {
 		let data = await fs.readFile(`./prisma/seed/${filename}.txt`, { encoding: "utf8" });
 		data = data.split(regex[filename] || /\r?\n/).filter((item) => item !== "");
-		console.log(filename, " length ", data.length);
 		if (trim) data = data.map((item) => item.replaceAll(" ", ""));
 		return data.sort();
 	} catch (err) {
@@ -67,7 +66,7 @@ async function main() {
 		data: usersData,
 		skipDuplicates: true,
 	});
-	// console.log("words    ", words);
+
 	const tags = await prisma.tags.createManyAndReturn({
 		data: Array.from({ length: 100 }).map(() => {
 			return { name: randWords(words, 1, 2), created: randCreation(1000) };
@@ -104,7 +103,7 @@ async function main() {
 											data: [
 												...Array.from({ length: rand(0, MAX_POST_VOTES) }).map(() => {
 													return {
-														vote: rand(0, 2) > 0 ? 1 : -1,
+														value: Boolean(rand(0, 2)),
 														userId: users[rand(0, users.length - 1)].id,
 													};
 												}),
@@ -148,7 +147,7 @@ async function main() {
 				data: [
 					...Array.from({ length: rand(0, MAX_COMMENT_VOTES) }).map(() => {
 						return {
-							vote: rand(0, 2) > 0 ? 1 : -1,
+							value: Boolean(rand(0, 2)),
 							userId: users[rand(0, users.length - 1)].id,
 							commentId: comment.id,
 						};
@@ -161,7 +160,6 @@ async function main() {
 
 	mainBench.stop();
 	console.log("Users added : ", users.length);
-	// console.log("POSTS OK", posts);
 }
 main()
 	.catch((e) => {

@@ -7,7 +7,6 @@ import calculateElapsedTime from "../../utils/calculateEllapsedTime";
 
 export default function CommentItem({ data }) {
 	const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
-	const selfVote = data.votes.find((vote) => data.id === vote.commentId)?.vote;
 
 	return (
 		<div className={"flex py-3 gap-5 hover:bg-secondary/10 animate-fade-in "}>
@@ -21,7 +20,7 @@ export default function CommentItem({ data }) {
 				<p>{data.content}</p>
 
 				<ButtonContainer className={"mt-4"}>
-					<VoteButton commentId={data.id} vote={selfVote} voteResult={data.voteResult} />
+					<VoteButton commentId={data.id} votes={data.votes} />
 					<button>Reply</button>
 				</ButtonContainer>
 			</div>

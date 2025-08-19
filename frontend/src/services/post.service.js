@@ -20,7 +20,7 @@ const create = async (data) => {
 
 const getById = async (data) => {
 	try {
-		const response = await axiosInstance.get("/post/getById", { params: data });
+		const response = await axiosInstance.get("/post/" + data.id, { params: { userId: data.userId } });
 		return response.data;
 	} catch (error) {
 		throw error.response ? error.response.data : error;

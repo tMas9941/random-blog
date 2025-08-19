@@ -2,9 +2,9 @@ import commentVoteService from "../services/comment-vote.service.js";
 import HttpError from "../utils/HttpError.js";
 
 const create = async (req, res, next) => {
-	const { vote, userId, commentId } = req.body;
+	const { value, userId, commentId } = req.body;
 	try {
-		const create = await commentVoteService.create({ vote, userId, commentId });
+		const create = await commentVoteService.create({ value, userId, commentId });
 		if (!create) throw new HttpError("Error during voting!", 405);
 
 		res.status(200).send(create);
@@ -26,9 +26,9 @@ const destroy = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-	const { vote, userId, commentId } = req.body;
+	const { value, userId, commentId } = req.body;
 	try {
-		const create = await commentVoteService.update({ vote, userId, commentId });
+		const create = await commentVoteService.update({ value, userId, commentId });
 		if (!create) throw new HttpError("Error during voting!", 405);
 
 		res.status(200).send(create);

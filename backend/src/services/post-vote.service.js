@@ -1,9 +1,12 @@
 import prisma from "../models/prisma-client.js";
 
-const create = async ({ vote, userId, postId }) => {
-	console.log("POST create service : ", { vote, userId, postId });
-	const result = await prisma.postVotes.create({ data: { vote, userId, postId } });
-	return result;
+const create = async ({ value, userId, postId }) => {
+	try {
+		const result = await prisma.postVotes.create({ data: { value, userId, postId } });
+		return result;
+	} catch (error) {
+		throw error;
+	}
 };
 
 const destroy = async ({ userId, postId }) => {
@@ -11,8 +14,8 @@ const destroy = async ({ userId, postId }) => {
 	return result;
 };
 
-const update = async ({ vote, userId, postId }) => {
-	const result = await prisma.postVotes.update({ where: { userId_postId: { userId, postId } }, data: { vote } });
+const update = async ({ value, userId, postId }) => {
+	const result = await prisma.postVotes.update({ where: { userId_postId: { userId, postId } }, data: { value } });
 	return result;
 };
 
@@ -23,14 +26,7 @@ const list = async () => {
 
 export async function findVote(where) {
 	const res = await prisma.postVotes.findFirst({ where });
-	return res.id;
-}
-
-export async function getEvaluatedVoteCount(postId) {
-	const res = await prisma.postVotes.findMany({ where: { postId } });
-	// vote => positive votes
-	const evaluatedVoteCount = { vote: res.filter((vote) => vote.vote > 0).length, total: res.length };
-	return evaluatedVoteCount;
+	return res?.id;
 }
 
 export default { create, list, destroy, update };

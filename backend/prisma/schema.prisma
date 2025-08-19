@@ -81,7 +81,7 @@ model PostTags {
 
 model PostVotes {
     created DateTime @default(now())
-    vote Int
+    value Boolean
 
     userId String
     user Users @relation( fields: [userId], references: [id],onDelete: Cascade)
@@ -94,7 +94,7 @@ model PostVotes {
 
 model CommentVotes {
     created DateTime @default(now())
-    vote Int
+    value Boolean
 
     userId String
     user Users @relation( fields: [userId], references: [id])

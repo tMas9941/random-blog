@@ -1,7 +1,7 @@
 const formatDate = new Intl.DateTimeFormat("hu", {
 	timeZone: "CET",
 	year: "numeric",
-	month: "numeric",
+	month: "short",
 	day: "numeric",
 });
 const formatTime = new Intl.DateTimeFormat("hu", {

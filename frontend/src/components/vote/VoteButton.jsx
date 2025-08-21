@@ -62,7 +62,7 @@ function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, active
 			onClick={() => changeVoteResult(voteValue)}
 		>
 			{voteValue && <span>{`${text}`}</span>}
-			<SvgComponent name={"nextArrow"} size={25} className={!voteValue && "rotate-180 "} />
+			<SvgComponent name={"nextArrow"} size={25} className={voteValue ? "rotate-180" : ""} />
 			{!voteValue && <span>{`${text}`}</span>}
 		</button>
 	);

@@ -5,6 +5,7 @@ import tagService from "../services/tag.service.js";
 import HttpError from "../utils/HttpError.js";
 import benchmark from "../utils/benchmark.js";
 import calculateVotes from "../utils/calculateVotes.js";
+import cloudinaryService from "../services/cloudinary.service.js";
 
 const create = async (req, res, next) => {
 	const { userId, title, content, tags } = req.body;
@@ -57,6 +58,7 @@ const getByid = async (req, res, next) => {
 		if (!response) throw new HttpError("Error during fetching post!", 405);
 
 		const responseWithVotes = { ...response, votes: calculateVotes(response, userId) };
+
 		res.status(200).send(responseWithVotes);
 	} catch (error) {
 		next(error);

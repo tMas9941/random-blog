@@ -16,7 +16,10 @@ export default function CommentList({ where, user }) {
 	const reRender = useSignal(renderCommentList, "CommentList"); // need to render new comments
 
 	return (
-		<div ref={chunkContainerRef} className="flex flex-col border-y border-accent/50 divide-y-1 divide-accent/50 ">
+		<div
+			ref={chunkContainerRef}
+			className="flex flex-col border-y border-secondary/60 divide-y-1 divide-secondary/60 transition-all duration-500"
+		>
 			{[...Array(page)].map((none, index) => (
 				<ChunkLoader
 					key={index + 1}

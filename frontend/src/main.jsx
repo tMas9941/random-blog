@@ -8,6 +8,8 @@ import Home from "./pages/Home.jsx";
 import Forum from "./pages/Posts.jsx";
 import Profile from "./pages/Profile.jsx";
 import CreatePost from "./pages/CreatePost.jsx";
+import Settings from "./pages/Settings.jsx";
+
 // Router Profile
 import ProfilePosts from "./components/profile/ProfilePosts.jsx";
 import ProfileUpvotes from "./components/profile/ProfileUpvotes.jsx";
@@ -34,6 +36,10 @@ const router = createBrowserRouter([
 					{ path: "/profile/upvotes", element: <ProfileUpvotes /> },
 					{ path: "/profile/comments", element: <ProfileComments /> },
 				],
+			},
+			{
+				path: "/settings",
+				element: <AuthUser component={<Settings />} />,
 			},
 		],
 	},

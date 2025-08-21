@@ -159,7 +159,6 @@ async function main() {
 	);
 
 	mainBench.stop();
-	console.log("Users added : ", users.length);
 }
 main()
 	.catch((e) => {

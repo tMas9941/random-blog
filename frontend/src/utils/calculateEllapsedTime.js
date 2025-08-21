@@ -15,5 +15,6 @@ export default function calculateElapsedTime(time) {
 	if (result[1] > 1) {
 		result[0] += "s";
 	}
+
 	return `${result[1]} ${result[0]}`;
 }

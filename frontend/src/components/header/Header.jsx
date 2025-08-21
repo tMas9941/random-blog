@@ -49,6 +49,7 @@ function UserMenu({ navigate }) {
 			{user && (
 				<DropDownButton text={user.username} avatar={true}>
 					<DropDownItem text={"Profile"} onClick={() => navigate("/profile")} />
+					<DropDownItem text={"Settings"} onClick={() => navigate("/settings")} />
 					<DropDownItem text={"Log out"} onClick={Logout} />
 				</DropDownButton>
 			)}

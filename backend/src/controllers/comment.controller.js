@@ -19,19 +19,12 @@ const list = async (req, res, next) => {
 	try {
 		const list = await commentService.list({ limit, page, where, userId });
 
-		// const newList = await Promise.all(
-		// 	list.map(async (post) => {
-		// 		return { ...post, voteResult: await getEvaluatedCommentCount(post.id) };
-		// 	})
-		// );
-		console.log({ list });
 		const newList = await Promise.all(
 			list.map(async (comment) => {
-				// return { ...post, voteResult: await getEvaluatedVoteCount(post.id) };
 				return { ...comment, votes: calculateVotes(comment, userId) };
 			})
 		);
-		console.log({ newList });
+
 		res.status(200).send(newList);
 	} catch (error) {
 		next(error);

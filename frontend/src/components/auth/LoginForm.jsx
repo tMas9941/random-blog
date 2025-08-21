@@ -47,6 +47,7 @@ export default function LoginForm({ close }) {
 					<h2 className="text-4xl font-bold mb-5">Log in</h2>
 					<FormField name="username" type="text" />
 					<FormField name="password" type="password" />
+
 					<Button
 						disabled={state.lockForm}
 						text={"Log in"}

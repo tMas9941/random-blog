@@ -29,7 +29,7 @@ const getById = async ({ id, userId = "" }) => {
 	const post = await prisma.posts.findUnique({
 		where: { id },
 		include: {
-			author: { select: { username: true } },
+			author: { select: { username: true, profile: { select: { avatarUrl: true } } } },
 			tags: { select: { tagName: true } },
 			votes: true,
 		},

@@ -3,17 +3,21 @@ import authService from "../services/auth.service.js";
 import Signal from "../utils/signal.js";
 import { jwtDecode } from "jwt-decode";
 
-// localStorage.setItem("user", "");
+// localStorage.setItem("userId", "");
 
 export const userSignal = new Signal(await loadUserData());
 export const darkModeSignal = new Signal(
 	(localStorage.getItem("darkMode") && Boolean(JSON.parse(localStorage.getItem("darkMode")))) || false
 );
+
 async function loadUserData() {
-	const userId = localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).id;
-	const user = await authService.validateUser(userId);
-	if (!user) Logout;
-	return user;
+	let userId = localStorage.getItem("userId");
+	if (!userId || userId === "undefined") {
+		Logout;
+	} else {
+		const user = await authService.validateUser(userId);
+		return user;
+	}
 }
 
 export async function Login(data) {
@@ -22,7 +26,7 @@ export async function Login(data) {
 		const token = await authService.login(data);
 		const decodedToken = jwtDecode(token);
 		userSignal.changeValue(decodedToken);
-		localStorage.setItem("userId", JSON.stringify(decodedToken).id);
+		localStorage.setItem("userId", decodedToken.id);
 		return decodedToken;
 	} catch (error) {
 		throw error;
@@ -39,10 +43,10 @@ export const Registration = async (data) => {
 	}
 };
 
-export const Logout = () => {
+export function Logout() {
 	userSignal.changeValue(null);
-	localStorage.setItem("user", null);
-};
+	localStorage.setItem("userId", null);
+}
 
 export const toggleDarkMode = () => {
 	darkModeSignal.changeValue(!darkModeSignal.value);

@@ -19,7 +19,6 @@ export default function Profile() {
 }
 
 function ProfileSide({ user }) {
-	console.log(user, user.profile);
 	return (
 		<div>
 			<h1 className="mb-10">Profile</h1>

@@ -32,4 +32,13 @@ const uploadImage = async () => {
 		});
 };
 
-export default { uploadImage };
+const getFolderData = async (folder) => {
+	config();
+	const result = await cloudinary.api.resources_by_asset_folder(
+		folder,
+		{ max_results: 30 },
+		(error, result) => error || result
+	);
+	return result;
+};
+export default { uploadImage, getFolderData };

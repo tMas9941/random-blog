@@ -1,7 +1,6 @@
 import axiosInstance from "./axios.instance";
 
 const updateAvatarUrl = async (data) => {
-	console.log("data ", data);
 	try {
 		const response = await axiosInstance.put("/profile/avatar", data);
 		return response.data;

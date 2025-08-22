@@ -10,7 +10,7 @@ export default function CommentItem({ data }) {
 
 	return (
 		<div className={"flex py-3 gap-5 hover:bg-secondary/10 animate-fade-in "}>
-			<Avatar text={data.user.username} size={40} url={data.profile.avatarUrl} />
+			<Avatar text={data.user.username} size={60} url={data.user.profile.avatarUrl} />
 
 			<div className="flex flex-col gap-1 ">
 				<div className="flex gap-2">

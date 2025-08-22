@@ -31,7 +31,6 @@ const DisplayAvatar = ({ url, profileId }) => {
 		const changeDB = await profileService.updateAvatarUrl({ url: resFile.url, profileId });
 
 		// Change Cloudonary URL in local user
-		console.log("new prifle ", { ...userSignal.value.profile, avatarUrl: resFile.url });
 		userSignal.changeValue({ ...userSignal.value, profile: { ...userSignal.value.profile, avatarUrl: resFile.url } });
 
 		// Change component states

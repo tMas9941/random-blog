@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import benchmark from "../../src/utils/benchmark.js";
 import bcrypt from "bcrypt";
 import { CLOUD_NAME } from "../../src/constants/constants.js";
+import cloudinaryService from "../../src/services/cloudinary.service.js";
 
 async function readFile(filename, trim = false) {
 	const regex = { paragraphs: /\r?\n/, words: /\r?\n|,|\s|[.]/ };
@@ -75,11 +76,18 @@ async function main() {
 		skipDuplicates: true,
 	});
 
+	// get default avatar's data from cloudinary
+	const cloudDefaultAvatars = await cloudinaryService.getFolderData("default_avatars");
+	// get avatar folder size ( api limited to 30, so it can give back false total_size )
+	const countAvatar = cloudDefaultAvatars.resources.length;
+
 	const profiles = await prisma.profiles.createManyAndReturn({
 		data: users.map((user) => {
+			const randomNumber = rand(0, countAvatar - 1);
+
 			return {
 				userId: user.id,
-				avatarUrl: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v1755695929/default_avatar.jpg`,
+				avatarUrl: cloudDefaultAvatars.resources[randomNumber].secure_url,
 				introduction: paragraphs[rand(0, paragraphs.length - 1)].slice(0, MAX_COMMENT_LENGTH),
 			};
 		}),

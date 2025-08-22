@@ -39,8 +39,8 @@ export default function PostItem({ data, showComment = true }) {
 						))}
 					</div>
 				</div>
-				<div className="min-w-30 [&_div]:m-2 ">
-					<Avatar text={data.author.username} size={60} url={data.author.profile?.avatarUrl} />
+				<div className="min-w-30 [&_div]:mb-2 ">
+					<Avatar text={data.author.username} size={80} url={data.author.profile?.avatarUrl} />
 					<h3 className="font-semibold truncate">{data.author.username}</h3>
 					<p> {convertedDate.date}</p>
 					<p> {convertedDate.time}</p>

@@ -37,7 +37,7 @@ function Password() {
 }
 function Profile() {
 	const user = userSignal.value;
-	console.log("Setting Profile", user.profile);
+
 	// const created = convertTimeStringToDate(user.created);
 	// const daysDifference = calculateElapsedTime(new Date() - new Date(user.created));
 

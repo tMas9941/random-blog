@@ -47,7 +47,7 @@ function UserMenu({ navigate }) {
 	return (
 		<div className="relative h-full flex items-center pe-3 gap-5 ">
 			{user && (
-				<DropDownButton text={user.username} avatar={true}>
+				<DropDownButton text={user.username} avatar={true} url={user.profile.avatarUrl}>
 					<DropDownItem text={"Profile"} onClick={() => navigate("/profile")} />
 					<DropDownItem text={"Settings"} onClick={() => navigate("/settings")} />
 					<DropDownItem text={"Log out"} onClick={Logout} />
@@ -55,13 +55,13 @@ function UserMenu({ navigate }) {
 			)}
 			{!user && <UserMenuButton text={"login"} userMenu={userMenu} />}
 			{!user && <UserMenuButton text={"registration"} userMenu={userMenu} />}
-			<DarkModeSwitch />
 			{user && (
 				<ColorButton onClick={() => navigate("/posts/create")} className="rounded-full">
 					Post
 					<SvgComponent name={"pen"} size={20} className={"ms-3 fill-white"} />
 				</ColorButton>
 			)}
+			<DarkModeSwitch />
 			<PopupWindow popupComponent={<RegistrationForm />} userMenu={userMenu} text={"registration"} />
 			<PopupWindow popupComponent={<LoginForm />} userMenu={userMenu} text={"login"} />
 		</div>

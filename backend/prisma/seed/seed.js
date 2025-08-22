@@ -2,6 +2,7 @@ import prisma from "../../src/models/prisma-client.js";
 import fs from "node:fs/promises";
 import benchmark from "../../src/utils/benchmark.js";
 import bcrypt from "bcrypt";
+import { CLOUD_NAME } from "../../src/constants/constants.js";
 
 async function readFile(filename, trim = false) {
 	const regex = { paragraphs: /\r?\n/, words: /\r?\n|,|\s|[.]/ };
@@ -36,16 +37,23 @@ const MAX_POST_VOTES = 100;
 const MAX_COMMENTS = 10;
 const MAX_COMMENT_VOTES = 30;
 
+const MAX_USERNAME_LENGTH = 30;
+const MAX_TITLE_LENGTH = 150;
+const MAX_POST_LENGTH = 1000;
+const MAX_COMMENT_LENGTH = 300;
+const MAX_TAG_LENGTH = 20;
+
 async function main() {
+	// read txt files
 	const mainBench = benchmark("Seed");
 	const names = await readFile("names", true);
 	const userNames = Array.from({ length: MAX_USER }).map(() => names[rand(0, names.length - 1)]);
 	const paragraphs = await readFile("paragraphs");
 	const words = await readFile("words");
-	// console.log("names : ", names, randWords(words, 6));
 
-	// return;
+	// reset existing tables
 	await prisma.commentVotes.deleteMany({});
+	await prisma.profiles.deleteMany({});
 	await prisma.postTags.deleteMany({});
 	await prisma.tags.deleteMany({});
 	await prisma.posts.deleteMany({});
@@ -54,7 +62,7 @@ async function main() {
 	const usersData = await Promise.all([
 		...userNames.map(async (name, index) => {
 			return {
-				username: name,
+				username: name.slice(0, MAX_USERNAME_LENGTH),
 				email: `${name + index}@email.com`,
 				password: await bcrypt.hash("1111111111", 1),
 				created: randCreation(1000),
@@ -67,9 +75,19 @@ async function main() {
 		skipDuplicates: true,
 	});
 
+	const profiles = await prisma.profiles.createManyAndReturn({
+		data: users.map((user) => {
+			return {
+				userId: user.id,
+				avatarUrl: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v1755695929/default_avatar.jpg`,
+				introduction: paragraphs[rand(0, paragraphs.length - 1)].slice(0, MAX_COMMENT_LENGTH),
+			};
+		}),
+	});
+
 	const tags = await prisma.tags.createManyAndReturn({
 		data: Array.from({ length: 100 }).map(() => {
-			return { name: randWords(words, 1, 2), created: randCreation(1000) };
+			return { name: randWords(words, 1, 2).slice(0, MAX_TAG_LENGTH), created: randCreation(1000) };
 		}),
 		skipDuplicates: true,
 	});
@@ -82,8 +100,8 @@ async function main() {
 						async (item) =>
 							await prisma.posts.create({
 								data: {
-									title: randWords(words, 3, 8),
-									content: paragraphs[rand(0, paragraphs.length - 1)],
+									title: randWords(words, 3, 8).slice(0, MAX_TITLE_LENGTH),
+									content: paragraphs[rand(0, paragraphs.length - 1)].slice(0, MAX_POST_LENGTH),
 									created: randCreation(index),
 									authorId: user.id,
 									tags: {
@@ -116,7 +134,7 @@ async function main() {
 											data: [
 												...Array.from({ length: rand(0, MAX_COMMENTS) }).map(() => {
 													return {
-														content: randWords(words, 2, 20),
+														content: randWords(words, 2, 20).slice(0, MAX_COMMENT_LENGTH),
 														userId: users[rand(0, users.length - 1)].id,
 													};
 												}),

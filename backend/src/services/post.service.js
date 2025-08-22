@@ -10,7 +10,7 @@ const list = async ({ limit, page, where, userId }) => {
 		skip: limit && page && (page - 1) * limit,
 		take: limit && Number(limit),
 		include: {
-			author: { select: { username: true } },
+			author: { select: { username: true, profile: { select: { avatarUrl: true } } } },
 			tags: { select: { tagName: true } },
 			votes: true,
 			_count: {

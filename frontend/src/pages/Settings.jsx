@@ -1,6 +1,6 @@
 import React from "react";
 import { userSignal } from "../global/userData";
-import UploadAndDisplayImage from "../components/misc/UploadAndDisplayImage";
+import DisplayAvatar from "../components/misc/DisplayAvatar";
 import calculateElapsedTime from "../utils/calculateEllapsedTime";
 import convertTimeStringToDate from "../utils/convertTimeStringToDate";
 import { Formik, Form } from "formik";
@@ -37,8 +37,9 @@ function Password() {
 }
 function Profile() {
 	const user = userSignal.value;
-	const created = convertTimeStringToDate(user.created);
-	const daysDifference = calculateElapsedTime(new Date() - new Date(user.created));
+	console.log("Setting Profile", user.profile);
+	// const created = convertTimeStringToDate(user.created);
+	// const daysDifference = calculateElapsedTime(new Date() - new Date(user.created));
 
 	const handleSubmit = (data) => {
 		console.log(data);
@@ -47,9 +48,9 @@ function Profile() {
 		<>
 			<h2>Profile</h2>
 			<div className="flex gap-10 [&_p]:text-xl">
-				<UploadAndDisplayImage />
+				<DisplayAvatar url={user.profile.avatarUrl} profileId={user.profile.id} />
 				<Formik
-					initialValues={{ username: user.username, email: user.email }}
+					initialValues={{ username: user.username, email: user.email, introduction: user.profile.introduction }}
 					validationSchema={profileValidation}
 					onSubmit={handleSubmit}
 				>
@@ -58,12 +59,9 @@ function Profile() {
 							"relative flex flex-col gap-2 w-[50%] min-w-[300px] [&>input]:border [&>input]:border-secondary [&>input]:rounded "
 						}
 					>
-						<div className="w-full ">
-							<FormField name="username" type="text" />
-							<FormField name="email" type="text" />
-							<FormField name="country" type="text" />
-						</div>
-						<CountryPicker />
+						<FormField name="username" type="text" />
+						<FormField name="email" type="text" />
+
 						<FormField
 							as="textarea"
 							name="introduction"
@@ -71,6 +69,7 @@ function Profile() {
 							placeholder={"Tell us about yourself..."}
 							className="h-[15em]"
 						/>
+						<CountryPicker />
 						<Button
 							// disabled={state.lockForm}
 							text={"Save changes"}

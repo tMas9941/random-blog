@@ -17,4 +17,13 @@ const login = async (data) => {
 	}
 };
 
-export default { registration, login };
+const validateUser = async (id) => {
+	try {
+		const response = await axiosInstance.get(`/user/${id}`);
+		return response.data;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export default { registration, login, validateUser };

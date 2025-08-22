@@ -11,4 +11,16 @@ const list = async (req, res, next) => {
 	}
 };
 
-export default { list };
+const getById = async (req, res, next) => {
+	const { id } = req.params;
+
+	try {
+		const user = await userService.getById(id);
+		if (!user) throw new HttpError("User not found!", 404);
+		res.status(200).send(user);
+	} catch (error) {
+		next(error);
+	}
+};
+
+export default { list, getById };

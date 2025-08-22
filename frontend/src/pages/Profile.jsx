@@ -19,11 +19,13 @@ export default function Profile() {
 }
 
 function ProfileSide({ user }) {
+	console.log(user, user.profile);
 	return (
 		<div>
 			<h1 className="mb-10">Profile</h1>
-			<div className="flex">
+			<div className="flex flex-col gap-5 w-80">
 				<AvatarSection user={user} />
+				<p className="">{user.profile?.introduction}</p>
 			</div>
 		</div>
 	);

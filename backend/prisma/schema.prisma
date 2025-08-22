@@ -17,8 +17,8 @@ datasource db {
 
 model Posts {
     id String @id @default(cuid())
-    title String
-    content String
+    title String @db.VarChar(150)
+    content String  @db.VarChar(1000)
     created DateTime @default(now())
 
     authorId String
@@ -30,11 +30,12 @@ model Posts {
 }
 model Users {
     id String @id @default(cuid())
-    username String @unique
+    username String @unique @db.VarChar(30)
+    password String 
     email String    @unique
     created DateTime @default(now())
-    password String
-
+    
+    profile Profiles?
     posts Posts[]
     comments Comments[]
 
@@ -42,10 +43,19 @@ model Users {
     commentVotes CommentVotes[]
 }
 
+model Profiles {
+    id String @id @default(cuid())
+    avatarUrl String
+    introduction String @db.VarChar(300)
+
+    userId String @unique @map("profileUserId")
+    user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model Comments {
     id String @id @default(cuid())
     created DateTime @default(now())
-    content String
+    content String @db.VarChar(300)
 
     userId String
     user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -63,7 +73,7 @@ model Comments {
 
 
 model Tags {
-    name String @id
+    name String @id @db.VarChar(20)
     created DateTime @default(now())
     posts PostTags[]
 }

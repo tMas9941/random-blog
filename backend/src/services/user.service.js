@@ -13,9 +13,9 @@ const create = ({ username, email, password }) => {
 
 	return newUser;
 };
-
+const getById = (id) => prisma.users.findUnique({ where: { id }, include: { profile: true } });
 const findByEmail = (email) => prisma.users.findFirst({ where: { email } });
 
-const findByUsername = (username) => prisma.users.findFirst({ where: { username } });
+const findByUsername = (username) => prisma.users.findFirst({ where: { username }, include: { profile: true } });
 
-export default { list, create, findByEmail, findByUsername };
+export default { list, create, findByEmail, findByUsername, getById };

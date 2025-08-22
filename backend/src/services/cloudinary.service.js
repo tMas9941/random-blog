@@ -10,7 +10,6 @@ const config = () => {
 };
 
 const uploadImage = async () => {
-	console.log("START UPLOAD");
 	config();
 	const uploadResult = await cloudinary.uploader
 		.upload("./src/services/sky.jpg", {
@@ -31,7 +30,6 @@ const uploadImage = async () => {
 		.catch((error) => {
 			console.log(error);
 		});
-	console.log(uploadResult);
 };
 
 export default { uploadImage };

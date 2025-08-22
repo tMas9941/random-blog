@@ -10,7 +10,7 @@ const list = async ({ limit, page, where, userId }) => {
 	const response = await prisma.comments.findMany({
 		skip: limit && page && (page - 1) * limit,
 		take: limit && Number(limit),
-		include: { user: { select: { username: true } }, votes: true },
+		include: { user: { select: { username: true, profile: { avatarUrl: true } } }, votes: true },
 		where: where,
 		orderBy: { created: "desc" },
 	});

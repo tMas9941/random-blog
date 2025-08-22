@@ -1,5 +1,8 @@
-export default function Avatar({ text = "X", size = 80, color = "green" }) {
-	const firstLetter = text[0].toUpperCase();
+import { CLOUD_NAME } from "../../constants/constants";
+
+const defaultUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v1755695929/default_avatar.jpg`;
+
+export default function Avatar({ size = 80, url = defaultUrl }) {
 	return (
 		<div
 			style={{
@@ -7,14 +10,11 @@ export default function Avatar({ text = "X", size = 80, color = "green" }) {
 				minHeight: size,
 				width: size,
 				height: size,
-				backgroundColor: color,
-				borderWidth: size * 0.05,
+				borderWidth: Math.max(2, size * 0.04),
 			}}
-			className="relative flex items-center justify-center rounded-full overflow-hidden select-none"
+			className="relative flex items-center justify-center rounded-[15%] overflow-hidden select-none"
 		>
-			<span style={{ fontSize: size * 1.2, marginBottom: size * 0.2 }} className="font-semibold text-n-text">
-				{firstLetter}
-			</span>
+			<img className="z-2 w-full h-full pointer-events-none " src={url} />
 		</div>
 	);
 }

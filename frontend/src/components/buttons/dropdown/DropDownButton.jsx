@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Button from "../Button";
-import SvgComponent from "../../misc/SvgComponent";
+
 import Avatar from "../../misc/Avatar";
 
-export default function DropDownButton({ children, text, avatar = false }) {
+export default function DropDownButton({ children, text, avatar = false, url }) {
 	const [toggled, setToggled] = useState(false);
 
 	const toggleDropDownMenu = (e) => {
@@ -18,8 +18,7 @@ export default function DropDownButton({ children, text, avatar = false }) {
 				text={!avatar && text}
 				onClick={toggleDropDownMenu}
 			>
-				{/* <SvgComponent name={"singleArrow"} size={20} className={`${toggled ? "rotate-270 " : "rotate-90 "}`} /> */}
-				<Avatar text={text} size={35} />
+				<Avatar text={text} size={40} url={url} />
 			</Button>
 			<div
 				className={"absolute z-20 w-50 h-fit rounded-sm border-1 border-white/30 bg-n-background"}

@@ -43,7 +43,7 @@ export default function Header() {
 function UserMenu({ navigate }) {
 	const user = useSignal(userSignal, "header");
 	const userMenu = useUserMenu();
-	console.log("header ", { user });
+
 	return (
 		<div className="relative h-full flex items-center pe-3 gap-5 ">
 			{user && (

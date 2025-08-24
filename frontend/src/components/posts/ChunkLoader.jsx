@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 // Services
 import postService from "../../services/post.service";
@@ -16,7 +16,7 @@ const chunkItems = {
 
 export const CHUNK_TYPE = { post: "post", comment: "comment" };
 
-export default function Chunkloader({ index = 1, type, query, reRender }) {
+const Chunkloader = ({ index = 1, type, query, reRender }) => {
 	const [list, setList] = useState();
 	const loading = useRef(false);
 
@@ -42,4 +42,11 @@ export default function Chunkloader({ index = 1, type, query, reRender }) {
 			))}
 		</>
 	);
+};
+export default memo(Chunkloader, areEqual);
+
+function areEqual(prevProps, nextProps) {
+	if (prevProps.index !== nextProps.index) return false;
+	if (prevProps.reRender !== nextProps.reRender) return false;
+	return true;
 }

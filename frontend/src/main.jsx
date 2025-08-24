@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Routes
 import App from "./App.jsx";
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
 		path: "/",
 		element: <App />,
 		children: [
-			{ path: "/home", element: <Home /> },
+			{ path: "/home", index: true, element: <Home /> },
 			{ path: "/posts", element: <Forum /> },
 			{ path: "/posts/:id", element: <PostPage /> },
 			{ path: "/posts/create", element: <AuthUser component={<CreatePost />} /> },
@@ -41,8 +41,10 @@ const router = createBrowserRouter([
 				path: "/settings",
 				element: <AuthUser component={<Settings />} />,
 			},
+			{ path: "/", element: <Navigate to={`/home`} /> },
 		],
 	},
+
 	{
 		path: "*",
 		element: <h1>Page not found!</h1>,

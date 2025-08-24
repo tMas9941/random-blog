@@ -12,7 +12,7 @@ export const darkModeSignal = new Signal(
 
 async function loadUserData() {
 	let userId = localStorage.getItem("userId");
-	if (!userId || userId === "undefined") {
+	if (!userId || userId === "undefined" || userId === "null") {
 		Logout;
 	} else {
 		const user = await authService.validateUser(userId);
@@ -44,8 +44,8 @@ export const Registration = async (data) => {
 };
 
 export function Logout() {
-	userSignal.changeValue(null);
-	localStorage.setItem("userId", null);
+	userSignal.changeValue(undefined);
+	localStorage.setItem("userId", undefined);
 }
 
 export const toggleDarkMode = () => {

@@ -6,6 +6,7 @@ import Avatar from "../misc/Avatar";
 import commentService from "../../services/comment.service";
 
 import { renderCommentList } from "./CommentList";
+import SvgComponent from "../misc/SvgComponent";
 
 export default function CommentInput({ postId, user }) {
 	const textRef = useRef();
@@ -35,7 +36,7 @@ export default function CommentInput({ postId, user }) {
 
 	return (
 		<div ref={container} id={"inputContainer"} className="flex gap-5 mb-10">
-			<Avatar size={40} />
+			<SvgComponent name={"comment"} size={50} className={"fill-accent"} />
 			<div className={"flex flex-col  w-full me-30 " + focusClass}>
 				<textarea
 					ref={textRef}

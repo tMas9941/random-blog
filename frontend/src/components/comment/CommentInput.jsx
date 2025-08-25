@@ -1,26 +1,20 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 // Components
 import ColorButton from "../buttons/ColorButton";
-import Avatar from "../misc/Avatar";
 import commentService from "../../services/comment.service";
 
 import { renderCommentList } from "./CommentList";
 import SvgComponent from "../misc/SvgComponent";
 
+const focusClass =
+	"focus-within:[&>textarea]:h-24 focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";
+
 export default function CommentInput({ postId, user }) {
 	const textRef = useRef();
 	const container = useRef();
 
-	if (!user)
-		return (
-			<div className="flex items-center justify-center min-h-12 mb-10 text-lg p-1 rounded bg-secondary/20 text-center my-auto ">
-				Login to add comments...
-			</div>
-		);
-
-	const focusClass =
-		"focus-within:[&>textarea]:h-24 focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";
+	if (!user) return <NoUser />;
 
 	const clearText = () => {
 		textRef.current.value = "";
@@ -28,7 +22,11 @@ export default function CommentInput({ postId, user }) {
 	};
 
 	const postComment = async () => {
-		await commentService.create({ userId: user.id, postId, content: textRef.current.value });
+		try {
+			await commentService.create({ userId: user.id, postId, content: textRef.current.value });
+		} catch (error) {
+			return;
+		}
 
 		renderCommentList.changeValue(renderCommentList.value + 1);
 		clearText();
@@ -56,6 +54,14 @@ export default function CommentInput({ postId, user }) {
 					<ColorButton className="mt-5" text={"Comment"} onClick={postComment}></ColorButton>
 				</div>
 			</div>
+		</div>
+	);
+}
+
+function NoUser() {
+	return (
+		<div className="flex items-center justify-center min-h-12 mb-10 text-lg p-1 rounded bg-secondary/20 text-center my-auto ">
+			Login to add comments...
 		</div>
 	);
 }

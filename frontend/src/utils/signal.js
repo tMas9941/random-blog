@@ -1,9 +1,11 @@
+// connected functions will be called when changeValue is triggered
 export default class Signal {
 	constructor(value) {
 		this.value = value;
 		this.connectedFunctions = {};
 	}
 
+	// expected Str name and a function -  functions with the same name will be overwrited
 	connect(functionName, newFunction) {
 		this.connectedFunctions[functionName] = newFunction;
 	}

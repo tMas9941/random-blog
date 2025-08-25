@@ -8,7 +8,7 @@ import ColorButton from "../components/buttons/ColorButton";
 import postValidation from "../validations/postValidation";
 import postService from "../services/post.service";
 import { userSignal } from "../global/userData";
-import { CREATE_STATES, createPostReducer } from "../hooks/reducers/createPostReducer";
+import { CREATE_POST_STATES, createPostReducer } from "../hooks/reducers/createPostReducer";
 import FormStatusMsg from "../components/auth/FormStatusMsg";
 
 import TagField from "../components/posts/TagField";
@@ -17,43 +17,53 @@ export default function CreatePost() {
 	return (
 		<div className="w-fit h-full mx-auto w-fit">
 			<h1>Create Post</h1>
-
 			<CreateForm />
 		</div>
 	);
 }
 
 const TIMEOUT = 2000;
-const CreateForm = () => {
-	const [state, dispatch] = useReducer(createPostReducer, CREATE_STATES.INIT);
+function CreateForm() {
+	const [state, dispatch] = useReducer(createPostReducer, CREATE_POST_STATES.INIT);
 	const tagsRef = useRef([]);
 	const navigate = useNavigate();
 
 	const handleSubmit = async (data) => {
-		// detect empty tag container
-		if (tagsRef.current.length === 0) {
-			dispatch({ newState: CREATE_STATES.TAGS_ERROR });
+		if (isTagContainerEmpty()) {
+			dispatch({ newState: CREATE_POST_STATES.TAGS_ERROR });
 			return;
 		}
-		// start uploading new post
-		dispatch({ newState: CREATE_STATES.FETCH_START });
+
 		try {
-			await postService.create({ ...data, userId: userSignal.value.id, tags: tagsRef.current });
-			dispatch({ newState: CREATE_STATES.FETCH_SUCCESS });
-			setTimeout(() => {
-				// navigate("/posts");
-				dispatch({ newState: CREATE_STATES.INIT });
-			}, TIMEOUT);
+			createPost(data);
 		} catch (error) {
-			dispatch({
-				newState: CREATE_STATES.FETCH_FAILED,
-				addValue: { message: error?.message },
-			});
-			setTimeout(() => {
-				dispatch({ newState: CREATE_STATES.INIT });
-			}, TIMEOUT);
+			handleError(error);
 		}
 	};
+
+	function isTagContainerEmpty() {
+		return tagsRef.current.length === 0;
+	}
+
+	async function createPost(data) {
+		dispatch({ newState: CREATE_POST_STATES.FETCH_START });
+		await postService.create({ ...data, userId: userSignal.value.id, tags: tagsRef.current });
+		dispatch({ newState: CREATE_POST_STATES.FETCH_SUCCESS });
+		setTimeout(() => {
+			navigate("/posts");
+			dispatch({ newState: CREATE_POST_STATES.INIT });
+		}, TIMEOUT);
+	}
+
+	function handleError(error) {
+		dispatch({
+			newState: CREATE_POST_STATES.FETCH_FAILED,
+			addValue: { message: error?.message },
+		});
+		setTimeout(() => {
+			dispatch({ newState: CREATE_POST_STATES.INIT });
+		}, TIMEOUT);
+	}
 
 	return (
 		<div className="relative min-h-10 min-w-100 max-w-100 mt-5">
@@ -85,7 +95,7 @@ const CreateForm = () => {
 						type="text"
 						tagsRef={tagsRef}
 						tagMessage={state.tagMessage}
-						clearMessage={() => dispatch({ newState: CREATE_STATES.INIT })}
+						clearMessage={() => dispatch({ newState: CREATE_POST_STATES.INIT })}
 					/>
 					<div className="flex justify-between !opacity-100">
 						<ColorButton
@@ -108,4 +118,4 @@ const CreateForm = () => {
 			</Formik>
 		</div>
 	);
-};
+}

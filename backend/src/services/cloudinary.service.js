@@ -8,21 +8,17 @@ cloudinary.config({
 });
 
 const uploadFile = async ({ img, preset, publicId }) => {
-	try {
-		const uploadResult = await new Promise((resolve, reject) => {
-			cloudinary.uploader
-				.upload_stream({ upload_preset: preset, public_id: publicId }, (error, uploadResult) => {
-					if (error) {
-						return reject(error);
-					}
-					return resolve(uploadResult);
-				})
-				.end(img.buffer);
-		});
-		return uploadResult;
-	} catch (error) {
-		throw error;
-	}
+	const uploadResult = await new Promise((resolve, reject) => {
+		cloudinary.uploader
+			.upload_stream({ upload_preset: preset, public_id: publicId }, (error, uploadResult) => {
+				if (error) {
+					return reject(error);
+				}
+				return resolve(uploadResult);
+			})
+			.end(img.buffer);
+	});
+	return uploadResult;
 };
 
 const getFolderData = async (folder) => {

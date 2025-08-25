@@ -51,8 +51,8 @@ export default function TagField({ name, text, className = "", tagsRef, tagMessa
 			</label>
 			<div
 				className={` ${
-					tagMessage ? "border-warning/50" : "border-[gray]/70"
-				} w-full border  p-[3px] flex gap-1 items-center flex-wrap`}
+					tagMessage ? "outline-warning/50" : "outline-[gray]/70 outline-transparent focus-within:outline-primary"
+				} w-full  p-[3px] flex gap-1 items-center flex-wrap  bg-secondary/20  outline-1 rounded-sm `}
 			>
 				{tags.map((tagName) => (
 					<TagBlock key={tagName} name={tagName} remove={removeTag} />
@@ -60,10 +60,11 @@ export default function TagField({ name, text, className = "", tagsRef, tagMessa
 				<input
 					ref={inputRef}
 					type="text"
+					name={name}
 					placeholder={"Add new tag..."}
 					onKeyDown={(e) => e.key === "Enter" && handeleInput(e)}
 					onKeyUp={handeleInput}
-					className={"text-inherit w-full bg-secondary/10 p-1 !outline-none my-1 text-gray-500 " + +className}
+					className={" text-inherit w-full p-1 !outline-none my-1 text-gray-500" + className}
 				/>
 			</div>
 		</div>

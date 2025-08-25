@@ -10,6 +10,7 @@ import useSignal from "../../hooks/useSignal";
 export const renderCommentList = new Signal(0);
 
 const CHUNK_SIZE = 5;
+
 export default function CommentList({ where, user }) {
 	const chunkContainerRef = useRef();
 	const page = useScrollDetect(chunkContainerRef, CHUNK_SIZE);

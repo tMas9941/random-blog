@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import SvgComponent from "./SvgComponent";
 
 import objToFormData from "../../utils/objToFormData";
-import { CLOUD_NAME } from "../../constants/constants";
 import profileService from "../../services/profile.service";
 import Loader from "./loader/Loader";
 import { userSignal } from "../../global/userData";

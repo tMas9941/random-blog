@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../Button";
 
 import Avatar from "../../misc/Avatar";
+import ClickDetector from "../../misc/ClickDetector";
 
 export default function DropDownButton({ children, text, avatar = false, url }) {
 	const [toggled, setToggled] = useState(false);
@@ -27,12 +28,7 @@ export default function DropDownButton({ children, text, avatar = false, url }) 
 			>
 				{children}
 			</div>
-			{/* detect click out of popup */}
-			<div
-				className="fixed z-19 left-0 top-0 min-h-full min-w-full "
-				onClick={toggleDropDownMenu}
-				hidden={!toggled}
-			></div>
+			<ClickDetector onClick={toggleDropDownMenu} hidden={!toggled} />
 		</div>
 	);
 }

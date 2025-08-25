@@ -1,4 +1,4 @@
-export const CREATE_STATES = {
+export const CREATE_POST_STATES = {
 	INIT: {
 		tagMessage: null,
 		lockForm: false,

@@ -16,6 +16,7 @@ export default function PostsList({ where, user }) {
 					key={index + 1}
 					query={{ limit: CHUNK_SIZE, page: index + 1, where: JSON.stringify(where), userId: user?.id }}
 					type={CHUNK_TYPE.post}
+					userId={user?.id}
 				/>
 			))}
 		</div>

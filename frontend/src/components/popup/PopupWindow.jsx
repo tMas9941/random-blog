@@ -27,7 +27,8 @@ export default function PopupWindow({ popupComponent, userMenu, text }) {
 				}`}
 			>
 				{/* bind the  close popup  function to the passed component */}
-				{AddExtraProps(popupComponent, { close: userMenu.reset })}
+				{AddExtraProps(popupComponent, { closePopup: userMenu.reset })}
+
 				{/* detect click out of popup */}
 				<div
 					className="fixed -z-1 left-0 top-0 h-full w-full bg-black/30 backdrop-blur-[1px]"

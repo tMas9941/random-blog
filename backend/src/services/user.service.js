@@ -1,21 +1,22 @@
 import prisma from "../models/prisma-client.js";
 
-const list = () => prisma.users.findMany();
+const list = async () => await prisma.users.findMany();
 
-const create = ({ username, email, password }) => {
-	const newUser = prisma.users.create({
+const create = async ({ username, email, password }) => {
+	const newUser = await prisma.users.create({
 		data: {
 			username,
 			email,
 			password,
 		},
 	});
-
 	return newUser;
 };
-const getById = (id) => prisma.users.findUnique({ where: { id }, include: { profile: true } });
-const findByEmail = (email) => prisma.users.findFirst({ where: { email } });
+const getById = async (id) => await prisma.users.findUnique({ where: { id }, include: { profile: true } });
 
-const findByUsername = (username) => prisma.users.findFirst({ where: { username }, include: { profile: true } });
+const findByEmail = async (email) => await prisma.users.findFirst({ where: { email } });
+
+const findByUsername = async (username) =>
+	await prisma.users.findFirst({ where: { username }, include: { profile: true } });
 
 export default { list, create, findByEmail, findByUsername, getById };

@@ -9,24 +9,29 @@ import FormStatusMsg from "./FormStatusMsg.jsx";
 import FormField from "../misc/FormField.jsx";
 import registrationValidation from "../../validations/registrationValidation.js";
 
-export default function RegistrationForm({ close }) {
-	const [state, dispatch] = useReducer(registrationReducer, REG_STATES.INIT);
+const MSG_TIMEOUT = 1300;
+export default function RegistrationForm({ closePopup }) {
+	const [state, dispatch] = useReducer(registrationReducer, REG_STATES.INIT); // handle popup msg and form data
 
 	const handleSubmit = async (data, { resetForm }) => {
-		dispatch({ newState: REG_STATES.FETCH_START });
 		try {
-			await Registration(data);
-			dispatch({ newState: REG_STATES.FETCH_SUCCESS });
-			setTimeout(() => {
-				resetForm();
-				close();
-			}, 1100);
+			await attemptRegistration(data, resetForm);
 		} catch (error) {
 			dispatch({ newState: REG_STATES.FETCH_FAILED, addValue: { message: error?.message } });
+		} finally {
+			setTimeout(() => dispatch({ newState: REG_STATES.INIT }), MSG_TIMEOUT);
 		}
-
-		setTimeout(() => dispatch({ newState: REG_STATES.INIT }), 1300);
 	};
+
+	async function attemptRegistration(data, resetForm) {
+		dispatch({ newState: REG_STATES.FETCH_START });
+		await Registration(data);
+		dispatch({ newState: REG_STATES.FETCH_SUCCESS });
+		setTimeout(() => {
+			resetForm();
+			closePopup();
+		}, MSG_TIMEOUT);
+	}
 
 	return (
 		<div className="relative min-h-10 min-w-80 ">

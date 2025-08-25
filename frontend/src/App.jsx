@@ -3,17 +3,16 @@ import Header from "./components/header/Header";
 import useSignal from "./hooks/useSignal";
 import { darkModeSignal } from "./global/userData";
 
+const themes = {
+	true: "bg-n-background text-n-text fill-n-text stroke-n-text",
+	false: "bg-background text-text fill-text stroke-text",
+};
+
 function App() {
 	const darkMode = useSignal(darkModeSignal, "App");
 
 	return (
-		<div
-			className={` ${
-				darkMode
-					? "bg-n-background text-n-text fill-n-text stroke-n-text"
-					: "bg-background text-text fill-text stroke-text"
-			} min-h-screen `}
-		>
+		<div className={"min-h-screen  " + themes[darkMode]}>
 			<Header />
 			<div className="py-20 max-w-[1280px] mx-auto [&_h1]:text-4xl [&_h1]:font-semibold ">
 				<Outlet />

@@ -11,8 +11,8 @@ const formatTime = new Intl.DateTimeFormat("hu", {
 	second: "2-digit",
 });
 
+// convert string date to Date
+// returns the date and time separated
 export default function convertTimeStringToDate(timeStr) {
-	// convert string date to Date
-	// returns the date and time separated
 	return { date: formatDate.format(new Date(timeStr)), time: formatTime.format(new Date(timeStr)) };
 }

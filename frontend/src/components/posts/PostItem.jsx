@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import TagBlock from "./TagBlock";
 
 // Utils
@@ -17,35 +17,12 @@ import { userSignal } from "../../global/userData";
 const buttonClass = "flex items-center gap-2 fill-accent text-xl !px-4";
 export default function PostItem({ data, showComment = true }) {
 	if (!data) return <></>;
-	const convertedDate = convertTimeStringToDate(data.created);
-	const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
+
 	const selfPost = data.authorId === userSignal.value?.id;
 
 	return (
 		<div className="w-full py-5  ">
-			<div className="flex gap-4 ">
-				<div className="flex flex-col w-full gap-5 mb-5 [&>p]:min-h-20">
-					<div>
-						<Link to={"/posts/" + data.id} className="text-2xl font-semibold ">
-							{data.title}
-						</Link>
-						<p className="inline ms-3 mt-auto font-italic text-sm text-[gray]/80"> {timePassed}</p>
-					</div>
-					<p>{data.content}</p>
-
-					<div className="flex gap-2 mt-auto ">
-						{data.tags.map((tag) => (
-							<TagBlock key={tag.tagName} name={tag.tagName} />
-						))}
-					</div>
-				</div>
-				<div className="min-w-30 [&_div]:mb-2 ">
-					<Avatar text={data.author.username} size={80} url={data.author.profile?.avatarUrl} />
-					<h3 className="font-semibold truncate">{data.author.username}</h3>
-					<p> {convertedDate.date}</p>
-					<p> {convertedDate.time}</p>
-				</div>
-			</div>
+			<PostContent data={data} />
 			<ButtonContainer>
 				<VoteButton postId={data.id} votes={data.votes} />
 				{showComment && <CommentButton postId={data.id} count={data._count.comments} />}
@@ -71,3 +48,38 @@ const CommentButton = ({ postId, count }) => (
 		Comments
 	</Link>
 );
+
+const PostContent = memo(({ data }) => {
+	const convertedDate = convertTimeStringToDate(data.created);
+	const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
+	return (
+		<div className="flex gap-4 ">
+			<div className="flex flex-col w-full gap-5 mb-5 [&>p]:min-h-20">
+				<div>
+					<Link to={"/posts/" + data.id} className="text-2xl font-semibold ">
+						{data.title}
+					</Link>
+					<p className="inline ms-3 mt-auto font-italic text-sm text-[gray]/80"> {timePassed}</p>
+				</div>
+				<p>{data.content}</p>
+
+				<div className="flex gap-2 mt-auto ">
+					{data.tags.map((tag) => (
+						<TagBlock key={tag.tagName} name={tag.tagName} />
+					))}
+				</div>
+			</div>
+			<div className="min-w-30 [&_div]:mb-2 ">
+				<Avatar text={data.author.username} size={80} url={data.author.profile?.avatarUrl} />
+				<h3 className="font-semibold truncate">{data.author.username}</h3>
+				<p> {convertedDate.date}</p>
+				<p> {convertedDate.time}</p>
+			</div>
+		</div>
+	);
+}, areEqual);
+
+function areEqual(prevProps, nextProps) {
+	if (prevProps.content !== nextProps.content) return false;
+	return true;
+}

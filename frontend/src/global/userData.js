@@ -6,22 +6,30 @@ import { jwtDecode } from "jwt-decode";
 // localStorage.setItem("userId", "");
 
 export const userSignal = new Signal(await loadUserData());
-export const darkModeSignal = new Signal(
-	(localStorage.getItem("darkMode") && Boolean(JSON.parse(localStorage.getItem("darkMode")))) || false
-);
+export const darkModeSignal = new Signal(loadDarkMode());
+
+function loadDarkMode() {
+	return (localStorage.getItem("darkMode") && Boolean(JSON.parse(localStorage.getItem("darkMode")))) || false;
+}
 
 async function loadUserData() {
+	// load userId from localstorage and validates it
 	let userId = localStorage.getItem("userId");
-	if (!userId || userId === "undefined" || userId === "null") {
+	if (isUserNull(userId)) {
 		Logout;
-	} else {
-		const user = await authService.validateUser(userId);
-		return user;
+		return;
+	}
+
+	const user = await authService.validateUser(userId);
+	return user;
+
+	function isUserNull(userId) {
+		return !userId || userId === "undefined" || userId === "null";
 	}
 }
 
 export async function Login(data) {
-	// login and get token from backend and decode it
+	// get token from backend and decode it, then save user
 	try {
 		const token = await authService.login(data);
 		const decodedToken = jwtDecode(token);

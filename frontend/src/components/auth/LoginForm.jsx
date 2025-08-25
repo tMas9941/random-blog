@@ -10,29 +10,33 @@ import FormStatusMsg from "./FormStatusMsg.jsx";
 import loginValidation from "../../validations/loginValidation.js";
 import FormField from "../misc/FormField.jsx";
 
-export default function LoginForm({ close }) {
-	const [state, dispatch] = useReducer(loginReducer, LOGIN_STATES.INIT);
+const MSG_TIMEOUT = 1000;
+export default function LoginForm({ closePopup }) {
+	const [state, dispatch] = useReducer(loginReducer, LOGIN_STATES.INIT); // handle popup msg and form data
 
 	const handleSubmit = async (data, { resetForm }) => {
-		dispatch({ newState: LOGIN_STATES.FETCH_START });
-
 		try {
-			await Login(data);
-			dispatch({ newState: LOGIN_STATES.FETCH_SUCCESS });
-			setTimeout(() => {
-				close();
-				resetForm();
-			}, 700);
+			await attemptLogin(data);
 		} catch (error) {
-			dispatch({
-				newState: LOGIN_STATES.FETCH_FAILED,
-				addValue: { message: error?.message },
-			});
+			handleError(error);
+		} finally {
+			setTimeout(() => dispatch({ newState: LOGIN_STATES.INIT }), MSG_TIMEOUT);
 		}
-
-		setTimeout(() => dispatch({ newState: LOGIN_STATES.INIT }), 1000);
 	};
 
+	async function attemptLogin(data) {
+		dispatch({ newState: LOGIN_STATES.FETCH_START });
+		await Login(data);
+		dispatch({ newState: LOGIN_STATES.FETCH_SUCCESS });
+		setTimeout(() => closePopup(), MSG_TIMEOUT);
+	}
+
+	function handleError(error) {
+		dispatch({
+			newState: LOGIN_STATES.FETCH_FAILED,
+			addValue: { message: error?.message },
+		});
+	}
 	return (
 		<div className="relative bg-inherit text-inherit min-h-10 min-w-80">
 			<FormStatusMsg state={state} />

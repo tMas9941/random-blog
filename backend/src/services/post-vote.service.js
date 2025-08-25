@@ -1,12 +1,8 @@
 import prisma from "../models/prisma-client.js";
 
 const create = async ({ value, userId, postId }) => {
-	try {
-		const result = await prisma.postVotes.create({ data: { value, userId, postId } });
-		return result;
-	} catch (error) {
-		throw error;
-	}
+	const result = await prisma.postVotes.create({ data: { value, userId, postId } });
+	return result;
 };
 
 const destroy = async ({ userId, postId }) => {

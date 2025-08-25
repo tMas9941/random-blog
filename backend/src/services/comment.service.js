@@ -14,7 +14,7 @@ const list = async ({ limit, page, where, userId }) => {
 		where: where,
 		orderBy: { created: "desc" },
 	});
-	console.log(response);
+
 	return response;
 };
 

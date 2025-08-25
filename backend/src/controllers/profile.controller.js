@@ -1,11 +1,18 @@
+import cloudinaryService from "../services/cloudinary.service.js";
 import profileService from "../services/profile.service.js";
 
-const updateAvatarUrl = async (req, res, next) => {
-	const { url, profileId } = req.body;
+const updateAvatar = async (req, res, next) => {
+	const { profileId } = req.body;
 
 	try {
-		const response = await profileService.updateAvatarUrl({ url, profileId });
-		res.status(200).send(response);
+		const cloudinaryResponse = await cloudinaryService.uploadFile({
+			img: req.file,
+			publicId: profileId,
+			preset: "avatar_upload",
+		});
+		const dbResponse = await profileService.updateAvatarUrl({ url: cloudinaryResponse.url, profileId });
+
+		res.status(200).send(dbResponse);
 	} catch (error) {
 		next(error);
 	}
@@ -20,4 +27,4 @@ const updateIntroduction = async (req, res, next) => {
 	}
 };
 
-export default { updateAvatarUrl, updateIntroduction };
+export default { updateAvatar, updateIntroduction };

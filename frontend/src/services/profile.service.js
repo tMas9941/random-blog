@@ -1,6 +1,6 @@
 import axiosInstance from "./axios.instance";
 
-const updateAvatarUrl = async (data) => {
+const updateAvatar = async (data) => {
 	try {
 		const response = await axiosInstance.put("/profile/avatar", data);
 		return response.data;
@@ -18,4 +18,4 @@ const updateIntroduction = async (data) => {
 	}
 };
 
-export default { updateAvatarUrl, updateIntroduction };
+export default { updateAvatar, updateIntroduction };

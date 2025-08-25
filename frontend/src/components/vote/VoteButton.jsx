@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SvgComponent from "../misc/SvgComponent";
 import { userSignal } from "../../global/userData";
 import { castCommentVote, castPostVote } from "../../global/voteHandler";
 
 export default function VoteButton({ postId, commentId, votes }) {
 	const userId = userSignal?.value?.id;
+
 	const { voted, setVoted, positiveVotes, negativeVotes, voteRatio, totalVotes } = useVoteResult(votes);
 
 	const changeVoteResult = (newValue) => {
@@ -30,8 +31,6 @@ export default function VoteButton({ postId, commentId, votes }) {
 				activeClass={"fill-success text-success stroke-success "}
 				voted={voted}
 			/>
-			{/* --color-text: #050d10; --color-background: #f0f6fa; --color-primary: #4da2c7; --color-secondary: #8e9edc;
-			--color-accent: #777fd4; */}
 			<span
 				style={{ color: `color-mix(in srgb, #ff0000 ${100 - voteRatio}%, #008c17  ${voteRatio}%)` }}
 				className="min-w-17 px-1 text-center text-lg font-bold [&>span]:font-semibold brightness-130"
@@ -57,7 +56,7 @@ function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, active
 			disabled={disabled}
 			title={disabled ? "Must login to vote!" : ""}
 			className={`flex h-[80%] px-1 text-lg items-center brightness-130 stroke-accent ${
-				voted === voteValue ? activeClass + " stroke-1  " : " stroke-2 fill-none "
+				!disabled && voted === voteValue ? activeClass + " stroke-1  " : " stroke-2 fill-none "
 			} [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold ${disabled ? " " : "cursor-pointer hover:bg-inherit"}`}
 			onClick={() => changeVoteResult(voteValue)}
 		>
@@ -70,10 +69,25 @@ function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, active
 
 const useVoteResult = (votes) => {
 	const [voted, setVoted] = useState(votes.value);
-	const totalVotes = votes.total + Number(voted !== null) - Number(votes.value !== null);
-	const positiveVotes = votes.positive + Number(voted === true) - Number(votes.value === true);
+	useEffect(() => {
+		setVoted(votes.value);
+	}, [votes]);
+
+	let totalVotes = votes.total;
+	let positiveVotes = votes.positive;
+
+	totalVotes = votes.total + Number(voted !== null) - Number(votes.value !== null);
+	positiveVotes = votes.positive + Number(voted === true) - Number(votes.value === true);
+
 	const negativeVotes = totalVotes - positiveVotes;
 	const voteRatio = (positiveVotes / totalVotes) * 100 || 0;
 
-	return { voted, setVoted, positiveVotes, negativeVotes, voteRatio, totalVotes };
+	return {
+		voted,
+		setVoted,
+		positiveVotes,
+		negativeVotes,
+		voteRatio,
+		totalVotes,
+	};
 };

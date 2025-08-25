@@ -13,7 +13,6 @@ export default function CountryPicker() {
 				<ErrorMessage name={"country"} component="div" className="text-warning text-sm font-normal" />
 			</label>
 			<input
-				onChange={(event) => console.log(event.target.value)}
 				name={"country"}
 				placeholder={"Serach for a country..."}
 				className={

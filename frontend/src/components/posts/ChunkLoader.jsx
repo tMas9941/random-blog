@@ -16,7 +16,7 @@ const chunkItems = {
 
 export const CHUNK_TYPE = { post: "post", comment: "comment" };
 
-const Chunkloader = ({ index = 1, type, query, reRender }) => {
+const Chunkloader = ({ index = 1, type, query, userId, reRender }) => {
 	const [list, setList] = useState();
 	const loading = useRef(false);
 
@@ -29,7 +29,7 @@ const Chunkloader = ({ index = 1, type, query, reRender }) => {
 			})();
 		}
 		return () => (loading.current = false);
-	}, [index, reRender]);
+	}, [index, reRender, userId]);
 
 	if (!list) return <Loader className={"round-loader m-auto "} />;
 
@@ -48,5 +48,6 @@ export default memo(Chunkloader, areEqual);
 function areEqual(prevProps, nextProps) {
 	if (prevProps.index !== nextProps.index) return false;
 	if (prevProps.reRender !== nextProps.reRender) return false;
+	if (prevProps.userId !== nextProps.userId) return false;
 	return true;
 }

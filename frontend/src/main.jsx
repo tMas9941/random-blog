@@ -35,6 +35,7 @@ const router = createBrowserRouter([
 					{ path: "/profile/posts", element: <ProfilePosts /> },
 					{ path: "/profile/upvotes", element: <ProfileUpvotes /> },
 					{ path: "/profile/comments", element: <ProfileComments /> },
+					{ path: "/profile/", element: <Navigate to={`/profile/posts`} /> },
 				],
 			},
 			{

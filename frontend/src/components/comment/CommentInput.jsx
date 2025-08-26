@@ -24,12 +24,12 @@ export default function CommentInput({ postId, user }) {
 	const postComment = async () => {
 		try {
 			await commentService.create({ userId: user.id, postId, content: textRef.current.value });
+			renderCommentList.changeValue(renderCommentList.value + 1);
+			clearText();
 		} catch (error) {
+			// TODO add erro popup
 			return;
 		}
-
-		renderCommentList.changeValue(renderCommentList.value + 1);
-		clearText();
 	};
 
 	return (

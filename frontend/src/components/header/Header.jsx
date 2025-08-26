@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 // Signal
 import useSignal from "../../hooks/useSignal";
-import { Logout, userSignal } from "../../global/userData";
+import { logout, userSignal } from "../../global/userData";
 
 // Components
 import HeaderButton from "../buttons/HeaderButton";
@@ -55,7 +55,7 @@ function RightSide() {
 				<DropDownButton text={user.username} avatar={true} url={user.profile.avatarUrl}>
 					<DropDownItem text={"Profile"} onClick={() => navigate("/profile")} />
 					<DropDownItem text={"Settings"} onClick={() => navigate("/settings")} />
-					<DropDownItem text={"Log out"} onClick={Logout} />
+					<DropDownItem text={"Log out"} onClick={logout} />
 				</DropDownButton>
 			)}
 			{!user && <UserMenuButton text={"login"} userMenu={userMenu} />}

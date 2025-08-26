@@ -17,13 +17,13 @@ const login = async (data) => {
 	}
 };
 
-const validateUser = async (id) => {
-	try {
-		const response = await axiosInstance.get(`/user/${id}`);
-		return response.data;
-	} catch (error) {
-		throw error.response ? error.response.data : error;
-	}
-};
+// const validateUser = async (id) => {
+// 	try {
+// 		const response = await axiosInstance.get(`/user/${id}`);
+// 		return response.data;
+// 	} catch (error) {
+// 		throw error.response ? error.response.data : error;
+// 	}
+// };
 
-export default { registration, login, validateUser };
+export default { registration, login };

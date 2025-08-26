@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import { REG_STATES, registrationReducer } from "../../hooks/reducers/regReducer.js";
-import { Registration } from "../../global/userData.js";
+import { registration } from "../../global/userData.js";
 import { Form, Formik } from "formik";
 
 // Components
@@ -25,7 +25,7 @@ export default function RegistrationForm({ closePopup }) {
 
 	async function attemptRegistration(data, resetForm) {
 		dispatch({ newState: REG_STATES.FETCH_START });
-		await Registration(data);
+		await registration(data);
 		dispatch({ newState: REG_STATES.FETCH_SUCCESS });
 		setTimeout(() => {
 			resetForm();

@@ -13,47 +13,46 @@ function loadDarkMode() {
 }
 
 async function loadUserData() {
-	// load userId from localstorage and validates it
-	let userId = localStorage.getItem("userId");
-	if (isUserNull(userId)) {
-		Logout;
-		return;
-	}
-
-	const user = await authService.validateUser(userId);
-	return user;
-
-	function isUserNull(userId) {
-		return !userId || userId === "undefined" || userId === "null";
+	// load token from localstorage
+	let token = localStorage.getItem("token");
+	if (token) {
+		try {
+			const decodedToken = jwtDecode(token);
+			return decodedToken;
+		} catch (error) {
+			console.log("Invalid token", error); // TODO modify to popup - which is not ready
+			logout();
+			return;
+		}
 	}
 }
 
-export async function Login(data) {
+export async function login(data) {
 	// get token from backend and decode it, then save user
 	try {
 		const token = await authService.login(data);
+		localStorage.setItem("token", token);
 		const decodedToken = jwtDecode(token);
 		userSignal.changeValue(decodedToken);
-		localStorage.setItem("userId", decodedToken.id);
 		return decodedToken;
 	} catch (error) {
 		throw error;
 	}
 }
-export const Registration = async (data) => {
+export const registration = async (data) => {
 	// register and login
 	try {
 		await authService.registration(data);
-		const newUser = await Login(data);
+		const newUser = await login(data);
 		return newUser;
 	} catch (error) {
 		throw error;
 	}
 };
 
-export function Logout() {
+export function logout() {
 	userSignal.changeValue(undefined);
-	localStorage.setItem("userId", undefined);
+	localStorage.setItem("token", undefined);
 }
 
 export const toggleDarkMode = () => {

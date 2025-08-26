@@ -5,7 +5,7 @@ import { Form, Formik } from "formik";
 
 // Components
 import Button from "../buttons/Button.jsx";
-import { Login } from "../../global/userData.js";
+import { login } from "../../global/userData.js";
 import FormStatusMsg from "./FormStatusMsg.jsx";
 import loginValidation from "../../validations/loginValidation.js";
 import FormField from "../misc/FormField.jsx";
@@ -26,7 +26,7 @@ export default function LoginForm({ closePopup }) {
 
 	async function attemptLogin(data) {
 		dispatch({ newState: LOGIN_STATES.FETCH_START });
-		await Login(data);
+		await login(data);
 		dispatch({ newState: LOGIN_STATES.FETCH_SUCCESS });
 		setTimeout(() => closePopup(), MSG_TIMEOUT);
 	}

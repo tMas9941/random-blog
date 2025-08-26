@@ -1,10 +1,10 @@
-export default function benchmark(name) {
+export default function benchmark(name, printStart = false) {
 	const start = new Date();
+	if (printStart) console.log(name, "started...");
 	return {
 		stop: function () {
-			const end = new Date();
-			const time = end.getTime() - start.getTime();
-			console.log("Timer:", name, "finished in", time, "ms");
+			const time = new Date().getTime() - start.getTime();
+			console.log(name, "finished in", time, "ms");
 		},
 	};
 }

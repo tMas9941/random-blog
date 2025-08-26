@@ -107,11 +107,56 @@ model CommentVotes {
     value Boolean
 
     userId String
-    user Users @relation( fields: [userId], references: [id])
+    user Users @relation( fields: [userId], references: [id], onDelete: Cascade)
 
     commentId String
     comment Comments @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
     @@id([userId, commentId])
    
+}
+
+model Roles {
+    id String @id @default(cuid())
+    name String
+
+    permissions RolePermissions[]
+}
+
+
+enum PermissionActions {
+    CREATE
+    READ
+    UPDATE
+    DELETE
+}
+
+enum PermissionSubjects {
+    POSTS
+    COMMENTS
+    SETTINGS
+}
+
+model Permissions {
+    id String @id @default(cuid())
+    action PermissionActions
+    subject PermissionSubjects
+
+    roles RolePermissions[]
+}
+
+enum PermissionTarget {
+    OWN
+    ALL
+}
+
+model RolePermissions {
+    roleId String
+    role Roles @relation(fields:[roleId], references: [id], onDelete: Cascade)
+    target PermissionTarget
+
+    permissionId String
+    permission Permissions @relation(fields:[permissionId], references: [id], onDelete: Cascade)
+    
+    @@id([roleId, permissionId])
 }

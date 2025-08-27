@@ -15,18 +15,20 @@ function loadDarkMode() {
 async function loadUserData() {
 	// load token from localstorage
 	let token = localStorage.getItem("token");
-	if (token) {
+	if (hasToken(token)) {
 		try {
 			const decodedToken = jwtDecode(token);
 			return decodedToken;
 		} catch (error) {
 			console.log("Invalid token", error); // TODO modify to popup - which is not ready
-			logout();
+			localStorage.setItem("token", undefined);
 			return;
 		}
 	}
 }
-
+function hasToken(token) {
+	return !!token && token !== "null" && token !== "undefined";
+}
 export async function login(data) {
 	// get token from backend and decode it, then save user
 	try {

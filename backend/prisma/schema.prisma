@@ -39,6 +39,9 @@ model Users {
     posts Posts[]
     comments Comments[]
 
+    role String @default("user")
+    roles Roles @relation( fields: [role], references: [name], onDelete: Cascade)
+
     postVotes PostVotes[]
     commentVotes CommentVotes[]
 }
@@ -116,12 +119,6 @@ model CommentVotes {
    
 }
 
-model Roles {
-    id String @id @default(cuid())
-    name String
-
-    permissions RolePermissions[]
-}
 
 
 enum PermissionActions {
@@ -138,11 +135,12 @@ enum PermissionSubjects {
 }
 
 model Permissions {
-    id String @id @default(cuid())
+    // id String @id @default(cuid())
     action PermissionActions
     subject PermissionSubjects
 
     roles RolePermissions[]
+    @@id([action, subject])
 }
 
 enum PermissionTarget {
@@ -150,13 +148,25 @@ enum PermissionTarget {
     ALL
 }
 
+model Roles {
+   
+    name String @id
+    permissions RolePermissions[]
+
+    users Users[]
+   
+}
+
 model RolePermissions {
-    roleId String
-    role Roles @relation(fields:[roleId], references: [id], onDelete: Cascade)
+    action PermissionActions
+    subject PermissionSubjects
     target PermissionTarget
 
-    permissionId String
-    permission Permissions @relation(fields:[permissionId], references: [id], onDelete: Cascade)
+    roleName String
+    role Roles @relation(fields:[roleName], references: [name], onDelete: Cascade)
+
+    // permissionId String
+    permission Permissions @relation(fields:[action,subject], references: [action,subject], onDelete: Cascade)
     
-    @@id([roleId, permissionId])
+    @@id([roleName, action,subject])
 }

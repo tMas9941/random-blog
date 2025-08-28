@@ -14,6 +14,8 @@ const create = async ({ username, email, password }) => {
 };
 const getById = async (id) => await prisma.users.findUnique({ where: { id }, include: { profile: true } });
 
+const getPermissionsById = async (id) => await prisma.users.findUnique({ where: { id }, include: { profile: true } });
+
 const findByEmail = async (email) => await prisma.users.findFirst({ where: { email } });
 
 const findByUsername = async (username) =>

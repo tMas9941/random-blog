@@ -13,6 +13,7 @@ import postVoteRoutes from "./routes/post-vote.routes.js";
 import commentVoteRoutes from "./routes/comment-vote.routes.js";
 import commentRoutes from "./routes/comment.routes.js";
 import profileRoutes from "./routes/profile.routes.js";
+import permissionroutes from "./routes/permission.routes.js";
 
 import { FRONTEND_URL } from "./constants/constants.js";
 
@@ -31,6 +32,7 @@ app.use("/api/post-vote", postVoteRoutes);
 app.use("/api/comment-vote", commentVoteRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/permission", permissionroutes);
 
 app.use(errorHandler);
 

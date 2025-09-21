@@ -5,7 +5,6 @@ import tagService from "../services/tag.service.js";
 import HttpError from "../utils/HttpError.js";
 import benchmark from "../utils/benchmark.js";
 import calculateVotes from "../utils/calculateVotes.js";
-import cloudinaryService from "../services/cloudinary.service.js";
 
 const create = async (req, res, next) => {
 	const { userId, title, content, tags } = req.body;
@@ -27,17 +26,19 @@ const create = async (req, res, next) => {
 };
 
 const list = async (req, res, next) => {
-	let { limit, page, where, userId = "" } = req.query;
+	const { limit, page, userId } = req.query;
+	let { where } = req.query;
+	console.log("list", { limit, page, userId }, { where });
 	if (where) where = JSON.parse(where);
-
 	try {
 		const bench = benchmark("post controller list");
-		const list = await postService.list({ limit, page, where, userId });
+		console.log("TRY");
+		const list = await postService.list({ limit, page, where });
+		console.log("lsit service done");
 		if (!list) throw new HttpError("Error during post query!", 405);
-
+		console.log("list", list.length);
 		const newList = await Promise.all(
 			list.map(async (post) => {
-				// return { ...post, voteResult: await getEvaluatedVoteCount(post.id) };
 				return { ...post, votes: calculateVotes(post, userId) };
 			})
 		);
@@ -52,13 +53,13 @@ const list = async (req, res, next) => {
 const getByid = async (req, res, next) => {
 	const { id } = req.params;
 	const { userId } = req.query;
-
+	// console.log({ id }, { userId });
 	try {
-		const response = await postService.getById({ id, userId });
+		const response = await postService.getById({ id });
 		if (!response) throw new HttpError("Error during fetching post!", 405);
-
+		// console.log(response);
 		const responseWithVotes = { ...response, votes: calculateVotes(response, userId) };
-
+		// console.log(responseWithVotes);
 		res.status(200).send(responseWithVotes);
 	} catch (error) {
 		next(error);

@@ -21,8 +21,8 @@ model Posts {
     content String  @db.VarChar(1000)
     created DateTime @default(now())
 
-    authorId String
-    author Users @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    userId String
+    user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     tags PostTags[] 
     comments Comments[] 

@@ -26,15 +26,17 @@ const create = async (req, res, next) => {
 };
 
 const list = async (req, res, next) => {
-    const { limit, page, userId } = req.query;
-    let { where } = req.query;
+    let { limit, page, where, userId = "" } = req.query;
     if (where) where = JSON.parse(where);
+
     try {
         const bench = benchmark("post controller list");
-        const list = await postService.list({ limit, page, where });
+        const list = await postService.list({ limit, page, where, userId });
         if (!list) throw new HttpError("Error during post query!", 405);
+
         const newList = await Promise.all(
             list.map(async (post) => {
+                // return { ...post, voteResult: await getEvaluatedVoteCount(post.id) };
                 return { ...post, votes: calculateVotes(post, userId) };
             })
         );
@@ -49,10 +51,13 @@ const list = async (req, res, next) => {
 const getByid = async (req, res, next) => {
     const { id } = req.params;
     const { userId } = req.query;
+
     try {
-        const response = await postService.getById({ id });
+        const response = await postService.getById({ id, userId });
         if (!response) throw new HttpError("Error during fetching post!", 405);
+
         const responseWithVotes = { ...response, votes: calculateVotes(response, userId) };
+
         res.status(200).send(responseWithVotes);
     } catch (error) {
         next(error);

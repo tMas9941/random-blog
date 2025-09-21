@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 
 import cloudinaryService from "../../src/services/cloudinary.service.js";
 import { PermissionActions, PermissionSubjects, PermissionTarget } from "../../generated/prisma/index.js";
+import { permPostCreate } from "../../src/middlewares/authorization/post.permission.js";
 
 async function readFile(filename, trim = false) {
     const regex = { paragraphs: /\r?\n/, words: /\r?\n|,|\s|[.]/ };

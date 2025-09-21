@@ -2,6 +2,7 @@ import { useRef } from "react";
 
 import useScrollDetect from "../../hooks/useScrollDetect";
 import { CHUNK_TYPE } from "../../constants/exports";
+import ChunkLoader from "./ChunkLoader";
 
 const CHUNK_SIZE = 5;
 

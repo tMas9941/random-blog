@@ -1,11 +1,12 @@
 import express from "express";
 import postController from "../controllers/post.controller.js";
-import { auth } from "../middlewares/auth.middleware.js";
+import { permPostCreate, permPostReadOwn } from "../middlewares/authorization/post.permission.js";
+import { auth } from "../middlewares/authorization/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/create", postController.create);
+router.post("/create", auth(permPostCreate()), postController.create);
 router.get("/list", postController.list);
-router.get("/:id", await auth({ authData: { action: "READ", subject: "POST" } }), postController.getByid);
+router.get("/:id", auth(permPostReadOwn()), postController.getByid);
 
 export default router;

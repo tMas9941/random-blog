@@ -14,11 +14,11 @@ const create = async ({ username, email, password }) => {
 };
 const getById = async (id) => await prisma.users.findUnique({ where: { id }, include: { profile: true } });
 
-const getPermissionsById = async (id) => await prisma.users.findUnique({ where: { id }, include: { profile: true } });
+const verifyById = async (id) => await prisma.users.findUnique({ where: { id }, select: { username: true } });
 
 const findByEmail = async (email) => await prisma.users.findFirst({ where: { email } });
 
 const findByUsername = async (username) =>
 	await prisma.users.findFirst({ where: { username }, include: { profile: true } });
 
-export default { list, create, findByEmail, findByUsername, getById };
+export default { list, create, findByEmail, findByUsername, getById, verifyById };

@@ -14,7 +14,7 @@ const MSG_TIMEOUT = 1000;
 export default function LoginForm({ closePopup }) {
 	const [state, dispatch] = useReducer(loginReducer, LOGIN_STATES.INIT); // handle popup msg and form data
 
-	const handleSubmit = async (data, { resetForm }) => {
+	const handleSubmit = async (data) => {
 		try {
 			await attemptLogin(data);
 		} catch (error) {

@@ -18,7 +18,7 @@ const buttonClass = "flex items-center gap-2 fill-accent text-xl !px-4";
 export default function PostItem({ data, showComment = true }) {
 	if (!data) return <></>;
 
-	const selfPost = data.authorId === userSignal.value?.id;
+	const selfPost = data.userId === userSignal.value?.id;
 
 	return (
 		<div className="w-full py-5  ">
@@ -70,8 +70,8 @@ const PostContent = memo(({ data }) => {
 				</div>
 			</div>
 			<div className="min-w-30 [&_div]:mb-2 ">
-				<Avatar text={data.author.username} size={80} url={data.author.profile?.avatarUrl} />
-				<h3 className="font-semibold truncate">{data.author.username}</h3>
+				<Avatar text={data.user.username} size={80} url={data.user.profile?.avatarUrl} />
+				<h3 className="font-semibold truncate">{data.user.username}</h3>
 				<p> {convertedDate.date}</p>
 				<p> {convertedDate.time}</p>
 			</div>

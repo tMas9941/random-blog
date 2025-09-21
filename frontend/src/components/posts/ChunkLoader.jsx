@@ -10,44 +10,43 @@ import CommentItem from "../comment/CommentItem";
 import Loader from "../misc/loader/Loader";
 
 const chunkItems = {
-	post: { item: PostItem, service: postService },
-	comment: { item: CommentItem, service: commentService },
+    post: { item: PostItem, service: postService },
+    comment: { item: CommentItem, service: commentService },
 };
 
-export const CHUNK_TYPE = { post: "post", comment: "comment" };
-
 const Chunkloader = ({ index = 1, type, query, userId, reRender }) => {
-	const [list, setList] = useState();
-	const loading = useRef(false);
+    const [list, setList] = useState();
+    const loading = useRef(false);
 
-	useEffect(() => {
-		if (!loading.current) {
-			loading.current = true;
-			(async () => {
-				const data = await chunkItems[type].service.list(query);
-				setList(data);
-			})();
-		}
-		return () => (loading.current = false);
-	}, [index, reRender, userId]);
+    useEffect(() => {
+        if (!loading.current) {
+            loading.current = true;
+            (async () => {
+                const data = await chunkItems[type].service.list(query);
+                console.log(data);
+                setList(data);
+            })();
+        }
+        return () => (loading.current = false);
+    }, [index, reRender, userId, type, query]);
 
-	if (!list) return <Loader className={"round-loader m-auto "} />;
+    if (!list) return <Loader className={"round-loader m-auto "} />;
 
-	const DynamicListItem = chunkItems[type].item;
+    const DynamicListItem = chunkItems[type].item;
 
-	return (
-		<>
-			{list.map((data) => (
-				<DynamicListItem key={data.id} data={data} />
-			))}
-		</>
-	);
+    return (
+        <>
+            {list.map((data) => (
+                <DynamicListItem key={data.id} data={data} />
+            ))}
+        </>
+    );
 };
 export default memo(Chunkloader, areEqual);
 
 function areEqual(prevProps, nextProps) {
-	if (prevProps.index !== nextProps.index) return false;
-	if (prevProps.reRender !== nextProps.reRender) return false;
-	if (prevProps.userId !== nextProps.userId) return false;
-	return true;
+    if (prevProps.index !== nextProps.index) return false;
+    if (prevProps.reRender !== nextProps.reRender) return false;
+    if (prevProps.userId !== nextProps.userId) return false;
+    return true;
 }

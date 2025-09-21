@@ -4,8 +4,8 @@ import { useRef } from "react";
 import ColorButton from "../buttons/ColorButton";
 import commentService from "../../services/comment.service";
 
-import { renderCommentList } from "./CommentList";
 import SvgComponent from "../misc/SvgComponent";
+import { renderCommentList } from "../../constants/exports";
 
 const focusClass =
 	"focus-within:[&>textarea]:h-24 focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";

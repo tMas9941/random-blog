@@ -23,7 +23,6 @@ const Chunkloader = ({ index = 1, type, query, userId, reRender }) => {
             loading.current = true;
             (async () => {
                 const data = await chunkItems[type].service.list(query);
-                console.log(data);
                 setList(data);
             })();
         }

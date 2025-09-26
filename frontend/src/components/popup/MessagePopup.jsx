@@ -26,7 +26,7 @@ export default function MessagePopup() {
                 style={{ width: WIDTH, marginLeft: -WIDTH / 2 }}
             >
                 <div className={`px-5 py-2 min-h-full bg-${result} flex justify-center`}>
-                    <SvgComponent name={result} className={"h-full"} size="60" />
+                    <SvgComponent name={result} className={"h-full fill-white"} size="60" />
                 </div>
 
                 <span className="block min-h-fit p-2 text-xl m-auto font-semibold">{message}</span>

@@ -27,7 +27,7 @@ export default function CommentInput({ postId, user }) {
             await commentService.create({ userId: user.id, postId, content: textRef.current.value });
             renderCommentList.changeValue(renderCommentList.value + 1);
             clearText();
-        } catch (error) {
+        } catch {
             changePopupData("Error during commenting!", popupResults.error);
             return;
         }

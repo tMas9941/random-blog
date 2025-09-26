@@ -9,7 +9,6 @@ import { login } from "../../global/userData.js";
 import FormStatusMsg from "./FormStatusMsg.jsx";
 import loginValidation from "../../validations/loginValidation.js";
 import FormField from "../misc/FormField.jsx";
-import { changePopupData, popupResults } from "../../global/popupHandler.js";
 import { useNavigate } from "react-router-dom";
 
 const MSG_TIMEOUT = 2000;

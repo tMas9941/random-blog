@@ -1,11 +1,10 @@
-import React, { useState } from "react";
 import { ErrorMessage, Field, Form } from "formik";
 import SvgComponent from "./SvgComponent";
 
 export default function CountryPicker() {
-    const [countryList, setCountryList] = useState([]);
+    // const [countryList, setCountryList] = useState([]);
     // TODO finish this
-    const fetchCoutnries = async () => {};
+    // const fetchCoutnries = async () => {};
     return (
         <div className="relative">
             <label className="peer text-md font-semibold flex items-center gap-3 my-1">

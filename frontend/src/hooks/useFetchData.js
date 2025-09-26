@@ -22,6 +22,7 @@ const useFetchData = ({ dependencies, fetchService }) => {
             }
         }
         return () => setLoading(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [...dependencies]);
 
     return data;

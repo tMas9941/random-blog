@@ -3,7 +3,6 @@ import Loader from "../misc/loader/Loader";
 
 const SVG_SIZE = 100;
 export default function FormStatusMsg({ state }) {
-    console.log("state ", state);
     return (
         state.lockForm && (
             <>

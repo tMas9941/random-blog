@@ -10,7 +10,7 @@ import FormField from "../misc/FormField.jsx";
 import registrationValidation from "../../validations/registrationValidation.js";
 import { useNavigate } from "react-router-dom";
 
-const MSG_TIMEOUT = 1500;
+const MSG_TIMEOUT = 1200;
 
 export default function RegistrationForm() {
     const [state, dispatch] = useReducer(registrationReducer, REG_STATES.INIT); // handle popup msg and form data
@@ -20,7 +20,6 @@ export default function RegistrationForm() {
             await attemptRegistration(data);
         } catch (error) {
             dispatch({ newState: REG_STATES.FETCH_FAILED, addValue: { message: error?.message || error.error } });
-        } finally {
             setTimeout(() => dispatch({ newState: REG_STATES.INIT }), MSG_TIMEOUT);
         }
     };
@@ -29,11 +28,10 @@ export default function RegistrationForm() {
         dispatch({ newState: REG_STATES.FETCH_START });
         const newUser = await registration(data);
         dispatch({ newState: REG_STATES.FETCH_SUCCESS });
-        console.log("const newUser =", newUser);
         setTimeout(async () => {
             await login(newUser);
             navigate("/home");
-        }, MSG_TIMEOUT - 500);
+        }, MSG_TIMEOUT);
     }
 
     return (

@@ -9,16 +9,16 @@ export default function useScrollDetect(chunkContainerRef, chunkMaxSize) {
     useEffect(() => {
         window.addEventListener("scroll", scrollChanged);
         return () => window.removeEventListener("scroll", scrollChanged);
-
-        function scrollChanged() {
-            const chunkChildrenCount = chunkContainerRef.current?.children.length;
-            if (doNeedNewPage(chunkChildrenCount)) {
-                const newPageCount = Math.floor(chunkChildrenCount / chunkMaxSize + 1);
-                setPage(newPageCount);
-            }
-        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chunkContainerRef, chunkMaxSize]);
 
+    function scrollChanged() {
+        const chunkChildrenCount = chunkContainerRef.current?.children.length;
+        if (doNeedNewPage(chunkChildrenCount)) {
+            const newPageCount = Math.floor(chunkChildrenCount / chunkMaxSize + 1);
+            setPage(newPageCount);
+        }
+    }
     function doNeedNewPage(chunkChildrenCount) {
         const isScrollPositionAtBottom =
             document.documentElement.scrollHeight - window.scrollY - document.documentElement.clientHeight <= 100;

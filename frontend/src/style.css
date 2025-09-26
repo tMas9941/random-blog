@@ -15,32 +15,52 @@
 --accent: #2b3388; */
 
 @theme static {
-	--color-black: #000000;
-	--color-white: #ffffff;
-	--color-success: #008c17;
-	--color-warning: #ff0000;
+    --color-black: #000000;
+    --color-white: #ffffff;
 
-	--color-text: #050d10;
-	--color-background: #f0f6fa;
-	--color-primary: #4da2c7;
-	--color-secondary: #8e9edc;
-	--color-accent: #777fd4;
+    --color-success: #008c17;
+    --color-warning: #ffaa00;
+    --color-error: #ff0000;
 
-	--color-n-text: #eff7fa;
-	--color-n-background: #050b0f;
-	--color-n-primary: #388eb2;
-	--color-n-secondary: #233271;
-	--color-n-accent: #2b3388;
+    --color-text: #050d10;
+    --color-background: #f0f6fa;
+    --color-primary: #4da2c7;
+    --color-secondary: #8e9edc;
+    --color-accent: #777fd4;
 
-	--animate-fade-in: fade-in 0.7s ease-out;
-	@keyframes fade-in {
-		0% {
-			background-color: color-mix(in srgb, var(--color-secondary) 40%, transparent);
-			opacity: 0;
-			visibility: visible;
-		}
-		100% {
-			opacity: 1;
-		}
-	}
+    --color-n-text: #eff7fa;
+    --color-n-background: #050b0f;
+    --color-n-primary: #388eb2;
+    --color-n-secondary: #233271;
+    --color-n-accent: #2b3388;
+
+    --animate-fade-in: fade-in 0.7s ease-out;
+    @keyframes fade-in {
+        0% {
+            background-color: color-mix(in srgb, var(--color-secondary) 40%, transparent);
+            opacity: 0;
+            visibility: visible;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    --animate-wiggle: wiggle 0.3s ease-out;
+    @keyframes wiggle {
+        0%,
+        20%,
+        30% {
+            transform: rotate(-4deg);
+        }
+        60% {
+            transform: rotate(3deg);
+        }
+        75% {
+            transform: rotate(-2deg);
+        }
+        90% {
+            transform: rotate(1deg);
+        }
+    }
 }

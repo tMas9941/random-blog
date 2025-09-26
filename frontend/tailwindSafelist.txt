@@ -1,0 +1,11 @@
+bg-error
+bg-success
+bg-warning
+
+shadow-error
+shadow-success
+shadow-warning
+
+border-error
+border-success
+border-warning

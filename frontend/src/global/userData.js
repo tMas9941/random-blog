@@ -2,6 +2,7 @@ import authService from "../services/auth.service.js";
 
 import Signal from "../utils/signal.js";
 import { jwtDecode } from "jwt-decode";
+import { changePopupData, popupResults } from "./popupHandler.js";
 
 // localStorage.setItem("userId", "");
 
@@ -16,11 +17,11 @@ async function loadUserData() {
     // load token from localstorage
     let token = localStorage.getItem("token");
     if (hasToken(token)) {
-        try {
-            const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode(token);
+        if (decodedToken) {
             return decodedToken;
-        } catch (error) {
-            console.log("Invalid token", error); // TODO modify to popup - which is not ready
+        } else {
+            changePopupData("Invalid token!", popupResults.warning);
             localStorage.setItem("token", undefined);
             return undefined;
         }
@@ -37,6 +38,7 @@ export async function login(data) {
     localStorage.setItem("token", token);
     const decodedToken = jwtDecode(token);
     userSignal.changeValue(decodedToken);
+    changePopupData("Successfull login!", popupResults.success);
     return decodedToken;
 }
 
@@ -50,6 +52,7 @@ export const registration = async (data) => {
 export function logout() {
     userSignal.changeValue(undefined);
     localStorage.setItem("token", undefined);
+    changePopupData("Bye bye!", popupResults.warning);
 }
 
 export const toggleDarkMode = () => {

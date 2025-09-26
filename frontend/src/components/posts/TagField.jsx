@@ -46,12 +46,12 @@ export default function TagField({ name, text, className = "", tagsRef, tagMessa
 			<label className="peer text-md font-semibold flex items-center gap-3 my-1 ">
 				{capitalize(text ? text : name) + ":"}
 				{/* ERROR MESSAGE */}
-				<span className="text-warning text-sm font-normal">{tagMessage}</span>
+				<span className="text-error text-sm font-normal">{tagMessage}</span>
 				<span className=" text-sm font-normal ms-auto">{tags.length + " / " + MAX_TAGS}</span>
 			</label>
 			<div
 				className={` ${
-					tagMessage ? "outline-warning/50" : "outline-[gray]/70 outline-transparent focus-within:outline-primary"
+					tagMessage ? "outline-error/50" : "outline-[gray]/70 outline-transparent focus-within:outline-primary"
 				} w-full  p-[3px] flex gap-1 items-center flex-wrap  bg-secondary/20  outline-1 rounded-sm `}
 			>
 				{tags.map((tagName) => (

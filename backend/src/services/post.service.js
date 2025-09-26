@@ -1,7 +1,7 @@
 import prisma from "../models/prisma-client.js";
 
-const create = async ({ authorId, title, content }) => {
-    const newPost = await prisma.posts.create({ data: { authorId, title, content } });
+const create = async ({ userId, title, content }) => {
+    const newPost = await prisma.posts.create({ data: { userId, title, content } });
     return newPost;
 };
 

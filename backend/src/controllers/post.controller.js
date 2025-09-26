@@ -13,7 +13,7 @@ const create = async (req, res, next) => {
         const addTag = await tagService.create({ tags });
         if (!addTag) throw new HttpError("Error during tag creation!", 405);
 
-        const newPost = await postService.create({ authorId: userId, title, content });
+        const newPost = await postService.create({ userId, title, content });
         if (!newPost) throw new HttpError("Error during post creation!", 405);
 
         const postTag = await postTagService.create({ postId: newPost.id, tags });

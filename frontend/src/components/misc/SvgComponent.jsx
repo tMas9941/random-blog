@@ -13,7 +13,7 @@ export default function SvgComponent({ name, size = 50, className, ref, onClick 
                     xmlns="http://www.w3.org/2000/svg"
                 >
                     <path
-                        fill="white"
+                        stroke="none"
                         d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm-55.808 536.384-99.52-99.584a38.4 38.4 0 1 0-54.336 54.336l126.72 126.72a38.272 38.272 0 0 0 54.336 0l262.4-262.464a38.4 38.4 0 1 0-54.272-54.336L456.192 600.384z"
                     />
                 </svg>
@@ -28,7 +28,7 @@ export default function SvgComponent({ name, size = 50, className, ref, onClick 
                     xmlns="http://www.w3.org/2000/svg"
                 >
                     <path
-                        fill="white"
+                        stroke="none"
                         d="M264 456Q210 456 164 429 118 402 91 356 64 310 64 256 64 202 91 156 118 110 164 83 210 56 264 56 318 56 364 83 410 110 437 156 464 202 464 256 464 310 437 356 410 402 364 429 318 456 264 456ZM264 288L328 352 360 320 296 256 360 192 328 160 264 224 200 160 168 192 232 256 168 320 200 352 264 288Z"
                     />
                 </svg>
@@ -43,7 +43,7 @@ export default function SvgComponent({ name, size = 50, className, ref, onClick 
                     xmlns="http://www.w3.org/2000/svg"
                 >
                     <path
-                        fill="white"
+                        stroke="none"
                         d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm0 192a58.432 58.432 0 0 0-58.24 63.744l23.36 256.384a35.072 35.072 0 0 0 69.76 0l23.296-256.384A58.432 58.432 0 0 0 512 256zm0 512a51.2 51.2 0 1 0 0-102.4 51.2 51.2 0 0 0 0 102.4z"
                     />
                 </svg>

@@ -31,7 +31,7 @@ const registration = async (req, res, next) => {
         });
 
         if (!newUser) throw new HttpError("Error during registration!", 405);
-        res.status(200).json();
+        res.status(200).json(newUser);
     } catch (error) {
         next(error);
     }

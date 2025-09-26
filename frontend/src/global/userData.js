@@ -43,9 +43,8 @@ export async function login(data) {
 }
 
 export const registration = async (data) => {
-    // register and login
     await authService.registration(data);
-    const newUser = await login(data);
+    const newUser = { username: data.username, password: data.password };
     return newUser;
 };
 

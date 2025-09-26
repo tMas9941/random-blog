@@ -11,28 +11,28 @@ export const auth = (authData) => {
         try {
             const token = req.headers.authorization?.split(" ")[1];
             if (hasNoToken(token)) throw new HttpError("Unauthenticated", 401);
-
+            console.log("Token: ", token);
             const userData = jwt.verify(token, JWT_SECRET);
             if (!userData) throw new HttpError("Invalid Token!", 401);
-
+            console.log("UserData from token: ", userData);
             const verifyById = await userService.verifyById(userData.id);
             if (!verifyById) throw new HttpError("Invalid user!", 404);
-
+            console.log("Verified user: ", verifyById);
             const userPermissions = await roleService.getRolePermissions(userData.role);
-
+            console.log("User permissions: ", userPermissions);
             const ownerId = await getTargetUserId(authData.subject, req.params.id);
-
+            console.log("OwnerId: ", ownerId);
             const authorized = comparePermissions({
                 userPermissions: userPermissions.permissions,
                 neededPermissions: authData,
                 userId: userData.id,
                 ownerId,
             });
-
+            console.log("Authorized: ", authorized);
             if (!authorized) throw new HttpError("Unauthorized!", 403);
 
             req.userId = userData.id;
-
+            console.log("Authorized userId: ", req.userId);
             next();
         } catch (error) {
             next(error);

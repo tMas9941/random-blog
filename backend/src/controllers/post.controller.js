@@ -8,7 +8,7 @@ import calculateVotes from "../utils/calculateVotes.js";
 
 const create = async (req, res, next) => {
     const { userId, title, content, tags } = req.body;
-
+    console.log({ userId, title, content, tags });
     try {
         const addTag = await tagService.create({ tags });
         if (!addTag) throw new HttpError("Error during tag creation!", 405);

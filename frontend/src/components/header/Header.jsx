@@ -7,68 +7,59 @@ import { logout, userSignal } from "../../global/userData";
 
 // Components
 import HeaderButton from "../buttons/HeaderButton";
-import UserMenuButton from "../buttons/UserMenuButton";
-import useUserMenu from "../../hooks/useUserMenu";
+
 import DarkModeSwitch from "../buttons/DarkModeSwitch";
 import ColorButton from "../buttons/ColorButton";
 import SvgComponent from "../misc/SvgComponent";
 import DropDownButton, { DropDownItem } from "../buttons/dropdown/DropDownButton";
-import PopupWindow from "../popup/PopupWindow";
-
-// Forms
-import RegistrationForm from "../auth/RegistrationForm";
-import LoginForm from "../auth/LoginForm";
 
 export default function Header() {
-	return (
-		<nav className="z-10 fixed h-13 bg-text text-n-text w-full border-b border-background/40">
-			<div className="flex h-full max-w-[1500px] px-10 mx-auto flex justify-between items-center gap-1 ">
-				<LeftSide />
-				<RightSide />
-			</div>
-		</nav>
-	);
+    return (
+        <nav className="z-10 fixed h-13 bg-text text-n-text w-full border-b border-background/40">
+            <div className="flex h-full max-w-[1500px] px-10 mx-auto flex justify-between items-center gap-1 ">
+                <LeftSide />
+                <RightSide />
+            </div>
+        </nav>
+    );
 }
 
 function LeftSide() {
-	const navigate = useNavigate();
-	const location = useLocation();
+    const navigate = useNavigate();
+    const location = useLocation();
 
-	return (
-		<div className="flex h-full items-center">
-			<SvgComponent name={"logo"} onClick={() => navigate("/home")} className={"me-10"} />
-			<HeaderButton text={"Home"} onClick={() => navigate("/home")} location={location} />
-			<HeaderButton text={"Posts"} onClick={() => navigate("/posts")} location={location} />
-			<HeaderButton text={"Profile"} onClick={() => navigate("/profile")} location={location} />
-		</div>
-	);
+    return (
+        <div className="flex h-full items-center">
+            <SvgComponent name={"logo"} onClick={() => navigate("/home")} className={"me-10"} />
+            <HeaderButton text={"Home"} onClick={() => navigate("/home")} location={location} />
+            <HeaderButton text={"Posts"} onClick={() => navigate("/posts")} location={location} />
+            <HeaderButton text={"Profile"} onClick={() => navigate("/profile")} location={location} />
+        </div>
+    );
 }
 
 function RightSide() {
-	const navigate = useNavigate();
-	const user = useSignal(userSignal, "header");
-	const userMenu = useUserMenu();
+    const navigate = useNavigate();
+    const user = useSignal(userSignal, "header");
 
-	return (
-		<div className="relative h-full flex items-center pe-3 gap-5 ">
-			{user && (
-				<DropDownButton text={user.username} avatar={true} url={user.profile.avatarUrl}>
-					<DropDownItem text={"Profile"} onClick={() => navigate("/profile")} />
-					<DropDownItem text={"Settings"} onClick={() => navigate("/settings")} />
-					<DropDownItem text={"Log out"} onClick={logout} />
-				</DropDownButton>
-			)}
-			{!user && <UserMenuButton text={"login"} userMenu={userMenu} />}
-			{!user && <UserMenuButton text={"registration"} userMenu={userMenu} />}
-			{user && (
-				<ColorButton onClick={() => navigate("/posts/create")} className="rounded-full">
-					Post
-					<SvgComponent name={"pen"} size={20} className={"ms-3 fill-white"} />
-				</ColorButton>
-			)}
-			<DarkModeSwitch />
-			<PopupWindow popupComponent={<RegistrationForm />} userMenu={userMenu} text={"registration"} />
-			<PopupWindow popupComponent={<LoginForm />} userMenu={userMenu} text={"login"} />
-		</div>
-	);
+    return (
+        <div className="relative h-full flex items-center pe-3 gap-3 ">
+            {user && (
+                <DropDownButton text={user.username} avatar={true} url={user.profile.avatarUrl}>
+                    <DropDownItem text={"Profile"} onClick={() => navigate("/profile")} />
+                    <DropDownItem text={"Settings"} onClick={() => navigate("/settings")} />
+                    <DropDownItem text={"Log out"} onClick={logout} />
+                </DropDownButton>
+            )}
+            {!user && <HeaderButton text={"sign-up / log-in"} onClick={() => navigate("/authenticate")} />}
+            {/* {!user && <HeaderButton text={"registration"} onClick={() => navigate("/authenticate")} />} */}
+            {user && (
+                <ColorButton onClick={() => navigate("/posts/create")} className="rounded-full">
+                    Post
+                    <SvgComponent name={"pen"} size={20} className={"ms-3 fill-white"} />
+                </ColorButton>
+            )}
+            <DarkModeSwitch />
+        </div>
+    );
 }

@@ -11,10 +11,7 @@ export default function PostsList({ where, user }) {
     const page = useScrollDetect(chunkContainerRef, CHUNK_SIZE);
 
     return (
-        <div
-            ref={chunkContainerRef}
-            className="flex flex-col border-y border-secondary/60 divide-y-1 divide-secondary/60 "
-        >
+        <div ref={chunkContainerRef} className="flex flex-col   gap-5">
             {[...Array(page)].map((none, index) => (
                 <ChunkLoader
                     index={index}

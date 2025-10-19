@@ -9,7 +9,7 @@ export default function ShareButton({ className, postId }) {
         changePopupData("Link copied to clipboard! ", popupResults.warning);
     };
     return (
-        <Button title={"Edit post"} text={"Share"} className={"ms-auto " + className} onClick={handleClick}>
+        <Button title={"Edit post"} text={"Share"} className={className} onClick={handleClick}>
             <SvgComponent size={25} name={"share"} className={"fill-accent stroke-accent"} />
         </Button>
     );

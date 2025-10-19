@@ -11,16 +11,16 @@ import TagBlock from "./TagBlock";
 import SvgComponent from "../misc/SvgComponent";
 import { userSignal } from "../../global/userData";
 import PanelContainer from "../PanelContainer";
-import Loader from "../misc/loader/Loader";
 
 // Buttons
 import VoteButton from "../vote/VoteButton";
 import ButtonContainer from "../buttons/ButtonContainer";
-import Button from "../buttons/Button";
 import DeleteButton from "../buttons/DeleteButton";
 import PostLoadingPlaceholder from "./PostLoadingPlaceholder";
+import ShareButton from "./ShareButton";
 
 const buttonClass = "flex items-center gap-2 fill-accent text-xl !px-4";
+
 export default function PostItem({ data, onPostPage = false, removeSelfFromList }) {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -35,11 +35,9 @@ export default function PostItem({ data, onPostPage = false, removeSelfFromList 
             <ButtonContainer>
                 <VoteButton postId={data.id} votes={data.votes} />
                 {!onPostPage && <CommentButton postId={data.id} count={data._count.comments} />}
+                <ShareButton className={buttonClass} postId={data.id} />
                 {selfPost && (
                     <>
-                        <Button title={"Edit post"} text={"Edit"} className={"ms-auto " + buttonClass}>
-                            <SvgComponent size={20} name={"pen"} className={"fill-accent stroke-accent"} />
-                        </Button>
                         <DeleteButton
                             className={buttonClass}
                             data={data}

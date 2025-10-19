@@ -15,7 +15,7 @@ export default function DeleteButton({
         <Button
             title={title}
             text={"Delete"}
-            className={className}
+            className={"ms-auto " + className}
             onClick={() => deletePost({ data, removeSelfFromList, setLoading, onSuccess })}
         >
             <SvgComponent size={30} name={"close"} className={"fill-accent"} />

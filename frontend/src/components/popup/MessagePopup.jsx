@@ -19,10 +19,10 @@ export default function MessagePopup() {
     return (
         <>
             <div
-                className={`fixed z-50 left-[50%] min-h-20 bg-inherit shadow-sm border-1 rounded-lg
+                className={`fixed z-50 left-[50%] min-h-20 bg-inherit border-1 rounded-lg
              transition-position duration-200 ease-out backdrop-blur-sm flex gap-2 overflow-hidden  ${
                  show ? " top-20 animate-wiggle" : " top-0 opacity-0 "
-             } shadow-${result} border-${result}`}
+             }  border-${result}`}
                 style={{ width: WIDTH, marginLeft: -WIDTH / 2 }}
             >
                 <div className={`px-5 py-2 min-h-full bg-${result} flex justify-center`}>

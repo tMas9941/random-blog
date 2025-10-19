@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function useScrollDetect(chunkContainerRef, chunkMaxSize) {
     // detect scroll changes
-    // if scroll position reaches bottom => increase page
+    // if scroll position reaches bottom => check if need new page
 
     const [page, setPage] = useState(1); // starting page is 1
+    const prevChildrenCount = useRef(0);
 
     useEffect(() => {
         window.addEventListener("scroll", scrollChanged);
@@ -13,19 +14,21 @@ export default function useScrollDetect(chunkContainerRef, chunkMaxSize) {
     }, [chunkContainerRef, chunkMaxSize]);
 
     function scrollChanged() {
-        const chunkChildrenCount = chunkContainerRef.current?.children.length;
-        if (doNeedNewPage(chunkChildrenCount)) {
-            const newPageCount = Math.floor(chunkChildrenCount / chunkMaxSize + 1);
-            setPage(newPageCount);
+        if (needNewPage()) {
+            setPage((_size) => _size + 1);
         }
     }
-    function doNeedNewPage(chunkChildrenCount) {
-        const isScrollPositionAtBottom =
-            document.documentElement.scrollHeight - window.scrollY - document.documentElement.clientHeight <= 100;
-        const maxChunkItems = page * chunkMaxSize;
+    function needNewPage() {
+        // need new page if scroll at bottom and previous childrenCount does not match the current (avoid repeating refresh)
 
-        // need new page if scroll at bottom and chunkContainer is full
-        return isScrollPositionAtBottom && chunkChildrenCount >= maxChunkItems;
+        const scrollAtBottom =
+            document.documentElement.scrollHeight - window.scrollY - document.documentElement.clientHeight <= 100;
+
+        if (prevChildrenCount.current < chunkContainerRef.current.children.length && scrollAtBottom) {
+            prevChildrenCount.current = chunkContainerRef.current.children.length;
+            return true;
+        }
+        return false;
     }
 
     return page;

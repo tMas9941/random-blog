@@ -34,9 +34,9 @@ export default function CommentInput({ postId, user }) {
     };
 
     return (
-        <div ref={container} id={"inputContainer"} className="flex gap-5 mb-10">
+        <div ref={container} id={"inputContainer"} className="flex gap-5 my-10 mx-[min(150px,5%)]">
             <SvgComponent name={"comment"} size={50} className={"fill-accent"} />
-            <div className={"flex flex-col  w-full me-30 " + focusClass}>
+            <div className={"flex flex-col  w-full " + focusClass}>
                 <textarea
                     ref={textRef}
                     id="commentInput"

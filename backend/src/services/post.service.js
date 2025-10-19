@@ -26,6 +26,11 @@ const list = async ({ limit, page, where }) => {
     return list;
 };
 
+const destroy = async (id) => {
+    const post = await prisma.posts.delete({ where: { id } });
+    return post;
+};
+
 const getById = async ({ id }) => {
     const post = await prisma.posts.findUnique({
         where: { id },
@@ -48,4 +53,4 @@ const getUserIdByPost = async (id) => {
     return userId;
 };
 
-export default { create, list, getById, getUserIdByPost };
+export default { create, list, destroy, getById, getUserIdByPost };

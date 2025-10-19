@@ -73,11 +73,8 @@ const useVoteResult = (votes) => {
         setVoted(votes.value);
     }, [votes]);
 
-    let totalVotes = votes.total;
-    let positiveVotes = votes.positive;
-
-    totalVotes = votes.total + Number(voted !== null) - Number(votes.value !== null);
-    positiveVotes = votes.positive + Number(voted === true) - Number(votes.value === true);
+    const totalVotes = votes.total + Number(voted !== null) - Number(votes.value !== null);
+    const positiveVotes = votes.positive + Number(voted === true) - Number(votes.value === true);
 
     const negativeVotes = totalVotes - positiveVotes;
     const voteRatio = (positiveVotes / totalVotes) * 100 || 0;

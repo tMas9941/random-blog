@@ -33,10 +33,15 @@ const Chunkloader = ({ index = 1, type, query, userId, reRender }) => {
 
     const DynamicListItem = chunkItems[type].item;
 
+    function removeSelfFromList(id) {
+        const newList = list.filter((item) => item.id !== id);
+        setList(newList);
+    }
+
     return (
         <>
             {list.map((data) => (
-                <DynamicListItem key={data.id} data={data} />
+                <DynamicListItem key={data.id} data={data} removeSelfFromList={removeSelfFromList} />
             ))}
         </>
     );

@@ -21,7 +21,7 @@ export const auth = (authData) => {
             const userPermissions = await roleService.getRolePermissions(userData.role);
             // console.log("User permissions: ", userPermissions);
             const ownerId = await getTargetUserId(authData.subject, req.params.id);
-            // console.log("OwnerId: ", ownerId);
+            // console.log("OwnerId: ", ownerId, "\nreq.body ", req.body, " req.params", req.params);
             const authorized = comparePermissions({
                 userPermissions: userPermissions.permissions,
                 neededPermissions: authData,

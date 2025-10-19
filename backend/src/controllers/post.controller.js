@@ -47,7 +47,16 @@ const list = async (req, res, next) => {
         next(error);
     }
 };
-
+const destroy = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const response = await postService.destroy(id);
+        if (!response) throw new HttpError("Error during deleting post!", 405);
+        res.status(200).send(response);
+    } catch (error) {
+        next(error);
+    }
+};
 const getByid = async (req, res, next) => {
     const { id } = req.params;
     const { userId } = req.query;
@@ -63,4 +72,4 @@ const getByid = async (req, res, next) => {
         next(error);
     }
 };
-export default { create, list, getByid };
+export default { create, list, getByid, destroy };

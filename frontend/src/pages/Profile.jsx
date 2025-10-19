@@ -33,7 +33,7 @@ function ActivitySide() {
     const navigate = useNavigate();
     return (
         <div className="w-full ">
-            <div className="flex h-12 w-full border-b border-secondary/60">
+            <div className="flex h-12 w-full border-b border-secondary/60 mb-5">
                 <ProfileMenuButton text={"posts"} location={location} onClick={() => navigate("/profile/posts")} />
                 <ProfileMenuButton text={"upvotes"} location={location} onClick={() => navigate("/profile/upvotes")} />
                 <ProfileMenuButton

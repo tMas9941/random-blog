@@ -12,6 +12,7 @@ import CommentInput from "../components/comment/CommentInput";
 import CommentList from "../components/comment/CommentList";
 import useSignal from "../hooks/useSignal";
 import useFetchData from "../hooks/useFetchData";
+import PostLoadingPlaceholder from "../components/posts/PostLoadingPlaceholder";
 
 export default function PostPage() {
     const location = useLocation();
@@ -26,8 +27,9 @@ export default function PostPage() {
     if (!fetchData.data) return <Loader className={"round-loader m-auto "} />;
 
     return (
-        <div>
-            <PostItem data={fetchData.data} showComment={false} />
+        <div className="relative overflow-hidden">
+            <PostItem data={fetchData.data} onPostPage={true} />
+            <PostLoadingPlaceholder className=" peer-[.loading]:block hidden mt-10 rounded-lg [&~*]:p-4" />
             <CommentInput postId={fetchData.data.id} user={user} />
             <CommentList where={{ postId: fetchData.data.id }} user={user} />
         </div>

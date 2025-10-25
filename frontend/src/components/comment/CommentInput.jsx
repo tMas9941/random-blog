@@ -3,8 +3,9 @@ import { useRef } from "react";
 // Components
 import ColorButton from "../buttons/ColorButton";
 import commentService from "../../services/comment.service";
-
+import NoUser from "./NoUser";
 import SvgComponent from "../misc/SvgComponent";
+
 import { renderCommentList } from "../../constants/exports";
 import { changePopupData, popupResults } from "../../global/popupHandler";
 
@@ -43,26 +44,18 @@ export default function CommentInput({ postId, user }) {
                     name="comment"
                     rows="2"
                     maxLength="350"
-                    className="peer w-full h-12 bg-secondary/20 p-3 rounded resize-none not-[:placeholder-shown]:h-24 transition-[height] ease-out duration-150 "
+                    className="peer w-full h-12 bg-secondary/20 p-3 rounded resize-none  transition-[height] ease-out duration-150 "
                     placeholder="Add a comment..."
                 ></textarea>
                 <div className="flex gap-5 items-center opacity-0 scale-y-0 peer-not-[:placeholder-shown]:scale-y-100 peer-not-[:placeholder-shown]:opacity-100 transition-[scale,opacity] ease-out duration-150">
+                    <ColorButton className="mt-5" text={"Comment"} onClick={postComment}></ColorButton>
                     <ColorButton
                         className="mt-5 bg-secondary/20 border-2 border-secondary text-secondary disabled:border-white"
                         text={"Cancel"}
                         onClick={clearText}
                     ></ColorButton>
-                    <ColorButton className="mt-5" text={"Comment"} onClick={postComment}></ColorButton>
                 </div>
             </div>
-        </div>
-    );
-}
-
-function NoUser() {
-    return (
-        <div className="flex items-center justify-center min-h-12 mb-10 text-lg p-1 rounded bg-secondary/20 text-center my-auto ">
-            Login to add comments...
         </div>
     );
 }

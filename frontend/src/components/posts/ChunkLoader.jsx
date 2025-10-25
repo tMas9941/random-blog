@@ -41,7 +41,7 @@ const Chunkloader = ({ index = 1, type, query, userId, reRender }) => {
     return (
         <>
             {list.map((data) => (
-                <DynamicListItem key={data.id} data={data} removeSelfFromList={removeSelfFromList} />
+                <DynamicListItem key={data.id} data={data} removeSelfFromList={removeSelfFromList} userId={userId} />
             ))}
         </>
     );

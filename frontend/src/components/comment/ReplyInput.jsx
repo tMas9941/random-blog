@@ -1,34 +1,42 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import ColorButton from "../buttons/ColorButton";
 import Avatar from "../misc/Avatar";
 import { userSignal } from "../../global/userData";
 
 const focusClass = "focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";
-let activeReply = { comp: "", close: "" };
+let activeReply = { commentId: null, close: null };
 
-export default function ReplyInput({ setReplyActive }) {
+export default function ReplyInput({ setReplyActive, commentId }) {
     const container = useRef();
     const textRef = useRef();
 
-    const clearText = async () => {
-        textRef.current.value = "";
-        document.activeElement.blur();
+    const avatarURL = userSignal.value?.profile.avatarUrl;
+    if (!avatarURL) return <></>;
 
+    const clearText = () => {
+        document.activeElement.blur();
         setReplyActive(false);
     };
 
-    // field-sizing not supported by Firefox and Safari
+    // workaround of field-sizing is not supported by Firefox and Safari
     const fieldSizingContent = (ref, newHeight) => {
         if (isNaN(newHeight)) newHeight = ref.current.scrollHeight;
         ref.current.style.height = newHeight + "px";
     };
 
-    const avatarURL = userSignal.value?.profile.avatarUrl;
-    if (!avatarURL) return <></>;
+    // close previous reply panel
+    useEffect(() => {
+        if (activeReply.close && activeReply.commentId !== commentId) {
+            activeReply.close();
+        }
+        activeReply.close = clearText;
+        activeReply.commentId = commentId;
+    }, []);
+
     return (
-        <div ref={container} id={"inputContainer"} className="flex gap-5 w-full mt-4">
+        <div ref={container} id={"inputContainer"} className="flex gap-5 w-full h-fit mt-4 ">
             <Avatar text={"text"} size={45} url={avatarURL} />
-            <div className={"flex flex-col  w-full " + focusClass}>
+            <div className={"flex flex-col w-full " + focusClass}>
                 <textarea
                     ref={textRef}
                     id="commentInput"

@@ -12,7 +12,7 @@ export default function CommentItem({ data, userId }) {
     const [replyActive, setReplyActive] = useState(false);
 
     return (
-        <div className={"flex py-2 px-3 gap-5 hover:bg-secondary/10 animate-fade-in rounded-md"}>
+        <div className={"flex py-2 px-3 gap-5 hover:bg-secondary/10 animate-fade-in rounded-md "}>
             <Avatar text={data.user.username} size={60} url={data.user?.profile.avatarUrl} />
 
             <div className="flex flex-col gap-1 w-full">
@@ -24,9 +24,10 @@ export default function CommentItem({ data, userId }) {
 
                 <ButtonContainer className={"mt-4"}>
                     <VoteButton commentId={data.id} votes={data.votes} />
-                    {userId && <ReplyButton onClick={() => setReplyActive(true)} />}
+                    {userId && <ReplyButton onClick={() => setReplyActive(!replyActive)} />}
                 </ButtonContainer>
-                {replyActive && <ReplyInput setReplyActive={setReplyActive} />}
+
+                {replyActive && <ReplyInput setReplyActive={setReplyActive} commentId={data.id} />}
             </div>
         </div>
     );

@@ -21,12 +21,14 @@ export default function useScrollDetect(chunkContainerRef, chunkMaxSize) {
     function needNewPage() {
         // need new page if scroll at bottom and previous childrenCount does not match the current (avoid repeating refresh)
         const childrenCount = chunkContainerRef.current?.children.length;
+        console.log(childrenCount);
         if (!childrenCount) return false;
 
         const scrollAtBottom =
             document.documentElement.scrollHeight - window.scrollY - document.documentElement.clientHeight <= 100;
 
         if (prevChildrenCount.current < chunkContainerRef.current.children.length && scrollAtBottom) {
+            if (chunkContainerRef.current.children[0].classList.contains("loading")) return false; // fix endlessly instancing loaders
             prevChildrenCount.current = chunkContainerRef.current.children.length;
             return true;
         }

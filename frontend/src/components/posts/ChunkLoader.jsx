@@ -30,6 +30,7 @@ const Chunkloader = ({ index = 1, type, query, userId, reRender, level }) => {
     }, [index, reRender, userId, type, query]);
 
     if (!list) return <Loader className={"round-loader m-auto "} />;
+
     console.log(index, type, list);
     const DynamicListItem = chunkItems[type].item;
 

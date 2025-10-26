@@ -17,7 +17,7 @@ export default function CommentItem({ data, userId, level = 0 }) {
         <div
             className={
                 "flex py-2 px-3  hover:bg-secondary/10 animate-fade-in " +
-                (isReply ? " -ms-8 rounded-md gap-3" : " gap-4")
+                (isReply ? " -ms-6 rounded-md gap-3" : " gap-4")
             }
         >
             <Avatar text={data.user.username} size={isReply ? 45 : 55} url={data.user?.profile.avatarUrl} />
@@ -42,7 +42,14 @@ export default function CommentItem({ data, userId, level = 0 }) {
                         targetUser={data.user?.username}
                     />
                 )}
-                {<ReplyList where={{ commentId: data.id }} userId={userId} level={level} />}
+                {
+                    <ReplyList
+                        where={{ commentId: data.id }}
+                        userId={userId}
+                        level={level}
+                        replyAmount={data._count.comments}
+                    />
+                }
             </div>
         </div>
     );

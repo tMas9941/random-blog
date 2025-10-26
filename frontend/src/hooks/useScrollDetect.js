@@ -28,7 +28,7 @@ export default function useScrollDetect(chunkContainerRef, chunkMaxSize) {
             document.documentElement.scrollHeight - window.scrollY - document.documentElement.clientHeight <= 100;
 
         if (prevChildrenCount.current < chunkContainerRef.current.children.length && scrollAtBottom) {
-            if (chunkContainerRef.current.children[0].classList.contains("loading")) return false; // fix endlessly instancing loaders
+            if (chunkContainerRef.current.children[0].classList.contains("loading")) return false; // fix endlessly instancing of loaders
             prevChildrenCount.current = chunkContainerRef.current.children.length;
             return true;
         }

@@ -42,7 +42,6 @@ export default function ReplyPanel({ setReplyActive, commentId, isReply, targetU
             commentId,
             content: textRef.current.value,
         };
-        // console.log("data", data);
         let response;
         try {
             // if (isReply) {
@@ -51,10 +50,8 @@ export default function ReplyPanel({ setReplyActive, commentId, isReply, targetU
             // }
             response = await commentService.create(data);
             closePanel();
-            // console.log("response ", response);
-        } catch (error) {
+        } catch {
             changePopupData("Error during commenting!", popupResults.error);
-            // console.log("error ", error);
         }
     };
 

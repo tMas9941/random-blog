@@ -14,7 +14,7 @@ const chunkItems = {
     comment: { item: CommentItem, service: commentService },
 };
 
-const Chunkloader = ({ index = 1, type, query, userId, reRender }) => {
+const Chunkloader = ({ index = 1, type, query, userId, reRender, level }) => {
     const [list, setList] = useState();
     const loading = useRef(false);
 
@@ -30,7 +30,7 @@ const Chunkloader = ({ index = 1, type, query, userId, reRender }) => {
     }, [index, reRender, userId, type, query]);
 
     if (!list) return <Loader className={"round-loader m-auto "} />;
-
+    console.log(index, type, list);
     const DynamicListItem = chunkItems[type].item;
 
     function removeSelfFromList(id) {
@@ -41,7 +41,13 @@ const Chunkloader = ({ index = 1, type, query, userId, reRender }) => {
     return (
         <>
             {list.map((data) => (
-                <DynamicListItem key={data.id} data={data} removeSelfFromList={removeSelfFromList} userId={userId} />
+                <DynamicListItem
+                    key={data.id}
+                    data={data}
+                    removeSelfFromList={removeSelfFromList}
+                    userId={userId}
+                    level={level}
+                />
             ))}
         </>
     );

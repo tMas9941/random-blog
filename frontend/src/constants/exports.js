@@ -1,4 +1,8 @@
 import Signal from "../utils/signal";
 
 export const renderCommentList = new Signal(0);
+export function reRenderCommentList() {
+    renderCommentList.changeValue(renderCommentList.value + 1);
+}
+
 export const CHUNK_TYPE = { post: "post", comment: "comment" };

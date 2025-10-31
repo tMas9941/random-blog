@@ -11,8 +11,13 @@ import ReplyList from "./reply/ReplyList";
 export default function CommentItem({ data, userId, level = 0 }) {
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
     const [replyActive, setReplyActive] = useState(false);
+    const [render, setRender] = useState(0);
     const isReply = !data.postId;
-    // console.log("data.user ", data, { isReply }, level);
+
+    function triggerRerender(value) {
+        setRender((i) => i + value);
+    }
+
     return (
         <div
             className={
@@ -40,14 +45,17 @@ export default function CommentItem({ data, userId, level = 0 }) {
                         commentId={data.id}
                         isReply={isReply}
                         targetUser={data.user?.username}
+                        triggerRerender={triggerRerender}
                     />
                 )}
+
                 {
                     <ReplyList
                         where={{ commentId: data.id }}
                         userId={userId}
                         level={level}
                         replyAmount={data._count.comments}
+                        render={render}
                     />
                 }
             </div>

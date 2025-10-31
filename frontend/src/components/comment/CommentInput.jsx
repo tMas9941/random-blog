@@ -4,9 +4,8 @@ import { useRef } from "react";
 import ColorButton from "../buttons/ColorButton";
 import commentService from "../../services/comment.service";
 import NoUser from "./NoUser";
-import SvgComponent from "../misc/SvgComponent";
 
-import { renderCommentList } from "../../constants/exports";
+import { reRenderCommentList } from "../../constants/exports";
 import { changePopupData, popupResults } from "../../global/popupHandler";
 import Avatar from "../misc/Avatar";
 
@@ -27,17 +26,16 @@ export default function CommentInput({ postId, user }) {
     const postComment = async () => {
         try {
             await commentService.create({ userId: user.id, postId, content: textRef.current.value });
-            renderCommentList.changeValue(renderCommentList.value + 1);
+            reRenderCommentList();
+            changePopupData("Commented successfully!", popupResults.success);
             clearText();
         } catch {
             changePopupData("Error during commenting!", popupResults.error);
-            return;
         }
     };
 
     return (
         <div ref={container} id={"inputContainer"} className="flex gap-5 my-5 mx-[min(150px,5%)]">
-            {/* <SvgComponent name={"comment"} size={50} className={"fill-accent"} /> */}
             <Avatar text={user.username} size={70} url={user?.profile.avatarUrl} self={true} />
             <div className={"flex flex-col  w-full " + focusClass}>
                 <textarea

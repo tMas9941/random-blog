@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import ColorButton from "../../buttons/ColorButton";
 import Avatar from "../../misc/Avatar";
 import { userSignal } from "../../../global/userData";
@@ -10,13 +10,13 @@ const buttonContainerClass =
     "h-15 peer-[:placeholder-shown]:h-0 peer-[:placeholder-shown]:scale-y-0 peer-[:placeholder-shown]:opacity-0 transition-[scale,opacity,height] ease-out duration-150";
 let activeReply = { commentId: null, close: null };
 
-export default function ReplyPanel({ setReplyActive, commentId, isReply, targetUser }) {
+export default function ReplyPanel({ setReplyActive, commentId, triggerRerender }) {
     const container = useRef();
     const textRef = useRef();
 
     const avatarURL = userSignal.value?.profile.avatarUrl;
     if (!avatarURL) return <></>;
-    // console.log({ targetUser });
+
     const closePanel = () => {
         document.activeElement.blur();
         setReplyActive(false);
@@ -42,20 +42,24 @@ export default function ReplyPanel({ setReplyActive, commentId, isReply, targetU
             commentId,
             content: textRef.current.value,
         };
-        let response;
+
         try {
-            // if (isReply) {
-            // } else {
-            //     response = await commentService.create(data);
-            // }
-            response = await commentService.create(data);
+            let response = await commentService.create(data);
+            response.comments = 0;
+            response.user = { username: userSignal.value.username, profile: userSignal.value.profile };
+            response.votes = { value: null, total: 0, positive: 0 };
+            response._count = 0;
+
+            triggerRerender(1);
             closePanel();
+            changePopupData("Successfull replying!", popupResults.success);
         } catch {
             changePopupData("Error during commenting!", popupResults.error);
         }
     };
 
     closePreviousReply();
+
     return (
         <div ref={container} id={"inputContainer"} className="flex gap-5 w-full h-fit my-2 mx-2">
             <Avatar text={"text"} size={70} url={avatarURL} self={true} />

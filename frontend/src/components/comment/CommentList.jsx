@@ -10,8 +10,8 @@ const CHUNK_SIZE = 5;
 export default function CommentList({ where, userId }) {
     const chunkContainerRef = useRef();
     const page = useScrollDetect(chunkContainerRef, CHUNK_SIZE);
-    const reRender = useSignal(renderCommentList, "CommentList"); // need to render new comments
-    // console.log("userId ", userId);
+    const render = useSignal(renderCommentList, "CommentList"); // need to render new comments
+
     return (
         <div
             ref={chunkContainerRef}
@@ -22,7 +22,7 @@ export default function CommentList({ where, userId }) {
                     key={index + 1}
                     query={{ limit: CHUNK_SIZE, page: index + 1, where: JSON.stringify(where), userId }}
                     type={CHUNK_TYPE.comment}
-                    reRender={index === 0 && reRender} // need to render new comments
+                    render={index === 0 && render} // need to render new comments
                     userId={userId}
                 />
             ))}

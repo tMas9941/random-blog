@@ -6,16 +6,20 @@ import SvgComponent from "../../misc/SvgComponent";
 
 const CHUNK_SIZE = 5;
 
-export default function ReplyList({ where, userId, level, replyAmount }) {
+export default function ReplyList({ where, userId, level, replyAmount, render }) {
     level++;
     const chunkContainerRef = useRef();
     const [chunkAmount, setChunkAmount] = useState(0);
 
-    // const reRender = useSignal(renderCommentList, "CommentList"); // need to render new comments
-
     return (
         <>
-            {<OpenRepliesLink setChunkAmount={setChunkAmount} replyAmount={replyAmount} chunkAmount={chunkAmount} />}
+            {
+                <OpenRepliesLink
+                    setChunkAmount={setChunkAmount}
+                    replyAmount={replyAmount + render || 0}
+                    chunkAmount={chunkAmount}
+                />
+            }
             <div ref={chunkContainerRef} className="flex flex-col transition-all duration-500">
                 {[...Array(chunkAmount)].map((_, index) => (
                     <ChunkLoader
@@ -23,7 +27,7 @@ export default function ReplyList({ where, userId, level, replyAmount }) {
                         query={{ limit: CHUNK_SIZE, page: index + 1, where: JSON.stringify(where), userId }}
                         type={CHUNK_TYPE.comment}
                         level={level}
-                        // reRender={index === 0 && reRender} // need to render new comments
+                        render={index === 0 && render} // need to render new comments
                         userId={userId}
                     />
                 ))}
@@ -31,7 +35,7 @@ export default function ReplyList({ where, userId, level, replyAmount }) {
             <LoadMoreRepliesLink
                 setChunkAmount={setChunkAmount}
                 chunkAmount={chunkAmount}
-                replyAmount={replyAmount}
+                replyAmount={replyAmount + render || 0}
                 chunkContainerRef={chunkContainerRef}
                 level={level}
             />

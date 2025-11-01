@@ -29,6 +29,7 @@ export default function ReplyPanel({ replyActive, setReplyActive, commentId, tri
 
     useEffect(() => {
         if (replyActive) closePreviousReply();
+        if (textRef.current) textRef.current.focus(); // grap focus - autoFocus not working because why not
     });
 
     if (replyActive === false) return <div className={`w-full h-20 animate-shrink`}></div>;
@@ -77,7 +78,6 @@ export default function ReplyPanel({ replyActive, setReplyActive, commentId, tri
                         className="peer w-full min-h-12 max-w-[450px] bg-secondary/20 p-3 resize-none rounded transition-[height] ease-out duration-150 overflow-y-hidden"
                         placeholder="Add a comment..."
                         onInput={() => fieldSizingContent(textRef)}
-                        autoFocus
                     ></textarea>
                     <div className={"flex gap-5 items-center " + buttonContainerClass}>
                         <ColorButton text={"Comment"} onClick={handleComment}></ColorButton>

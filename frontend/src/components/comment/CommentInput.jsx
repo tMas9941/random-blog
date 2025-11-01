@@ -39,6 +39,7 @@ export default function CommentInput({ postId, user }) {
             <Avatar text={user.username} size={70} url={user?.profile.avatarUrl} self={true} />
             <div className={"flex flex-col  w-full " + focusClass}>
                 <textarea
+                    autoFocus
                     ref={textRef}
                     id="commentInput"
                     name="comment"

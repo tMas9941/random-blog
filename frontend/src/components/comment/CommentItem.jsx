@@ -10,7 +10,7 @@ import ReplyList from "./reply/ReplyList";
 
 export default function CommentItem({ data, userId, level = 0 }) {
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
-    const [replyActive, setReplyActive] = useState(false);
+    const [replyActive, setReplyActive] = useState(null);
     const [render, setRender] = useState(0);
     const isReply = !data.postId;
 
@@ -39,15 +39,16 @@ export default function CommentItem({ data, userId, level = 0 }) {
                     {userId && level < 3 && <ReplyButton onClick={() => setReplyActive(!replyActive)} />}
                 </ButtonContainer>
 
-                {replyActive && (
+                {
                     <ReplyPanel
+                        replyActive={replyActive}
                         setReplyActive={setReplyActive}
                         commentId={data.id}
                         isReply={isReply}
                         targetUser={data.user?.username}
                         triggerRerender={triggerRerender}
                     />
-                )}
+                }
 
                 {
                     <ReplyList

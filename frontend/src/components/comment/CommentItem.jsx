@@ -40,7 +40,7 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
                 <Avatar text={data.user.username} size={isReply ? 45 : 55} url={data.user?.profile.avatarUrl} />
                 <div className="flex flex-col gap-1 w-full -mt-[5px] ">
                     <CommentContent data={data} />
-                    <ButtonContainer className={"mt-2"}>
+                    <ButtonContainer className={"mt-2"} type={"comment"}>
                         <VoteButton commentId={data.id} votes={data.votes} isOwn={isOwn} />
                         {userId && level < MAX_COMMENT_LEVEL && (
                             <ReplyButton onClick={() => setReplyActive(!replyActive)} />

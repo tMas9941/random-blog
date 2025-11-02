@@ -40,7 +40,7 @@ export default function PostItem({ data, onPostPage = false, removeSelfFromList 
                     <>
                         <DeleteButton
                             type="post"
-                            className={buttonClass}
+                            className={buttonClass + " ms-auto"}
                             data={data}
                             removeSelfFromList={removeSelfFromList}
                             setLoading={setLoading}
@@ -54,9 +54,9 @@ export default function PostItem({ data, onPostPage = false, removeSelfFromList 
 }
 
 const CommentButton = ({ postId, count }) => (
-    <Link to={"/posts/" + postId + "#comment"} className={buttonClass}>
+    <Link to={"/posts/" + postId + "#comment"} className={buttonClass + " font-semibold"}>
         <SvgComponent name={"comment"} size={25} />
-        <span className="mx-1 text-accent font-bold">{count}</span>
+        <span className="mx-1 text-accent font-bold stroke-1">{count}</span>
         Comments
     </Link>
 );

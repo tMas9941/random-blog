@@ -1,5 +1,7 @@
 import { changePopupData, popupResults } from "../../global/popupHandler";
+import commentService from "../../services/comment.service";
 import postService from "../../services/post.service";
+import delay from "../../utils/delay";
 import SvgComponent from "../misc/SvgComponent";
 import Button from "./Button";
 
@@ -14,17 +16,19 @@ async function handleOnClick(props) {
     switch (props.type) {
         case "post": {
             await deletePost(props);
+            break;
         }
         case "comment": {
             await deleteComment(props);
+            break;
         }
         default: {
             changePopupData("Couldn't delete item!", popupResults.error);
         }
     }
 }
-async function deletePost({ data, removeSelfFromList, setLoading, onSuccess }) {
-    console.log("data, removeSelfFromList, setLoading, onSuccess ", data, removeSelfFromList, setLoading, onSuccess);
+async function deletePost(props) {
+    const { data, removeSelfFromList, setLoading, onSuccess } = props;
     try {
         setLoading(true);
         await postService.destroy(data);
@@ -38,18 +42,19 @@ async function deletePost({ data, removeSelfFromList, setLoading, onSuccess }) {
     }
 }
 
-async function deleteComment({ data, removeSelfFromList, setLoading, onSuccess }) {
-    setLoading(true);
-    if (onSuccess) onSuccess();
-    return;
+async function deleteComment(props) {
+    const { data, removeSelfFromList, setLoading, onSuccess, containerRef } = props;
     try {
         setLoading(true);
-        await postService.destroy(data);
+        await commentService.destroy({ id: data.id });
+        changePopupData("Comment deleted sccessfully!", popupResults.success);
+        setLoading(false);
+        containerRef.current.classList.add("animate-shrink");
+        await delay(155);
         if (removeSelfFromList) removeSelfFromList(data.id);
-        changePopupData("Post deleted sccessfully!", popupResults.success);
         if (onSuccess) onSuccess();
     } catch {
-        changePopupData("Couldn't delete post!", popupResults.error);
+        changePopupData("Couldn't delete comment!", popupResults.error);
     } finally {
         setLoading(false);
     }

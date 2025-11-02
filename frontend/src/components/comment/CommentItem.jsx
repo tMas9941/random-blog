@@ -1,18 +1,23 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
+// Buttons
 import Avatar from "../misc/Avatar";
 import VoteButton from "../vote/VoteButton";
 import ButtonContainer from "../buttons/ButtonContainer";
-import calculateElapsedTime from "../../utils/calculateEllapsedTime";
 import SvgComponent from "../misc/SvgComponent";
+import DeleteButton from "../buttons/DeleteButton";
+
+// Components
 import ReplyPanel from "./reply/ReplyPanel";
 import ReplyList from "./reply/ReplyList";
-import DeleteButton from "../buttons/DeleteButton";
 import PostLoadingPlaceholder from "../posts/PostLoadingPlaceholder";
+
 import { userSignal } from "../../global/userData";
+import calculateElapsedTime from "../../utils/calculateEllapsedTime";
 
 export default function CommentItem({ data, userId, level = 0, removeSelfFromList }) {
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
+    const containerRef = useRef();
     const [replyActive, setReplyActive] = useState(null);
     const [render, setRender] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -24,7 +29,7 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
     }
 
     return (
-        <div className="relative p-2">
+        <div ref={containerRef} className="relative p-2 ">
             {loading && <PostLoadingPlaceholder className={"h-full -m-2"} />}
             <div
                 className={
@@ -45,13 +50,13 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
                         {userId && level < 3 && <ReplyButton onClick={() => setReplyActive(!replyActive)} />}
                         {isOwn && (
                             <DeleteButton
+                                containerRef={containerRef}
                                 type={"comment"}
                                 title={"Delete comment!"}
                                 className={"!pe-3 ms-auto"}
                                 data={data}
                                 removeSelfFromList={removeSelfFromList}
                                 setLoading={setLoading}
-                                onSuccess={() => console.log("SUCCESS")}
                             />
                         )}
                     </ButtonContainer>

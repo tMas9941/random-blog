@@ -16,6 +16,8 @@ import { userSignal } from "../../global/userData";
 import calculateElapsedTime from "../../utils/calculateEllapsedTime";
 import PanelContainer from "../PanelContainer";
 
+const MAX_COMMENT_LEVEL = 2;
+
 export default function CommentItem({ data, userId, level = 0, removeSelfFromList }) {
     const containerRef = useRef();
     const [replyActive, setReplyActive] = useState(null);
@@ -24,7 +26,7 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
     const isReply = !data.postId;
     const isOwn = data.userId === userSignal.value?.id;
 
-    const dividerClass = `flex py-2 px-3 rounded-md hover:bg-secondary/10 animate-fade-in 
+    const dividerClass = `flex py-2 px-3 rounded-md animate-fade-in 
     ${isReply ? " -ps-6  gap-3" : " gap-4"} `;
 
     function triggerRerender(value) {
@@ -40,7 +42,9 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
                     <CommentContent data={data} />
                     <ButtonContainer className={"mt-2"}>
                         <VoteButton commentId={data.id} votes={data.votes} isOwn={isOwn} />
-                        {userId && level < 3 && <ReplyButton onClick={() => setReplyActive(!replyActive)} />}
+                        {userId && level < MAX_COMMENT_LEVEL && (
+                            <ReplyButton onClick={() => setReplyActive(!replyActive)} />
+                        )}
                         {isOwn && (
                             <DeleteButton
                                 containerRef={containerRef}

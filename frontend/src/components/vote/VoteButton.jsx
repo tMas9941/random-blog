@@ -5,7 +5,7 @@ import { castCommentVote, castPostVote } from "../../global/voteHandler";
 
 export default function VoteButton({ postId, commentId, votes, isOwn }) {
     const userId = userSignal?.value?.id;
-
+    const buttonDisabled = !userId || isOwn;
     const { voted, setVoted, positiveVotes, negativeVotes, voteRatio, totalVotes } = useVoteResult(votes);
 
     const changeVoteResult = (newValue) => {
@@ -20,15 +20,17 @@ export default function VoteButton({ postId, commentId, votes, isOwn }) {
         if (newValue === voted) return setVoted(null);
         setVoted(newValue);
     };
-
     return (
-        <div className={"flex w-fit  items-center rounded [&>*]:rounded "}>
+        <div
+            className={"flex w-fit items-center rounded [&>*]:rounded"}
+            title={buttonDisabled && "Must login to vote and can't vote on your own stuff!"}
+        >
             <ButtonComp
                 text={positiveVotes}
                 voteValue={true}
                 changeVoteResult={changeVoteResult}
-                disabled={!userId || isOwn}
-                activeClass={"fill-success text-success stroke-success "}
+                disabled={buttonDisabled}
+                activeClass={"fill-success text-success stroke-success"}
                 voted={voted}
             />
 
@@ -44,7 +46,7 @@ export default function VoteButton({ postId, commentId, votes, isOwn }) {
                 text={negativeVotes}
                 voteValue={false}
                 changeVoteResult={changeVoteResult}
-                disabled={!userId || isOwn}
+                disabled={buttonDisabled}
                 activeClass={"fill-error text-error stroke-error "}
                 voted={voted}
             />
@@ -55,11 +57,13 @@ export default function VoteButton({ postId, commentId, votes, isOwn }) {
 function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, activeClass }) {
     return (
         <button
+            title={"Press to vote..."}
             disabled={disabled}
-            title={disabled ? "Must login to vote or can't vote on your own stuff!" : "Press to vote..."}
-            className={`flex h-[80%] px-1 text-lg items-center brightness-130 stroke-accent ${
+            className={`flex h-full px-1 text-lg items-center brightness-130 stroke-accent  ${
                 !disabled && voted === voteValue ? activeClass + " stroke-1  " : " stroke-2 fill-none "
-            } [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold ${disabled ? " " : "cursor-pointer hover:bg-inherit"}`}
+            } [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold ${
+                disabled ? " pointer-events-none " : "cursor-pointer hover:bg-inherit "
+            }`}
             onClick={() => changeVoteResult(voteValue)}
         >
             {voteValue && <span>{`${text}`}</span>}

@@ -7,39 +7,55 @@ import calculateElapsedTime from "../../utils/calculateEllapsedTime";
 import SvgComponent from "../misc/SvgComponent";
 import ReplyPanel from "./reply/ReplyPanel";
 import ReplyList from "./reply/ReplyList";
+import DeleteButton from "../buttons/DeleteButton";
+import PostLoadingPlaceholder from "../posts/PostLoadingPlaceholder";
+import { userSignal } from "../../global/userData";
 
-export default function CommentItem({ data, userId, level = 0 }) {
+export default function CommentItem({ data, userId, level = 0, removeSelfFromList }) {
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
     const [replyActive, setReplyActive] = useState(null);
     const [render, setRender] = useState(0);
+    const [loading, setLoading] = useState(false);
     const isReply = !data.postId;
+    const isOwn = data.userId === userSignal.value.id;
 
     function triggerRerender(value) {
         setRender((i) => i + value);
     }
 
     return (
-        <div
-            className={
-                "flex py-2 px-3  hover:bg-secondary/10 animate-fade-in " +
-                (isReply ? " -ms-6 rounded-md gap-3" : " gap-4")
-            }
-        >
-            <Avatar text={data.user.username} size={isReply ? 45 : 55} url={data.user?.profile.avatarUrl} />
+        <div className="relative p-2">
+            {loading && <PostLoadingPlaceholder className={"h-full -m-2"} />}
+            <div
+                className={
+                    " flex py-2 px-3  hover:bg-secondary/10 animate-fade-in " +
+                    (isReply ? " -ps-6 rounded-md gap-3" : " gap-4")
+                }
+            >
+                <Avatar text={data.user.username} size={isReply ? 45 : 55} url={data.user?.profile.avatarUrl} />
+                <div className="flex flex-col gap-1 w-full -mt-[5px] ">
+                    <div className="flex gap-2">
+                        <h3 className="font-semibold">{data.user.username}</h3>
+                        <p className="mt-auto font-italic text-sm text-[gray]/80"> {timePassed}</p>
+                    </div>
+                    <p className="break-all">{data.content}</p>
 
-            <div className="flex flex-col gap-1 w-full -mt-[5px]">
-                <div className="flex gap-2">
-                    <h3 className="font-semibold">{data.user.username}</h3>
-                    <p className="mt-auto font-italic text-sm text-[gray]/80"> {timePassed}</p>
-                </div>
-                <p className="break-all">{data.content}</p>
+                    <ButtonContainer className={"mt-2"}>
+                        <VoteButton commentId={data.id} votes={data.votes} />
+                        {userId && level < 3 && <ReplyButton onClick={() => setReplyActive(!replyActive)} />}
+                        {isOwn && (
+                            <DeleteButton
+                                type={"comment"}
+                                title={"Delete comment!"}
+                                className={"!pe-3 ms-auto"}
+                                data={data}
+                                removeSelfFromList={removeSelfFromList}
+                                setLoading={setLoading}
+                                onSuccess={() => console.log("SUCCESS")}
+                            />
+                        )}
+                    </ButtonContainer>
 
-                <ButtonContainer className={"mt-2"}>
-                    <VoteButton commentId={data.id} votes={data.votes} />
-                    {userId && level < 3 && <ReplyButton onClick={() => setReplyActive(!replyActive)} />}
-                </ButtonContainer>
-
-                {
                     <ReplyPanel
                         replyActive={replyActive}
                         setReplyActive={setReplyActive}
@@ -48,9 +64,7 @@ export default function CommentItem({ data, userId, level = 0 }) {
                         targetUser={data.user?.username}
                         triggerRerender={triggerRerender}
                     />
-                }
 
-                {
                     <ReplyList
                         where={{ commentId: data.id }}
                         userId={userId}
@@ -58,7 +72,7 @@ export default function CommentItem({ data, userId, level = 0 }) {
                         replyAmount={data._count.comments}
                         render={render}
                     />
-                }
+                </div>
             </div>
         </div>
     );

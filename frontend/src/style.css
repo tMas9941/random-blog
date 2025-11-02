@@ -50,7 +50,6 @@
     @keyframes shrink {
         0% {
             opacity: 1;
-            visibility: visible;
         }
         100% {
             opacity: 0;

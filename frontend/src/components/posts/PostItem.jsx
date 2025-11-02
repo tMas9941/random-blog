@@ -41,6 +41,7 @@ export default function PostItem({ data, onPostPage = false, removeSelfFromList 
                             <SvgComponent size={20} name={"pen"} className={"fill-accent stroke-accent"} />
                         </Button>
                         <DeleteButton
+                            type="post"
                             className={buttonClass}
                             data={data}
                             removeSelfFromList={removeSelfFromList}

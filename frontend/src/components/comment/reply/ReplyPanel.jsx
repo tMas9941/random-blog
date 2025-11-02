@@ -29,7 +29,7 @@ export default function ReplyPanel({ replyActive, setReplyActive, commentId, tri
 
     useEffect(() => {
         if (replyActive) closePreviousReply();
-        if (textRef.current) textRef.current.focus(); // grap focus - autoFocus not working because why not
+        if (textRef.current) textRef.current.focus(); // grab focus - autoFocus is not working because why not
     });
 
     if (replyActive === false) return <div className={`w-full h-20 animate-shrink`}></div>;

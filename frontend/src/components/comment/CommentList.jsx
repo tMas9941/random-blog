@@ -15,7 +15,7 @@ export default function CommentList({ where, userId }) {
     return (
         <div
             ref={chunkContainerRef}
-            className="flex flex-col border-y border-secondary/60 divide-y divide-secondary/30 transition-all duration-500"
+            className="flex flex-col border-y border-secondary/60 transition-all duration-500 gap-1"
         >
             {[...Array(page)].map((_, index) => (
                 <ChunkLoader

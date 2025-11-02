@@ -14,6 +14,7 @@ import PostLoadingPlaceholder from "../posts/PostLoadingPlaceholder";
 
 import { userSignal } from "../../global/userData";
 import calculateElapsedTime from "../../utils/calculateEllapsedTime";
+import PanelContainer from "../PanelContainer";
 
 export default function CommentItem({ data, userId, level = 0, removeSelfFromList }) {
     const containerRef = useRef();
@@ -23,16 +24,16 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
     const isReply = !data.postId;
     const isOwn = data.userId === userSignal.value?.id;
 
-    const dividerClass =
-        " flex py-2 px-3  hover:bg-secondary/10 animate-fade-in " + (isReply ? " -ps-6 rounded-md gap-3" : " gap-4");
+    const dividerClass = `flex py-2 px-3 rounded-md hover:bg-secondary/10 animate-fade-in 
+    ${isReply ? " -ps-6  gap-3" : " gap-4"} `;
 
     function triggerRerender(value) {
         setRender((i) => i + value);
     }
 
     return (
-        <div ref={containerRef} className="relative p-2 ">
-            {loading && <PostLoadingPlaceholder className={"h-full -m-2"} />}
+        <PanelContainer className="relative " ref={containerRef} isOwn={isOwn}>
+            {loading && <PostLoadingPlaceholder className={"h-full -m-1"} />}
             <div className={dividerClass}>
                 <Avatar text={data.user.username} size={isReply ? 45 : 55} url={data.user?.profile.avatarUrl} />
                 <div className="flex flex-col gap-1 w-full -mt-[5px] ">
@@ -71,7 +72,7 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
                     />
                 </div>
             </div>
-        </div>
+        </PanelContainer>
     );
 }
 

@@ -29,7 +29,7 @@ export default function PostItem({ data, onPostPage = false, removeSelfFromList 
     if (!data) return <></>;
 
     return (
-        <PanelContainer className={`p-4 ${loading && "loading"} peer `}>
+        <PanelContainer className={`p-4 ${loading && "loading"} peer `} isOwn={isOwn}>
             {loading && <PostLoadingPlaceholder className={"-m-4"} />}
             <PostContent data={data} onPostPage={onPostPage} />
             <ButtonContainer>

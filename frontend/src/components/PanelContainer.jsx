@@ -1,5 +1,12 @@
-export default function PanelContainer({ children, className }) {
+export default function PanelContainer({ children, className, isOwn = false, ref }) {
     return (
-        <div className={"relative min-w-80 bg-secondary/10 rounded-lg overflow-hidden " + className}>{children}</div>
+        <div
+            ref={ref}
+            className={` relative min-w-80 rounded-lg overflow-hidden
+                ${isOwn ? "bg-primary/10 hover:bg-primary/15 " : "hover:bg-secondary/10"}
+                ${className}`}
+        >
+            {children}
+        </div>
     );
 }

@@ -1,7 +1,6 @@
 import prisma from "../models/prisma-client.js";
 
 const create = async ({ userId, title, content }) => {
-    console.log("create, ", { userId, title, content });
     const newPost = await prisma.posts.create({ data: { userId, title, content } });
     return newPost;
 };
@@ -44,7 +43,7 @@ const getById = async ({ id }) => {
     return post;
 };
 
-const getUserIdByPost = async (id) => {
+const getPostOwner = async (id) => {
     const userId = await prisma.posts.findUnique({
         where: { id },
         select: { userId: true },
@@ -53,4 +52,4 @@ const getUserIdByPost = async (id) => {
     return userId;
 };
 
-export default { create, list, destroy, getById, getUserIdByPost };
+export default { create, list, destroy, getById, getPostOwner };

@@ -31,7 +31,7 @@ export default function PostPage() {
             <PostItem data={fetchData.data} onPostPage={true} />
             <PostLoadingPlaceholder className=" peer-[.loading]:block hidden mt-10 rounded-lg [&~*]:p-4" />
             <CommentInput postId={fetchData.data.id} user={user} />
-            <CommentList where={{ postId: fetchData.data.id }} user={user} />
+            <CommentList where={{ postId: fetchData.data.id }} userId={user?.id} />
         </div>
     );
 }

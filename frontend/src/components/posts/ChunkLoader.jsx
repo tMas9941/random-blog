@@ -14,7 +14,7 @@ const chunkItems = {
     comment: { item: CommentItem, service: commentService },
 };
 
-const Chunkloader = ({ index = 1, type, query, userId, reRender }) => {
+const Chunkloader = ({ index = 1, type, query, userId, render, level = 0 }) => {
     const [list, setList] = useState();
     const loading = useRef(false);
 
@@ -27,7 +27,7 @@ const Chunkloader = ({ index = 1, type, query, userId, reRender }) => {
             })();
         }
         return () => (loading.current = false);
-    }, [index, reRender, userId, type, query]);
+    }, [index, render, userId, type, query]);
 
     if (!list) return <Loader className={"round-loader m-auto "} />;
 
@@ -41,7 +41,13 @@ const Chunkloader = ({ index = 1, type, query, userId, reRender }) => {
     return (
         <>
             {list.map((data) => (
-                <DynamicListItem key={data.id} data={data} removeSelfFromList={removeSelfFromList} />
+                <DynamicListItem
+                    key={data.id}
+                    data={data}
+                    removeSelfFromList={removeSelfFromList}
+                    userId={userId}
+                    level={level}
+                />
             ))}
         </>
     );
@@ -50,7 +56,7 @@ export default memo(Chunkloader, areEqual);
 
 function areEqual(prevProps, nextProps) {
     if (prevProps.index !== nextProps.index) return false;
-    if (prevProps.reRender !== nextProps.reRender) return false;
+    if (prevProps.render !== nextProps.render) return false;
     if (prevProps.userId !== nextProps.userId) return false;
     return true;
 }

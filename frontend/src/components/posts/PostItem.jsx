@@ -24,21 +24,22 @@ const buttonClass = "flex items-center gap-2 fill-accent text-xl !px-4";
 export default function PostItem({ data, onPostPage = false, removeSelfFromList }) {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const selfPost = data.userId === userSignal.value?.id;
+    const isOwn = data.userId === userSignal.value?.id;
 
     if (!data) return <></>;
 
     return (
-        <PanelContainer className={`p-4 ${loading && "loading"} peer `}>
+        <PanelContainer className={`p-4 ${loading && "loading"} peer `} isOwn={isOwn}>
             {loading && <PostLoadingPlaceholder className={"-m-4"} />}
             <PostContent data={data} onPostPage={onPostPage} />
             <ButtonContainer>
-                <VoteButton postId={data.id} votes={data.votes} />
+                <VoteButton postId={data.id} votes={data.votes} isOwn={isOwn} />
                 {!onPostPage && <CommentButton postId={data.id} count={data._count.comments} />}
                 <ShareButton className={buttonClass} postId={data.id} />
-                {selfPost && (
+                {isOwn && (
                     <>
                         <DeleteButton
+                            type="post"
                             className={buttonClass}
                             data={data}
                             removeSelfFromList={removeSelfFromList}

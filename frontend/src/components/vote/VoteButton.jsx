@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SvgComponent from "../misc/SvgComponent";
 import { userSignal } from "../../global/userData";
 import { castCommentVote, castPostVote } from "../../global/voteHandler";
 
-export default function VoteButton({ postId, commentId, votes }) {
+export default function VoteButton({ postId, commentId, votes, isOwn }) {
     const userId = userSignal?.value?.id;
-
+    const buttonDisabled = !userId || isOwn;
     const { voted, setVoted, positiveVotes, negativeVotes, voteRatio, totalVotes } = useVoteResult(votes);
 
     const changeVoteResult = (newValue) => {
@@ -20,17 +20,20 @@ export default function VoteButton({ postId, commentId, votes }) {
         if (newValue === voted) return setVoted(null);
         setVoted(newValue);
     };
-
     return (
-        <div className={"flex w-fit  items-center rounded [&>*]:rounded "}>
+        <div
+            className={"flex w-fit items-center rounded [&>*]:rounded"}
+            title={buttonDisabled ? "Must login to vote and can't vote on your own stuff!" : ""}
+        >
             <ButtonComp
                 text={positiveVotes}
                 voteValue={true}
                 changeVoteResult={changeVoteResult}
-                disabled={!userId}
-                activeClass={"fill-success text-success stroke-success "}
+                disabled={buttonDisabled}
+                activeClass={"fill-success text-success stroke-success"}
                 voted={voted}
             />
+
             <span
                 style={{ color: `color-mix(in srgb, #ff0000 ${100 - voteRatio}%, #008c17  ${voteRatio}%)` }}
                 className="min-w-17 px-1 text-center text-lg font-bold [&>span]:font-semibold brightness-130"
@@ -38,11 +41,12 @@ export default function VoteButton({ postId, commentId, votes }) {
                 {totalVotes > 0 ? Math.floor(voteRatio) : ""}
                 {totalVotes > 0 && <span className="text-base"> %</span>}
             </span>
+
             <ButtonComp
                 text={negativeVotes}
                 voteValue={false}
                 changeVoteResult={changeVoteResult}
-                disabled={!userId}
+                disabled={buttonDisabled}
                 activeClass={"fill-error text-error stroke-error "}
                 voted={voted}
             />
@@ -53,11 +57,13 @@ export default function VoteButton({ postId, commentId, votes }) {
 function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, activeClass }) {
     return (
         <button
+            title={"Press to vote..."}
             disabled={disabled}
-            title={disabled ? "Must login to vote!" : ""}
-            className={`flex h-[80%] px-1 text-lg items-center brightness-130 stroke-accent ${
+            className={`flex h-full px-1 text-lg items-center brightness-130 stroke-accent  ${
                 !disabled && voted === voteValue ? activeClass + " stroke-1  " : " stroke-2 fill-none "
-            } [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold ${disabled ? " " : "cursor-pointer hover:bg-inherit"}`}
+            } [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold ${
+                disabled ? " pointer-events-none " : "cursor-pointer hover:bg-inherit "
+            }`}
             onClick={() => changeVoteResult(voteValue)}
         >
             {voteValue && <span>{`${text}`}</span>}

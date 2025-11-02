@@ -7,23 +7,23 @@ import { CHUNK_TYPE, renderCommentList } from "../../constants/exports";
 
 const CHUNK_SIZE = 5;
 
-export default function CommentList({ where, user }) {
+export default function CommentList({ where, userId }) {
     const chunkContainerRef = useRef();
     const page = useScrollDetect(chunkContainerRef, CHUNK_SIZE);
-    const reRender = useSignal(renderCommentList, "CommentList"); // need to render new comments
+    const render = useSignal(renderCommentList, "CommentList"); // need to render new comments
 
     return (
         <div
             ref={chunkContainerRef}
-            className="flex flex-col border-y border-secondary/60 divide-y-1 divide-secondary/60 transition-all duration-500"
+            className="flex flex-col border-y border-secondary/60 transition-all duration-500 gap-1"
         >
-            {[...Array(page)].map((none, index) => (
+            {[...Array(page)].map((_, index) => (
                 <ChunkLoader
                     key={index + 1}
-                    query={{ limit: CHUNK_SIZE, page: index + 1, where: JSON.stringify(where), userId: user?.id }}
+                    query={{ limit: CHUNK_SIZE, page: index + 1, where: JSON.stringify(where), userId }}
                     type={CHUNK_TYPE.comment}
-                    reRender={index === 0 && reRender} // need to render new comments
-                    userId={user?.id}
+                    render={index === 0 && render} // need to render new comments
+                    userId={userId}
                 />
             ))}
         </div>

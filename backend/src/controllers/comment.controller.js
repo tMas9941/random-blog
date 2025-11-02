@@ -31,6 +31,16 @@ const list = async (req, res, next) => {
     }
 };
 
+const destroy = async (req, res, next) => {
+    const { id } = req.body;
+    try {
+        const response = await commentService.destroy({ id });
+        res.status(200).send(response);
+    } catch (error) {
+        next(error);
+    }
+};
+
 const getByUserId = async (req, res, next) => {
     const { userId } = req.body;
 
@@ -42,4 +52,4 @@ const getByUserId = async (req, res, next) => {
         next(error);
     }
 };
-export default { create, list, getByUserId };
+export default { create, list, getByUserId, destroy };

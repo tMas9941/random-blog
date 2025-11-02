@@ -24,10 +24,14 @@ const list = async ({ limit, page, where, userId }) => {
     return response;
 };
 
-const getByUserId = async ({ userId }) => {
-    const response = await prisma.comments.findMany({ where: { userId } });
-
+const destroy = async ({ id }) => {
+    const response = await prisma.comments.delete({ where: { id } });
     return response;
 };
 
-export default { create, list, getByUserId };
+const getByUserId = async ({ userId }) => {
+    const response = await prisma.comments.findMany({ where: { userId } });
+    return response;
+};
+
+export default { create, list, getByUserId, destroy };

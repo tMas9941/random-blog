@@ -6,5 +6,6 @@ const router = express.Router();
 router.post("/create", commentController.create);
 router.get("/list", commentController.list);
 router.get("/:userId", commentController.getByUserId);
+router.delete("/delete", commentController.destroy);
 
 export default router;

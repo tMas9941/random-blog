@@ -17,6 +17,8 @@ import calculateElapsedTime from "../../utils/calculateEllapsedTime";
 import PanelContainer from "../PanelContainer";
 
 const MAX_COMMENT_LEVEL = 2;
+const AVATAR_SIZE_COMMENT = 55;
+const AVATAR_SIZE_REPLY = 45;
 
 export default function CommentItem({ data, userId, level = 0, removeSelfFromList }) {
     const containerRef = useRef();
@@ -34,10 +36,14 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
     }
 
     return (
-        <PanelContainer className="relative " ref={containerRef} isOwn={isOwn}>
+        <PanelContainer className=" p-1" ref={containerRef} isOwn={isOwn}>
             {loading && <PostLoadingPlaceholder className={"h-full -m-1"} />}
             <div className={dividerClass}>
-                <Avatar text={data.user.username} size={isReply ? 45 : 55} url={data.user?.profile.avatarUrl} />
+                <Avatar
+                    text={data.user.username}
+                    size={isReply ? AVATAR_SIZE_REPLY : AVATAR_SIZE_COMMENT}
+                    url={data.user?.profile.avatarUrl}
+                />
                 <div className="flex flex-col gap-1 w-full -mt-[5px] ">
                     <CommentContent data={data} />
                     <ButtonContainer className={"mt-2"} type={"comment"}>

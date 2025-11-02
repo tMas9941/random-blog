@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SvgComponent from "../misc/SvgComponent";
 import { userSignal } from "../../global/userData";
 import { castCommentVote, castPostVote } from "../../global/voteHandler";
 
-export default function VoteButton({ postId, commentId, votes }) {
+export default function VoteButton({ postId, commentId, votes, isOwn }) {
     const userId = userSignal?.value?.id;
 
     const { voted, setVoted, positiveVotes, negativeVotes, voteRatio, totalVotes } = useVoteResult(votes);
@@ -27,10 +27,11 @@ export default function VoteButton({ postId, commentId, votes }) {
                 text={positiveVotes}
                 voteValue={true}
                 changeVoteResult={changeVoteResult}
-                disabled={!userId}
+                disabled={!userId || isOwn}
                 activeClass={"fill-success text-success stroke-success "}
                 voted={voted}
             />
+
             <span
                 style={{ color: `color-mix(in srgb, #ff0000 ${100 - voteRatio}%, #008c17  ${voteRatio}%)` }}
                 className="min-w-17 px-1 text-center text-lg font-bold [&>span]:font-semibold brightness-130"
@@ -38,11 +39,12 @@ export default function VoteButton({ postId, commentId, votes }) {
                 {totalVotes > 0 ? Math.floor(voteRatio) : ""}
                 {totalVotes > 0 && <span className="text-base"> %</span>}
             </span>
+
             <ButtonComp
                 text={negativeVotes}
                 voteValue={false}
                 changeVoteResult={changeVoteResult}
-                disabled={!userId}
+                disabled={!userId || isOwn}
                 activeClass={"fill-error text-error stroke-error "}
                 voted={voted}
             />
@@ -54,7 +56,7 @@ function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, active
     return (
         <button
             disabled={disabled}
-            title={disabled ? "Must login to vote!" : ""}
+            title={disabled ? "Must login to vote or can't vote on your own stuff!" : "Press to vote..."}
             className={`flex h-[80%] px-1 text-lg items-center brightness-130 stroke-accent ${
                 !disabled && voted === voteValue ? activeClass + " stroke-1  " : " stroke-2 fill-none "
             } [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold ${disabled ? " " : "cursor-pointer hover:bg-inherit"}`}

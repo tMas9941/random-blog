@@ -24,7 +24,7 @@ const buttonClass = "flex items-center gap-2 fill-accent text-xl !px-4";
 export default function PostItem({ data, onPostPage = false, removeSelfFromList }) {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const selfPost = data.userId === userSignal.value?.id;
+    const isOwn = data.userId === userSignal.value?.id;
 
     if (!data) return <></>;
 
@@ -33,9 +33,9 @@ export default function PostItem({ data, onPostPage = false, removeSelfFromList 
             {loading && <PostLoadingPlaceholder className={"-m-4"} />}
             <PostContent data={data} onPostPage={onPostPage} />
             <ButtonContainer>
-                <VoteButton postId={data.id} votes={data.votes} />
+                <VoteButton postId={data.id} votes={data.votes} isOwn={isOwn} />
                 {!onPostPage && <CommentButton postId={data.id} count={data._count.comments} />}
-                {selfPost && (
+                {isOwn && (
                     <>
                         <Button title={"Edit post"} text={"Edit"} className={"ms-auto " + buttonClass}>
                             <SvgComponent size={20} name={"pen"} className={"fill-accent stroke-accent"} />

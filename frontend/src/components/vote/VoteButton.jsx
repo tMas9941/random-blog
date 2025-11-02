@@ -23,7 +23,7 @@ export default function VoteButton({ postId, commentId, votes, isOwn }) {
     return (
         <div
             className={"flex w-fit items-center rounded [&>*]:rounded"}
-            title={buttonDisabled && "Must login to vote and can't vote on your own stuff!"}
+            title={buttonDisabled ? "Must login to vote and can't vote on your own stuff!" : ""}
         >
             <ButtonComp
                 text={positiveVotes}

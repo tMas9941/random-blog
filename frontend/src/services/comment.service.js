@@ -20,7 +20,7 @@ const create = async (data) => {
 
 const destroy = async (data) => {
     try {
-        const response = await axiosInstance.delete("/comment/delete", { data });
+        const response = await axiosInstance.delete("/comment/delete/" + data.id);
         return response.data;
     } catch (error) {
         throw error.response ? error.response.data : error;

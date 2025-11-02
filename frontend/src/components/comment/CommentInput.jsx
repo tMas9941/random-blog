@@ -34,12 +34,16 @@ export default function CommentInput({ postId, user }) {
         }
     };
 
+    const autoFocusCommentInput = () => {
+        if (String(window.location).split("#").includes("comment") && textRef.current) textRef.current.focus();
+    };
+
+    autoFocusCommentInput();
     return (
         <div ref={container} id={"inputContainer"} className="flex gap-5 my-5 mx-[min(150px,5%)]">
             <Avatar text={user.username} size={70} url={user?.profile.avatarUrl} self={true} />
             <div className={"flex flex-col  w-full " + focusClass}>
                 <textarea
-                    autoFocus
                     ref={textRef}
                     id="commentInput"
                     name="comment"

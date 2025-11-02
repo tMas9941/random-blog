@@ -32,7 +32,7 @@ const list = async (req, res, next) => {
 };
 
 const destroy = async (req, res, next) => {
-    const { id } = req.body;
+    const { id } = req.params;
     try {
         const response = await commentService.destroy({ id });
         res.status(200).send(response);

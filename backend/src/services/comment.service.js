@@ -34,4 +34,13 @@ const getByUserId = async ({ userId }) => {
     return response;
 };
 
-export default { create, list, getByUserId, destroy };
+const getCommentOwner = async (id) => {
+    const userId = await prisma.comments.findUnique({
+        where: { id },
+        select: { userId: true },
+    });
+
+    return userId;
+};
+
+export default { create, list, getByUserId, destroy, getCommentOwner };

@@ -1,10 +1,14 @@
 import { JWT_SECRET } from "../../constants/constants.js";
-import roleService from "../../services/role.service.js";
-import userService from "../../services/user.service.js";
+
 import HttpError from "../../utils/HttpError.js";
 import jwt from "jsonwebtoken";
 import benchmark from "../../utils/benchmark.js";
+
+// Services
 import postService from "../../services/post.service.js";
+import commentService from "../../services/comment.service.js";
+import roleService from "../../services/role.service.js";
+import userService from "../../services/user.service.js";
 
 export const auth = (authData) => {
     return async (req, res, next) => {
@@ -44,11 +48,15 @@ async function getTargetUserId(subject, subjectId) {
     switch (subject) {
         case "POSTS":
             if (subjectId) {
-                const owner = await postService.getUserIdByPost(subjectId);
+                const owner = await postService.getPostOwner(subjectId);
                 return owner?.userId;
             }
 
         case "COMMENTS":
+            if (subjectId) {
+                const owner = await commentService.getCommentOwner(subjectId);
+                return owner?.userId;
+            }
             break;
         default:
             return null;

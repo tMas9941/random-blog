@@ -43,15 +43,15 @@ async function deletePost(props) {
 }
 
 async function deleteComment(props) {
-    const { data, removeSelfFromList, setLoading, onSuccess, containerRef } = props;
+    const { id, removeSelfFromList, setLoading, onSuccess, containerRef } = props;
     try {
         setLoading(true);
-        await commentService.destroy({ id: data.id });
+        await commentService.destroy({ id });
         changePopupData("Comment deleted sccessfully!", popupResults.success);
         setLoading(false);
         containerRef.current.classList.add("animate-shrink");
         await delay(155);
-        if (removeSelfFromList) removeSelfFromList(data.id);
+        if (removeSelfFromList) removeSelfFromList(id);
         if (onSuccess) onSuccess();
     } catch {
         changePopupData("Couldn't delete comment!", popupResults.error);

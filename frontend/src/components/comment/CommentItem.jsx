@@ -21,7 +21,7 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
     const [render, setRender] = useState(0);
     const [loading, setLoading] = useState(false);
     const isReply = !data.postId;
-    const isOwn = data.userId === userSignal.value.id;
+    const isOwn = data.userId === userSignal.value?.id;
 
     const dividerClass =
         " flex py-2 px-3  hover:bg-secondary/10 animate-fade-in " + (isReply ? " -ps-6 rounded-md gap-3" : " gap-4");
@@ -38,7 +38,7 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
                 <div className="flex flex-col gap-1 w-full -mt-[5px] ">
                     <CommentContent data={data} />
                     <ButtonContainer className={"mt-2"}>
-                        <VoteButton commentId={data.id} votes={data.votes} />
+                        <VoteButton commentId={data.id} votes={data.votes} isOwn={isOwn} />
                         {userId && level < 3 && <ReplyButton onClick={() => setReplyActive(!replyActive)} />}
                         {isOwn && (
                             <DeleteButton

@@ -55,6 +55,7 @@ export default function CommentInput({ postId, user }) {
                 <div className="flex gap-5 mt-3 items-center origin-top opacity-0 scale-y-0 peer-not-[:placeholder-shown]:scale-y-100 peer-not-[:placeholder-shown]:opacity-100 transition-[scale,opacity] ease-out duration-150">
                     <ColorButton text={"Comment"} onClick={postComment}></ColorButton>
                     <ColorButton
+                        theme="secondary"
                         className="bg-secondary/20 border-2 border-secondary text-secondary disabled:border-white"
                         text={"Cancel"}
                         onClick={clearText}

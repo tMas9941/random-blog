@@ -3,8 +3,8 @@ export default function ButtonContainer({ className, children, type = "post" }) 
     [&_button]:hover:brightness-120 [&_a]:hover:brightness-120 `;
     return (
         <div
-            className={`flex gap-4 w-full [&>*]:rounded-md [&>*]:px-1 [&>*]:${
-                type === "comment" ? "h-10" : "h-11"
+            className={`flex gap-4 w-full [&>*]:rounded-md [&>*]:px-1 ${
+                type === "comment" ? "[&>button]:py-1" : "[&>button]:py-1.5"
             } [&>button]:active:brightness-90
                 ${classEffects}
                 ${className}`}

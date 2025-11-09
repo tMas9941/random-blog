@@ -81,11 +81,7 @@ export default function ReplyPanel({ replyActive, setReplyActive, commentId, tri
                     ></textarea>
                     <div className={"flex gap-5 items-center " + buttonContainerClass}>
                         <ColorButton text={"Comment"} onClick={handleComment}></ColorButton>
-                        <ColorButton
-                            className="bg-secondary/20 border-2 border-secondary text-secondary disabled:border-white "
-                            text={"Cancel"}
-                            onClick={closePanel}
-                        ></ColorButton>
+                        <ColorButton theme="secondary" className=" " text={"Cancel"} onClick={closePanel}></ColorButton>
                     </div>
                 </div>
             </div>

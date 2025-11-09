@@ -16,7 +16,7 @@ export default function Authenticate() {
 					 ${darkMode ? " text-n-text" : "text-text"} flex justify-center
 					`}
         >
-            <PanelContainer>
+            <PanelContainer className={"bg-secondary/10"}>
                 <div className="flex w-full h-13 [&>button]:w-full ">
                     <HeaderButton text={"Login"} onClick={() => navigate("login")} className={"text-inherit"} />
                     <HeaderButton text={"Registration"} onClick={() => navigate("registration")} />

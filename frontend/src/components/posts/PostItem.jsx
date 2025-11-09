@@ -21,7 +21,7 @@ import ShareButton from "./ShareButton";
 
 const buttonClass = "flex items-center gap-2 fill-accent text-xl !px-4";
 
-export default function PostItem({ data, onPostPage = false, removeSelfFromList }) {
+const PostItem = memo(({ data, onPostPage = false, removeSelfFromList }) => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const isOwn = data.userId === userSignal.value?.id;
@@ -51,7 +51,7 @@ export default function PostItem({ data, onPostPage = false, removeSelfFromList 
             </ButtonContainer>
         </PanelContainer>
     );
-}
+}, areEqual);
 
 const CommentButton = ({ postId, count }) => (
     <Link to={"/posts/" + postId + "#comment"} className={buttonClass + " font-semibold"}>
@@ -61,7 +61,7 @@ const CommentButton = ({ postId, count }) => (
     </Link>
 );
 
-const PostContent = memo(({ data, onPostPage }) => {
+const PostContent = ({ data, onPostPage }) => {
     const convertedDate = convertTimeStringToDate(data.created);
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
     return (
@@ -76,7 +76,7 @@ const PostContent = memo(({ data, onPostPage }) => {
                     </Link>
                     <p className="inline ms-3 mt-auto font-italic text-sm text-[gray]/80"> {timePassed}</p>
                 </div>
-                <p>{data.content}</p>
+                <p className="break-all">{data.content}</p>
 
                 <div className="flex gap-2 mt-auto ">
                     {data.tags.map((tag) => (
@@ -92,9 +92,11 @@ const PostContent = memo(({ data, onPostPage }) => {
             </div>
         </div>
     );
-}, areEqual);
+};
+
+export default PostItem;
 
 function areEqual(prevProps, nextProps) {
-    if (prevProps.content !== nextProps.content) return false;
+    if (prevProps.data.id !== nextProps.data.id) return false;
     return true;
 }

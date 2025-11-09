@@ -21,15 +21,14 @@ import ShareButton from "./ShareButton";
 
 const buttonClass = "flex items-center gap-2 fill-accent text-xl !px-4";
 
-const PostItem = memo(({ data, onPostPage = false, removeSelfFromList }) => {
+const PostItem = memo(({ data, onPostPage = false, removeFromList }) => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const isOwn = data.userId === userSignal.value?.id;
 
     if (!data) return <></>;
-
     return (
-        <PanelContainer className={`p-4 ${loading && "loading"} peer `} isOwn={isOwn}>
+        <PanelContainer className={`p-4 ${loading && "loading pointer-events-none"} peer `} isOwn={isOwn}>
             {loading && <PostLoadingPlaceholder className={"-m-4"} />}
             <PostContent data={data} onPostPage={onPostPage} />
             <ButtonContainer>
@@ -42,9 +41,9 @@ const PostItem = memo(({ data, onPostPage = false, removeSelfFromList }) => {
                             type="post"
                             className={buttonClass + " ms-auto"}
                             data={data}
-                            removeSelfFromList={removeSelfFromList}
+                            removeFromList={removeFromList}
                             setLoading={setLoading}
-                            onSuccess={() => navigate("/posts")}
+                            onSuccess={() => onPostPage && navigate("/posts")}
                         />
                     </>
                 )}

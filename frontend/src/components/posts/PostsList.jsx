@@ -13,9 +13,9 @@ export default function PostsList({ where, user }) {
     const chunkContainerRef = useRef();
     const page = useScrollDetect(chunkContainerRef, CHUNK_SIZE);
 
-    const { data, loading } = useChunkLoader({
+    const { data, loading, removeFromList, error } = useChunkLoader({
         dependencies: [stringWhere, page],
-        fetchService: async () =>
+        fetchFunction: async () =>
             await postService.list({
                 limit: CHUNK_SIZE,
                 page: page,
@@ -23,13 +23,13 @@ export default function PostsList({ where, user }) {
                 userId: user?.id,
             }),
     });
-
+    console.log("error ", error, loading);
     if (!data) return <></>;
     return (
         <>
             <div ref={chunkContainerRef} className="flex flex-col gap-5">
                 {data.map((postData) => (
-                    <PostItem data={postData} key={postData.id} userId={user?.id} />
+                    <PostItem data={postData} key={postData.id} userId={user?.id} removeFromList={removeFromList} />
                 ))}
             </div>
             {loading && <Loader className="round-loader" />}

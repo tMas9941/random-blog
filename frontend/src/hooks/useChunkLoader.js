@@ -1,43 +1,41 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import delay from "../utils/delay";
 
-const useChunkLoader = ({ dependencies, fetchService }) => {
+const useChunkLoader = ({ dependencies, fetchFunction }) => {
     const [data, setdata] = useState([]);
     const [error, setError] = useState(null);
-    const loading = useRef(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        console.log("fetch");
-        if (!loading.current) {
+        if (!loading) {
             setLoading(true);
-
             fetchNewdata();
         }
         async function fetchNewdata() {
-            await delay(2000);
+            await delay(500);
             try {
-                const newdata = await fetchService();
-                addNewdata(newdata);
+                const newdata = await fetchFunction();
+                if (newdata.length) addNewdata(newdata);
             } catch (error) {
                 setError(error.error || error.message);
+            } finally {
+                setLoading(false);
             }
         }
-        return () => setLoading(false);
 
         function addNewdata(newdata) {
-            const mergeddata = [...data, ...newdata];
-            console.log("mergeddata ", mergeddata);
             setdata([...data, ...newdata]);
-            console.log(data);
         }
 
+        return () => setLoading(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [...dependencies]);
 
-    return { data, error, loading: loading.current };
+    return { data, error, loading, removeFromList };
 
-    function setLoading(value) {
-        loading.current = value;
+    function removeFromList(itemId) {
+        const filteredData = data.filter((item) => item.id !== itemId);
+        setdata(filteredData);
     }
 };
 export default useChunkLoader;

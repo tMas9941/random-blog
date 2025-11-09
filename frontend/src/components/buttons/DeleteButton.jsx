@@ -28,14 +28,15 @@ async function handleOnClick(props) {
     }
 }
 async function deletePost(props) {
-    const { data, removeSelfFromList, setLoading, onSuccess } = props;
+    const { data, removeFromList, setLoading, onSuccess } = props;
     try {
         setLoading(true);
         await postService.destroy(data);
-        if (removeSelfFromList) removeSelfFromList(data.id);
         changePopupData("Post deleted sccessfully!", popupResults.success);
         if (onSuccess) onSuccess();
-    } catch {
+        if (removeFromList) removeFromList(data.id);
+    } catch (error) {
+        console.log("error", error);
         changePopupData("Couldn't delete post!", popupResults.error);
     } finally {
         setLoading(false);

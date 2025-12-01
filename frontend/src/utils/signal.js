@@ -9,6 +9,9 @@ export default class Signal {
     connect(functionName, newFunction) {
         this.connectedFunctions[functionName] = newFunction;
     }
+    disconnect(functionName) {
+        delete this.connectedFunctions[functionName];
+    }
 
     changeValue(newValue) {
         if (this.value != newValue) {

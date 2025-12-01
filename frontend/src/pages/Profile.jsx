@@ -1,12 +1,12 @@
 import React from "react";
-import useSignal from "../hooks/useSignal";
+import useSignalState from "../hooks/useSignalState";
 import { userSignal } from "../global/userData";
 import ProfileMenuButton from "../components/profile/ProfileMenuButton";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AvatarSection from "../components/misc/AvatarSection";
 
 export default function Profile() {
-    const user = useSignal(userSignal, "profilePage");
+    const user = useSignalState(userSignal, "profilePage");
 
     return (
         <div className="flex flex col gap-20">

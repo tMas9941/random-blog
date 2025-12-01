@@ -5,7 +5,7 @@ import ColorButton from "../buttons/ColorButton";
 import commentService from "../../services/comment.service";
 import NoUser from "./NoUser";
 
-import { reRenderCommentList } from "../../constants/exports";
+import { addToCommentList } from "../../constants/exports";
 import { changePopupData, popupResults } from "../../global/popupHandler";
 import Avatar from "../misc/Avatar";
 
@@ -25,8 +25,10 @@ export default function CommentInput({ postId, user }) {
 
     const postComment = async () => {
         try {
-            await commentService.create({ userId: user.id, postId, content: textRef.current.value });
-            reRenderCommentList();
+            let response = await commentService.create({ userId: user.id, postId, content: textRef.current.value });
+            // response = supplementComment(response);
+            addToCommentList(response);
+
             changePopupData("Commented successfully!", popupResults.success);
             clearText();
         } catch {
@@ -41,7 +43,7 @@ export default function CommentInput({ postId, user }) {
     autoFocusCommentInput();
     return (
         <div ref={container} id={"inputContainer"} className="flex gap-5 my-5 mx-[min(150px,5%)]">
-            <Avatar text={user.username} size={70} url={user?.profile.avatarUrl} self={true} />
+            <Avatar text={user.username} size={70} url={user?.profile.avatarUrl} self={true} userId={user.id} />
             <div className={"flex flex-col  w-full " + focusClass}>
                 <textarea
                     ref={textRef}
@@ -55,6 +57,7 @@ export default function CommentInput({ postId, user }) {
                 <div className="flex gap-5 mt-3 items-center origin-top opacity-0 scale-y-0 peer-not-[:placeholder-shown]:scale-y-100 peer-not-[:placeholder-shown]:opacity-100 transition-[scale,opacity] ease-out duration-150">
                     <ColorButton text={"Comment"} onClick={postComment}></ColorButton>
                     <ColorButton
+                        theme="secondary"
                         className="bg-secondary/20 border-2 border-secondary text-secondary disabled:border-white"
                         text={"Cancel"}
                         onClick={clearText}

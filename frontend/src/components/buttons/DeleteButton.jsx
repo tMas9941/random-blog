@@ -28,13 +28,13 @@ async function handleOnClick(props) {
     }
 }
 async function deletePost(props) {
-    const { data, removeSelfFromList, setLoading, onSuccess } = props;
+    const { data, removeFromList, setLoading, onSuccess } = props;
     try {
         setLoading(true);
         await postService.destroy(data);
-        if (removeSelfFromList) removeSelfFromList(data.id);
         changePopupData("Post deleted sccessfully!", popupResults.success);
         if (onSuccess) onSuccess();
+        if (removeFromList) removeFromList(data.id);
     } catch {
         changePopupData("Couldn't delete post!", popupResults.error);
     } finally {
@@ -43,7 +43,7 @@ async function deletePost(props) {
 }
 
 async function deleteComment(props) {
-    const { id, removeSelfFromList, setLoading, onSuccess, containerRef } = props;
+    const { id, removeFromList, setLoading, onSuccess, containerRef } = props;
     try {
         setLoading(true);
         await commentService.destroy({ id });
@@ -51,7 +51,7 @@ async function deleteComment(props) {
         setLoading(false);
         containerRef.current.classList.add("animate-shrink");
         await delay(155);
-        if (removeSelfFromList) removeSelfFromList(id);
+        if (removeFromList) removeFromList(id);
         if (onSuccess) onSuccess();
     } catch {
         changePopupData("Couldn't delete comment!", popupResults.error);

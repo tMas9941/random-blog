@@ -10,13 +10,13 @@ import postService from "../services/post.service";
 import Loader from "../components/misc/loader/Loader";
 import CommentInput from "../components/comment/CommentInput";
 import CommentList from "../components/comment/CommentList";
-import useSignal from "../hooks/useSignal";
+import useSignalState from "../hooks/useSignalState";
 import useFetchData from "../hooks/useFetchData";
 import PostLoadingPlaceholder from "../components/posts/PostLoadingPlaceholder";
 
 export default function PostPage() {
     const location = useLocation();
-    const user = useSignal(userSignal, "PostPage");
+    const user = useSignalState(userSignal, "PostPage");
     const postId = location.pathname.split("/")[2];
     const fetchData = useFetchData({
         dependencies: [location.pathname.split("/")[2], user],

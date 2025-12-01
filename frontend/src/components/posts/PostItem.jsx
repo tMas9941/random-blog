@@ -21,17 +21,16 @@ import ShareButton from "./ShareButton";
 
 const buttonClass = "flex items-center gap-2 fill-accent text-xl !px-4";
 
-export default function PostItem({ data, onPostPage = false, removeSelfFromList }) {
+const PostItem = memo(({ data, onPostPage = false, removeFromList }) => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const isOwn = data.userId === userSignal.value?.id;
 
     if (!data) return <></>;
-
     return (
-        <PanelContainer className={`p-4 ${loading && "loading"} peer `} isOwn={isOwn}>
+        <PanelContainer className={`p-4 ${loading && "loading pointer-events-none"} peer `} isOwn={isOwn}>
             {loading && <PostLoadingPlaceholder className={"-m-4"} />}
-            <PostContent data={data} onPostPage={onPostPage} />
+            <PostContent data={data} onPostPage={onPostPage} userId={data.userId} />
             <ButtonContainer>
                 <VoteButton postId={data.id} votes={data.votes} isOwn={isOwn} />
                 {!onPostPage && <CommentButton postId={data.id} count={data._count.comments} />}
@@ -40,28 +39,28 @@ export default function PostItem({ data, onPostPage = false, removeSelfFromList 
                     <>
                         <DeleteButton
                             type="post"
-                            className={buttonClass}
+                            className={buttonClass + " ms-auto"}
                             data={data}
-                            removeSelfFromList={removeSelfFromList}
+                            removeFromList={removeFromList}
                             setLoading={setLoading}
-                            onSuccess={() => navigate("/posts")}
+                            onSuccess={() => onPostPage && navigate("/posts")}
                         />
                     </>
                 )}
             </ButtonContainer>
         </PanelContainer>
     );
-}
+}, areEqual);
 
 const CommentButton = ({ postId, count }) => (
-    <Link to={"/posts/" + postId + "#comment"} className={buttonClass}>
+    <Link to={"/posts/" + postId + "#comment"} className={buttonClass + " font-semibold"}>
         <SvgComponent name={"comment"} size={25} />
-        <span className="mx-1 text-accent font-bold">{count}</span>
+        <span className="mx-1 text-accent font-bold stroke-1">{count}</span>
         Comments
     </Link>
 );
 
-const PostContent = memo(({ data, onPostPage }) => {
+const PostContent = ({ data, onPostPage, userId }) => {
     const convertedDate = convertTimeStringToDate(data.created);
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
     return (
@@ -76,7 +75,7 @@ const PostContent = memo(({ data, onPostPage }) => {
                     </Link>
                     <p className="inline ms-3 mt-auto font-italic text-sm text-[gray]/80"> {timePassed}</p>
                 </div>
-                <p>{data.content}</p>
+                <p className="break-all">{data.content}</p>
 
                 <div className="flex gap-2 mt-auto ">
                     {data.tags.map((tag) => (
@@ -85,16 +84,18 @@ const PostContent = memo(({ data, onPostPage }) => {
                 </div>
             </div>
             <div className="min-w-30 [&_div]:mb-2 ">
-                <Avatar text={data.user.username} size={80} url={data.user.profile?.avatarUrl} />
+                <Avatar text={data.user.username} size={80} url={data.user.profile?.avatarUrl} userId={userId} />
                 <h3 className="font-semibold truncate">{data.user.username}</h3>
                 <p> {convertedDate.date}</p>
                 <p> {convertedDate.time}</p>
             </div>
         </div>
     );
-}, areEqual);
+};
+
+export default PostItem;
 
 function areEqual(prevProps, nextProps) {
-    if (prevProps.content !== nextProps.content) return false;
+    if (prevProps.data.id !== nextProps.data.id) return false;
     return true;
 }

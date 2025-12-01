@@ -1,4 +1,4 @@
-import useSignal from "../hooks/useSignal";
+import useSignalState from "../hooks/useSignalState";
 import { darkModeSignal } from "../global/userData";
 
 import Button from "../components/buttons/Button";
@@ -7,7 +7,7 @@ import HeaderButton from "../components/buttons/HeaderButton";
 import PanelContainer from "../components/PanelContainer";
 
 export default function Authenticate() {
-    const darkMode = useSignal(darkModeSignal, "Authenticate");
+    const darkMode = useSignalState(darkModeSignal, "Authenticate");
     const navigate = useNavigate();
 
     return (
@@ -16,7 +16,7 @@ export default function Authenticate() {
 					 ${darkMode ? " text-n-text" : "text-text"} flex justify-center
 					`}
         >
-            <PanelContainer>
+            <PanelContainer className={"bg-secondary/10"}>
                 <div className="flex w-full h-13 [&>button]:w-full ">
                     <HeaderButton text={"Login"} onClick={() => navigate("login")} className={"text-inherit"} />
                     <HeaderButton text={"Registration"} onClick={() => navigate("registration")} />

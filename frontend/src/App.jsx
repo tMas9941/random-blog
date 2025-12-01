@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Header from "./components/header/Header";
-import useSignal from "./hooks/useSignal";
+import useSignalState from "./hooks/useSignalState";
 import { darkModeSignal } from "./global/userData";
 import MessagePopup from "./components/popup/MessagePopup";
 
@@ -10,7 +10,7 @@ const themes = {
 };
 
 function App() {
-    const darkMode = useSignal(darkModeSignal, "App");
+    const darkMode = useSignalState(darkModeSignal, "App");
 
     return (
         <div className={"min-h-screen  " + themes[darkMode]}>

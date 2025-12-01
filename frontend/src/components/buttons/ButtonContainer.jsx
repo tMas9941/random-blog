@@ -1,12 +1,13 @@
-import React from "react";
-
-export default function ButtonContainer({ className, children }) {
+export default function ButtonContainer({ className, children, type = "post" }) {
+    const classEffects = `[&_button]:hover:bg-primary/40 [&_a]:hover:bg-primary/40 
+    [&_button]:hover:brightness-120 [&_a]:hover:brightness-120 `;
     return (
         <div
-            className={
-                "flex gap-4 w-full [&_button]:hover:bg-primary/40 [&_a]:hover:bg-primary/40 [&_button]:hover:brightness-120 [&_a]:hover:brightness-120 [&>*]:rounded-md [&>*]:px-1 [&>*]:h-11 [&>button]:active:brightness-90  " +
-                className
-            }
+            className={`flex gap-4 w-full [&>*]:rounded-md [&>*]:px-1 ${
+                type === "comment" ? "[&>button]:py-1" : "[&>button]:py-1.5"
+            } [&>button]:active:brightness-90
+                ${classEffects}
+                ${className}`}
         >
             {children}
         </div>

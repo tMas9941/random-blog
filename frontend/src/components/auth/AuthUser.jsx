@@ -1,9 +1,9 @@
 import React from "react";
 import { userSignal } from "../../global/userData";
-import useSignal from "../../hooks/useSignal";
+import useSignalState from "../../hooks/useSignalState";
 
 export default function AuthUser({ component }) {
-	const user = useSignal(userSignal, "authUserComponent");
-	if (!user) return <div>You need to login to access this page.</div>;
-	return component;
+    const user = useSignalState(userSignal, "authUserComponent");
+    if (!user) return <div>You need to login to access this page.</div>;
+    return component;
 }

@@ -1,5 +1,5 @@
 import SvgComponent from "../misc/SvgComponent";
-import useSignal from "../../hooks/useSignal";
+import useSignalState from "../../hooks/useSignalState";
 import { popupSignal, resetPopupData } from "../../global/popupHandler";
 
 const DURATION = 1500;
@@ -8,13 +8,13 @@ const WIDTH = 400;
 let timer;
 
 export default function MessagePopup() {
-    const popupData = useSignal(popupSignal, "MessagePopup");
+    const popupData = useSignalState(popupSignal, "MessagePopup");
 
     const result = popupData.result;
     const message = popupData.message;
     const show = popupData.show;
 
-    startTimer(timer); // hide popup on timeout
+    if (popupData.show) startTimer(timer); // hide popup on timeout
 
     return (
         <>

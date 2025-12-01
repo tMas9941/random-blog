@@ -1,31 +1,48 @@
 import { useRef } from "react";
 
 import useScrollDetect from "../../hooks/useScrollDetect";
-import ChunkLoader from "../posts/ChunkLoader";
-import useSignal from "../../hooks/useSignal";
-import { CHUNK_TYPE, renderCommentList } from "../../constants/exports";
+import { commentListChanged } from "../../constants/exports";
+import useChunkLoader from "../../hooks/useChunkLoader";
+import CommentItem from "./CommentItem";
+import commentService from "../../services/comment.service";
+import Loader from "../misc/loader/Loader";
 
 const CHUNK_SIZE = 5;
 
 export default function CommentList({ where, userId }) {
+    const whereString = JSON.stringify(where);
     const chunkContainerRef = useRef();
     const page = useScrollDetect(chunkContainerRef, CHUNK_SIZE);
-    const render = useSignal(renderCommentList, "CommentList"); // need to render new comments
+    const { data, loading, removeFromList, addToList } = useChunkLoader({
+        dependencies: [whereString, page],
+        fetchFunction: async () =>
+            await commentService.list({
+                limit: CHUNK_SIZE,
+                page: page,
+                where: whereString,
+                userId,
+            }),
+    });
+    commentListChanged.connect("renderNewComment", () => addToList(commentListChanged.value));
 
+    if (!data) return <></>;
     return (
-        <div
-            ref={chunkContainerRef}
-            className="flex flex-col border-y border-secondary/60 transition-all duration-500 gap-1"
-        >
-            {[...Array(page)].map((_, index) => (
-                <ChunkLoader
-                    key={index + 1}
-                    query={{ limit: CHUNK_SIZE, page: index + 1, where: JSON.stringify(where), userId }}
-                    type={CHUNK_TYPE.comment}
-                    render={index === 0 && render} // need to render new comments
-                    userId={userId}
-                />
-            ))}
-        </div>
+        <>
+            <div
+                ref={chunkContainerRef}
+                id={"commentList"}
+                className="flex flex-col border-y border-secondary/60 transition-all duration-500 gap-1"
+            >
+                {data.map((commentData) => (
+                    <CommentItem
+                        data={commentData}
+                        key={commentData.id}
+                        userId={userId}
+                        removeFromList={removeFromList}
+                    />
+                ))}
+                {loading && <Loader className="round-loader" />}
+            </div>
+        </>
     );
 }

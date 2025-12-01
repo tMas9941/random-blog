@@ -4,37 +4,29 @@ import Avatar from "../../misc/Avatar";
 import { userSignal } from "../../../global/userData";
 import commentService from "../../../services/comment.service";
 import { changePopupData, popupResults } from "../../../global/popupHandler";
+import useSignal from "../../../hooks/useSignal";
+import { addToReplyList, commentIdOfActiveReply, replyListChanged, setActiveReply } from "./replyHandler";
 
 const focusClass = "focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";
 const buttonContainerClass =
     "h-15 peer-[:placeholder-shown]:h-0 peer-[:placeholder-shown]:scale-y-0 peer-[:placeholder-shown]:opacity-0 transition-[scale,opacity,height] ease-out duration-150";
-const activeReply = { commentId: null, close: null };
 
-export default function ReplyPanel({ replyActive, setReplyActive, commentId, triggerRerender }) {
+export default function ReplyPanel({ commentId }) {
     const container = useRef();
     const textRef = useRef();
+    const activeReplyId = useSignal(commentIdOfActiveReply, "ReplyPanel_" + commentId);
 
     const closePanel = () => {
         document.activeElement.blur();
-        setReplyActive(false);
-    };
-
-    const closePreviousReply = () => {
-        if (activeReply.close && activeReply.commentId !== commentId) {
-            activeReply.close();
-        }
-        activeReply.close = closePanel;
-        activeReply.commentId = commentId;
+        setActiveReply(null);
     };
 
     useEffect(() => {
-        if (replyActive) closePreviousReply();
         if (textRef.current) textRef.current.focus(); // grab focus - autoFocus is not working because why not
     });
 
-    if (replyActive === false) return <div className={`w-full h-20 animate-shrink`}></div>;
+    if (activeReplyId !== commentId) return <div className={`w-full h-20 animate-shrink`}></div>;
     const avatarURL = userSignal.value?.profile.avatarUrl;
-    if (!avatarURL) return <></>;
 
     // workaround of field-sizing is not supported by Firefox and Safari
     const fieldSizingContent = (ref, newHeight) => {
@@ -55,8 +47,7 @@ export default function ReplyPanel({ replyActive, setReplyActive, commentId, tri
             response.user = { username: userSignal.value.username, profile: userSignal.value.profile };
             response.votes = { value: null, total: 0, positive: 0 };
             response._count = 0;
-
-            triggerRerender(1);
+            addToReplyList({ commentId, newReply: response });
             closePanel();
             changePopupData("Successfull replying!", popupResults.success);
         } catch {
@@ -65,7 +56,7 @@ export default function ReplyPanel({ replyActive, setReplyActive, commentId, tri
     };
 
     return (
-        replyActive && (
+        activeReplyId && (
             <div ref={container} className={`flex gap-5 w-full my-2 mx-2 animate-grow`}>
                 <Avatar text={"text"} size={70} url={avatarURL} self={true} />
                 <div className={"flex flex-col w-full " + focusClass}>

@@ -1,41 +1,70 @@
-import { useRef, useState } from "react";
-
-import { CHUNK_TYPE } from "../../../constants/exports";
-import ChunkLoader from "../../posts/ChunkLoader";
+import { useEffect, useRef, useState } from "react";
 import SvgComponent from "../../misc/SvgComponent";
+import useChunkLoader from "../../../hooks/useChunkLoader";
+import CommentItem from "../CommentItem";
+import Loader from "../../misc/loader/Loader";
+import commentService from "../../../services/comment.service";
+import { replyListChanged } from "./replyHandler";
 
 const CHUNK_SIZE = 5;
 
-export default function ReplyList({ where, userId, level, replyAmount, render }) {
+export default function ReplyList({ commentId, userId, level, replyAmount }) {
     level++;
+    const whereString = JSON.stringify({ commentId });
     const chunkContainerRef = useRef();
     const [chunkAmount, setChunkAmount] = useState(0);
+    const tempReplyAmount = useRef(0);
+    const { data, loading, removeFromList, addToList, clearList, extraItemCount } = useChunkLoader({
+        dependencies: [whereString, chunkAmount],
+        noPreload: chunkAmount < 1,
+        fetchFunction: async () =>
+            await commentService.list({
+                limit: CHUNK_SIZE,
+                page: chunkAmount,
+                where: whereString,
+                userId,
+            }),
+    });
+    useEffect(() => {
+        replyListChanged.connect("replyList" + commentId, () => {
+            if (replyListChanged.value.commentId === commentId) {
+                tempReplyAmount.current++;
+                setChunkAmount((value) => Math.max(value, 1));
+                addToList(replyListChanged.value.newReply);
+            }
+        });
+        return () => replyListChanged.disconnect("replyList" + commentId);
+    }, []);
 
+    const showedReplies = data.length || 0;
     return (
         <>
             {
                 <OpenRepliesLink
+                    clearList={clearList}
                     setChunkAmount={setChunkAmount}
-                    replyAmount={replyAmount + render || 0}
+                    replyAmount={replyAmount + extraItemCount || 0}
                     chunkAmount={chunkAmount}
+                    showedReplies={showedReplies}
                 />
             }
             <div ref={chunkContainerRef} className="flex flex-col transition-all duration-500">
-                {[...Array(chunkAmount)].map((_, index) => (
-                    <ChunkLoader
-                        key={index + 1}
-                        query={{ limit: CHUNK_SIZE, page: index + 1, where: JSON.stringify(where), userId }}
-                        type={CHUNK_TYPE.comment}
-                        level={level}
-                        render={index === 0 && render} // need to render new comments
-                        userId={userId}
-                    />
-                ))}
+                {chunkAmount > 0 &&
+                    data.map((commentData) => (
+                        <CommentItem
+                            key={commentData.id}
+                            data={commentData}
+                            userId={userId}
+                            removeFromList={removeFromList}
+                            level={level}
+                        />
+                    ))}
+                {loading && chunkAmount > 0 && <Loader className="round-loader" />}
             </div>
             <LoadMoreRepliesLink
                 setChunkAmount={setChunkAmount}
-                chunkAmount={chunkAmount}
-                replyAmount={replyAmount + render || 0}
+                showedReplies={showedReplies}
+                replyAmount={replyAmount + extraItemCount - showedReplies || 0}
                 chunkContainerRef={chunkContainerRef}
                 level={level}
             />
@@ -43,11 +72,14 @@ export default function ReplyList({ where, userId, level, replyAmount, render })
     );
 }
 
-function OpenRepliesLink({ setChunkAmount, replyAmount, chunkAmount }) {
-    if (replyAmount === 0) return <></>;
-    const toggled = chunkAmount > 0;
+function OpenRepliesLink({ setChunkAmount, replyAmount, chunkAmount, clearList, showedReplies }) {
+    if (replyAmount === 0) {
+        return <></>;
+    }
+    const toggled = showedReplies > 0;
     const handleClick = () => {
         setChunkAmount(Number(!toggled));
+        if (toggled) clearList();
     };
 
     return (
@@ -59,13 +91,13 @@ function OpenRepliesLink({ setChunkAmount, replyAmount, chunkAmount }) {
                     toggled ? "rotate-90 " : "-rotate-90 "
                 }fill-primary stroke-primary inline-block me-1 stroke-2 -mt-[2px]`}
             />
-            {` ${toggled ? "Hide " : "Show "}  ${replyAmount} replies`}
+            {` ${toggled ? "Hide " + showedReplies : "Show " + replyAmount} replies`}
         </a>
     );
 }
 
-function LoadMoreRepliesLink({ setChunkAmount, replyAmount, chunkAmount }) {
-    if (replyAmount - CHUNK_SIZE * chunkAmount <= 0 || replyAmount < 1 || chunkAmount < 1) return <></>;
+function LoadMoreRepliesLink({ setChunkAmount, replyAmount, showedReplies }) {
+    if (replyAmount <= 0 || !showedReplies) return <></>;
     const handleClick = () => {
         setChunkAmount((amount) => amount + 1);
     };
@@ -77,7 +109,7 @@ function LoadMoreRepliesLink({ setChunkAmount, replyAmount, chunkAmount }) {
                 size={17}
                 className={`-rotate-90 fill-primary stroke-primary inline-block me-1 stroke-2 -mt-[2px]`}
             />
-            {` Show ${replyAmount - CHUNK_SIZE * chunkAmount} more replies`}
+            {` Show ${replyAmount} more replies`}
         </a>
     );
 }

@@ -15,15 +15,14 @@ import PostLoadingPlaceholder from "../posts/PostLoadingPlaceholder";
 import { userSignal } from "../../global/userData";
 import calculateElapsedTime from "../../utils/calculateEllapsedTime";
 import PanelContainer from "../PanelContainer";
+import { commentIdOfActiveReply, setActiveReply } from "./reply/replyHandler";
 
 const MAX_COMMENT_LEVEL = 2;
 const AVATAR_SIZE_COMMENT = 55;
 const AVATAR_SIZE_REPLY = 45;
 
-export default function CommentItem({ data, userId, level = 0, removeSelfFromList }) {
+export default function CommentItem({ data, userId, level = 0, removeFromList, addToList }) {
     const containerRef = useRef();
-    const [replyActive, setReplyActive] = useState(null);
-    const [render, setRender] = useState(0);
     const [loading, setLoading] = useState(false);
     const isReply = !data.postId;
     const isOwn = data.userId === userSignal.value?.id;
@@ -31,16 +30,13 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
     const dividerClass = `flex py-2 px-3 rounded-md animate-fade-in 
     ${isReply ? " -ps-6  gap-3" : " gap-4"} `;
 
-    function triggerRerender(value) {
-        setRender((i) => i + value);
-    }
-
     return (
         <PanelContainer className=" p-1" ref={containerRef} isOwn={isOwn}>
             {loading && <PostLoadingPlaceholder className={"h-full -m-1"} />}
             <div className={dividerClass}>
                 <Avatar
                     text={data.user.username}
+                    userId={userId}
                     size={isReply ? AVATAR_SIZE_REPLY : AVATAR_SIZE_COMMENT}
                     url={data.user?.profile.avatarUrl}
                 />
@@ -48,9 +44,7 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
                     <CommentContent data={data} />
                     <ButtonContainer className={"mt-2"} type={"comment"}>
                         <VoteButton commentId={data.id} votes={data.votes} isOwn={isOwn} />
-                        {userId && level < MAX_COMMENT_LEVEL && (
-                            <ReplyButton onClick={() => setReplyActive(!replyActive)} />
-                        )}
+                        {userId && level < MAX_COMMENT_LEVEL && <ReplyButton commentId={data.id} />}
                         {isOwn && (
                             <DeleteButton
                                 containerRef={containerRef}
@@ -58,37 +52,32 @@ export default function CommentItem({ data, userId, level = 0, removeSelfFromLis
                                 title={"Delete comment!"}
                                 className={"!pe-3 ms-auto"}
                                 id={data.id}
-                                removeSelfFromList={removeSelfFromList}
+                                removeFromList={removeFromList}
                                 setLoading={setLoading}
                             />
                         )}
                     </ButtonContainer>
 
-                    <ReplyPanel
-                        replyActive={replyActive}
-                        setReplyActive={setReplyActive}
-                        commentId={data.id}
-                        isReply={isReply}
-                        targetUser={data.user?.username}
-                        triggerRerender={triggerRerender}
-                    />
+                    <ReplyPanel commentId={data.id} />
 
-                    <ReplyList
-                        where={{ commentId: data.id }}
-                        userId={userId}
-                        level={level}
-                        replyAmount={data._count.comments}
-                        render={render}
-                    />
+                    <ReplyList commentId={data.id} userId={userId} level={level} replyAmount={data._count.comments} />
                 </div>
             </div>
         </PanelContainer>
     );
 }
 
-const ReplyButton = ({ onClick }) => {
+const ReplyButton = ({ commentId }) => {
+    const handleOnClick = () => {
+        if (commentIdOfActiveReply.value === commentId) {
+            setActiveReply(null);
+        } else {
+            setActiveReply(commentId);
+        }
+    };
+
     return (
-        <button className="flex gap-3 items-center py-1 !px-3 cursor-pointer" onClick={onClick}>
+        <button className="flex gap-3 items-center py-1 !px-3 cursor-pointer" onClick={handleOnClick}>
             <SvgComponent name={"comment"} size={25} className={"fill-accent"} />
             <span>Reply</span>
         </button>

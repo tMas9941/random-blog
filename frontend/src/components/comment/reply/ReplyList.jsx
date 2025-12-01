@@ -18,39 +18,28 @@ export default function ReplyList({ commentId, userId, level, replyAmount }) {
     const { data, loading, removeFromList, addToList, clearList, extraItemCount } = useChunkLoader({
         dependencies: [whereString, chunkAmount],
         noPreload: chunkAmount < 1,
-        fetchFunction: async () =>
-            await commentService.list({
-                limit: CHUNK_SIZE,
-                page: chunkAmount,
-                where: whereString,
-                userId,
-            }),
+        fetchFunction,
     });
-    // useEffect(() => {
-    //     replyListChanged.connect("replyList" + commentId, () => {
-    //         if (replyListChanged.value.commentId === commentId) {
-    //             tempReplyAmount.current++;
-    //             setChunkAmount((value) => Math.max(value, 1));
-    //             addToList(replyListChanged.value.newReply);
-    //         }
-    //     });
-    //     return () => replyListChanged.disconnect("replyList" + commentId);
-    // }, []);
-    useSignal(replyListChanged, "replyList" + commentId, () => {
-        console.log("add reply ", commentId);
+    const showedReplies = data.length || 0;
+    useSignal(replyListChanged, "replyList" + commentId, addToReplyList);
+
+    async function fetchFunction() {
+        return await commentService.list({
+            limit: CHUNK_SIZE,
+            page: chunkAmount,
+            where: whereString,
+            userId,
+        });
+    }
+
+    function addToReplyList() {
         if (replyListChanged.value.commentId === commentId) {
             tempReplyAmount.current++;
             setChunkAmount((value) => Math.max(value, 1));
             addToList(replyListChanged.value.newReply);
         }
-    });
-    // function connectToSignal(signal, name, func) {
-    //     useEffect(() => {
-    //         signal.connect(name, func());
-    //         return () => signal.disconnect(name);
-    //     }, []);
-    // }
-    const showedReplies = data.length || 0;
+    }
+
     return (
         <>
             {

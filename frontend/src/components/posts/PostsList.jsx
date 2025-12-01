@@ -13,7 +13,7 @@ export default function PostsList({ where, user }) {
     const chunkContainerRef = useRef();
     const page = useScrollDetect(chunkContainerRef, CHUNK_SIZE);
 
-    const { data, loading, removeFromList, error } = useChunkLoader({
+    const { data, loading, removeFromList } = useChunkLoader({
         dependencies: [stringWhere, page],
         fetchFunction: async () =>
             await postService.list({

@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 // Signal
-import useSignal from "../../hooks/useSignal";
+import useSignalState from "../../hooks/useSignalState";
 import { logout, userSignal } from "../../global/userData";
 
 // Components
@@ -40,7 +40,7 @@ function LeftSide() {
 
 function RightSide() {
     const navigate = useNavigate();
-    const user = useSignal(userSignal, "header");
+    const user = useSignalState(userSignal, "header");
 
     return (
         <div className="relative h-full flex items-center pe-3 gap-3 ">

@@ -1,4 +1,4 @@
-import useSignal from "../hooks/useSignal";
+import useSignalState from "../hooks/useSignalState";
 import { darkModeSignal } from "../global/userData";
 
 import Button from "../components/buttons/Button";
@@ -7,7 +7,7 @@ import HeaderButton from "../components/buttons/HeaderButton";
 import PanelContainer from "../components/PanelContainer";
 
 export default function Authenticate() {
-    const darkMode = useSignal(darkModeSignal, "Authenticate");
+    const darkMode = useSignalState(darkModeSignal, "Authenticate");
     const navigate = useNavigate();
 
     return (

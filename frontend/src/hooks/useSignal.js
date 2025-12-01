@@ -1,14 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-export default function useSignal(signal, stateName) {
-    const [value, setValue] = useState(signal.value);
-
+export default function useSignal(signal, name, func) {
     useEffect(() => {
-        signal.connect(stateName, (newStatus) => {
-            setValue(newStatus);
-        });
-        return () => signal.disconnect(stateName);
-    }, []);
-
-    return value;
+        signal.connect(name, func);
+        return () => signal.disconnect(name);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 }

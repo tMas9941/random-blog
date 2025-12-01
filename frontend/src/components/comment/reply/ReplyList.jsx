@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import SvgComponent from "../../misc/SvgComponent";
 import useChunkLoader from "../../../hooks/useChunkLoader";
 import CommentItem from "../CommentItem";
 import Loader from "../../misc/loader/Loader";
 import commentService from "../../../services/comment.service";
 import { replyListChanged } from "./replyHandler";
+import useSignal from "../../../hooks/useSignal";
 
 const CHUNK_SIZE = 5;
 
@@ -25,17 +26,30 @@ export default function ReplyList({ commentId, userId, level, replyAmount }) {
                 userId,
             }),
     });
-    useEffect(() => {
-        replyListChanged.connect("replyList" + commentId, () => {
-            if (replyListChanged.value.commentId === commentId) {
-                tempReplyAmount.current++;
-                setChunkAmount((value) => Math.max(value, 1));
-                addToList(replyListChanged.value.newReply);
-            }
-        });
-        return () => replyListChanged.disconnect("replyList" + commentId);
-    }, []);
-
+    // useEffect(() => {
+    //     replyListChanged.connect("replyList" + commentId, () => {
+    //         if (replyListChanged.value.commentId === commentId) {
+    //             tempReplyAmount.current++;
+    //             setChunkAmount((value) => Math.max(value, 1));
+    //             addToList(replyListChanged.value.newReply);
+    //         }
+    //     });
+    //     return () => replyListChanged.disconnect("replyList" + commentId);
+    // }, []);
+    useSignal(replyListChanged, "replyList" + commentId, () => {
+        console.log("add reply ", commentId);
+        if (replyListChanged.value.commentId === commentId) {
+            tempReplyAmount.current++;
+            setChunkAmount((value) => Math.max(value, 1));
+            addToList(replyListChanged.value.newReply);
+        }
+    });
+    // function connectToSignal(signal, name, func) {
+    //     useEffect(() => {
+    //         signal.connect(name, func());
+    //         return () => signal.disconnect(name);
+    //     }, []);
+    // }
     const showedReplies = data.length || 0;
     return (
         <>
@@ -72,7 +86,7 @@ export default function ReplyList({ commentId, userId, level, replyAmount }) {
     );
 }
 
-function OpenRepliesLink({ setChunkAmount, replyAmount, chunkAmount, clearList, showedReplies }) {
+function OpenRepliesLink({ setChunkAmount, replyAmount, clearList, showedReplies }) {
     if (replyAmount === 0) {
         return <></>;
     }

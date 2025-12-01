@@ -4,8 +4,8 @@ import Avatar from "../../misc/Avatar";
 import { userSignal } from "../../../global/userData";
 import commentService from "../../../services/comment.service";
 import { changePopupData, popupResults } from "../../../global/popupHandler";
-import useSignal from "../../../hooks/useSignal";
-import { addToReplyList, commentIdOfActiveReply, replyListChanged, setActiveReply } from "./replyHandler";
+import useSignalState from "../../../hooks/useSignalState.js";
+import { addToReplyList, commentIdOfActiveReply, setActiveReply } from "./replyHandler";
 
 const focusClass = "focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";
 const buttonContainerClass =
@@ -14,7 +14,7 @@ const buttonContainerClass =
 export default function ReplyPanel({ commentId }) {
     const container = useRef();
     const textRef = useRef();
-    const activeReplyId = useSignal(commentIdOfActiveReply, "ReplyPanel_" + commentId);
+    const activeReplyId = useSignalState(commentIdOfActiveReply, "ReplyPanel_" + commentId);
 
     const closePanel = () => {
         document.activeElement.blur();

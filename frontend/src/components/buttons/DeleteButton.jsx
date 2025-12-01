@@ -35,8 +35,7 @@ async function deletePost(props) {
         changePopupData("Post deleted sccessfully!", popupResults.success);
         if (onSuccess) onSuccess();
         if (removeFromList) removeFromList(data.id);
-    } catch (error) {
-        console.log("error", error);
+    } catch {
         changePopupData("Couldn't delete post!", popupResults.error);
     } finally {
         setLoading(false);

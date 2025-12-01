@@ -1,11 +1,11 @@
 import { userSignal } from "../global/userData";
-import useSignal from "../hooks/useSignal";
+import useSignalState from "../hooks/useSignalState";
 
 // Components
 import PostsList from "../components/posts/PostsList";
 
 export default function Posts() {
-    const user = useSignal(userSignal, "Posts");
+    const user = useSignalState(userSignal, "Posts");
     return (
         <div className="w-full ">
             <h1 className="text-4xl font-bold mb-10">Posts</h1>

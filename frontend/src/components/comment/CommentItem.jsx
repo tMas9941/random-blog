@@ -21,7 +21,7 @@ const MAX_COMMENT_LEVEL = 2;
 const AVATAR_SIZE_COMMENT = 55;
 const AVATAR_SIZE_REPLY = 45;
 
-export default function CommentItem({ data, userId, level = 0, removeFromList, addToList }) {
+export default function CommentItem({ data, userId, level = 0, removeFromList }) {
     const containerRef = useRef();
     const [loading, setLoading] = useState(false);
     const isReply = !data.postId;

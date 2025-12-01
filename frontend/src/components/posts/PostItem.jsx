@@ -84,7 +84,6 @@ const PostContent = ({ data, onPostPage, userId }) => {
                 </div>
             </div>
             <div className="min-w-30 [&_div]:mb-2 ">
-                {console.log(data.user)}
                 <Avatar text={data.user.username} size={80} url={data.user.profile?.avatarUrl} userId={userId} />
                 <h3 className="font-semibold truncate">{data.user.username}</h3>
                 <p> {convertedDate.date}</p>

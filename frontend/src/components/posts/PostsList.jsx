@@ -23,7 +23,6 @@ export default function PostsList({ where, user }) {
                 userId: user?.id,
             }),
     });
-    console.log("error ", error, loading);
     if (!data) return <></>;
     return (
         <>

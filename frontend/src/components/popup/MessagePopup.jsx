@@ -14,7 +14,7 @@ export default function MessagePopup() {
     const message = popupData.message;
     const show = popupData.show;
 
-    startTimer(timer); // hide popup on timeout
+    if (popupData.show) startTimer(timer); // hide popup on timeout
 
     return (
         <>

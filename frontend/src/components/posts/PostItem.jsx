@@ -30,7 +30,7 @@ const PostItem = memo(({ data, onPostPage = false, removeFromList }) => {
     return (
         <PanelContainer className={`p-4 ${loading && "loading pointer-events-none"} peer `} isOwn={isOwn}>
             {loading && <PostLoadingPlaceholder className={"-m-4"} />}
-            <PostContent data={data} onPostPage={onPostPage} />
+            <PostContent data={data} onPostPage={onPostPage} userId={data.userId} />
             <ButtonContainer>
                 <VoteButton postId={data.id} votes={data.votes} isOwn={isOwn} />
                 {!onPostPage && <CommentButton postId={data.id} count={data._count.comments} />}
@@ -60,7 +60,7 @@ const CommentButton = ({ postId, count }) => (
     </Link>
 );
 
-const PostContent = ({ data, onPostPage }) => {
+const PostContent = ({ data, onPostPage, userId }) => {
     const convertedDate = convertTimeStringToDate(data.created);
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
     return (
@@ -84,7 +84,8 @@ const PostContent = ({ data, onPostPage }) => {
                 </div>
             </div>
             <div className="min-w-30 [&_div]:mb-2 ">
-                <Avatar text={data.user.username} size={80} url={data.user.profile?.avatarUrl} />
+                {console.log(data.user)}
+                <Avatar text={data.user.username} size={80} url={data.user.profile?.avatarUrl} userId={userId} />
                 <h3 className="font-semibold truncate">{data.user.username}</h3>
                 <p> {convertedDate.date}</p>
                 <p> {convertedDate.time}</p>

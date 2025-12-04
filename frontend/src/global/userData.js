@@ -14,17 +14,22 @@ function loadDarkMode() {
 }
 
 async function loadUserData() {
-    // load token from localstorage
-    let token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
+    let userdata;
     if (hasToken(token)) {
-        const decodedToken = jwtDecode(token);
-        if (decodedToken) {
-            return decodedToken;
-        } else {
-            changePopupData("Invalid token!", popupResults.warning);
-            localStorage.setItem("token", undefined);
-            return undefined;
-        }
+        userdata = await checkTokenValidity(token);
+    }
+    return userdata;
+}
+
+async function checkTokenValidity(token) {
+    try {
+        const newToken = await authService.refreshToken();
+        localStorage.setItem("token", newToken);
+        return jwtDecode(newToken);
+    } catch (error) {
+        changePopupData("Invalid token!", popupResults.warning);
+        localStorage.setItem("token", undefined);
     }
 }
 

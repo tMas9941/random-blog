@@ -6,6 +6,7 @@ import commentService from "../../../services/comment.service";
 import { changePopupData, popupResults } from "../../../global/popupHandler";
 import useSignalState from "../../../hooks/useSignalState.js";
 import { addToReplyList, commentIdOfActiveReply, setActiveReply } from "./replyHandler";
+import { supplementComment } from "../../../constants/exports.js";
 
 const focusClass = "focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";
 const buttonContainerClass =
@@ -42,11 +43,7 @@ export default function ReplyPanel({ commentId }) {
         };
 
         try {
-            let response = await commentService.create(data);
-            response.comments = 0;
-            response.user = { username: userSignal.value.username, profile: userSignal.value.profile };
-            response.votes = { value: null, total: 0, positive: 0 };
-            response._count = 0;
+            let response = supplementComment(await commentService.create(data));
             addToReplyList({ commentId, newReply: response });
             closePanel();
             changePopupData("Successfull replying!", popupResults.success);
@@ -58,7 +55,7 @@ export default function ReplyPanel({ commentId }) {
     return (
         activeReplyId && (
             <div ref={container} className={`flex gap-5 w-full my-2 mx-2 animate-grow`}>
-                <Avatar text={"text"} size={70} url={avatarURL} self={true} />
+                <Avatar text={"text"} size={70} url={avatarURL} isOwn={true} />
                 <div className={"flex flex-col w-full " + focusClass}>
                     <textarea
                         ref={textRef}

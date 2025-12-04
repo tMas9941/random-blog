@@ -65,4 +65,20 @@ const login = async (req, res, next) => {
         next(error);
     }
 };
-export default { registration, login };
+
+const refreshToken = async (req, res, next) => {
+    try {
+        const oldToken = req.headers.authorization.split("Bearer ")[1] || "";
+        jwt.verify(oldToken, JWT_SECRET, (err) => {
+            if (err) throw new HttpError("Invalid token!", 401);
+        });
+
+        const decodedToken = jwt.decode(oldToken, JWT_SECRET);
+        const user = await userService.findByUsername(decodedToken.username);
+        const newToken = jwt.sign(user, JWT_SECRET);
+        return res.status(200).json(newToken);
+    } catch (error) {
+        next(error);
+    }
+};
+export default { registration, login, refreshToken };

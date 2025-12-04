@@ -41,11 +41,10 @@ function LeftSide() {
 function RightSide() {
     const navigate = useNavigate();
     const user = useSignalState(userSignal, "header");
-
     return (
         <div className="relative h-full flex items-center pe-3 gap-3 ">
             {user && (
-                <DropDownButton text={user.username} avatar={true} url={user.profile.avatarUrl}>
+                <DropDownButton text={user.username} avatar={true} url={user.profile?.avatarUrl}>
                     <DropDownItem text={"Profile"} onClick={() => navigate("/profile")} />
                     <DropDownItem text={"Settings"} onClick={() => navigate("/settings")} />
                     <DropDownItem text={"Log out"} onClick={logout} />

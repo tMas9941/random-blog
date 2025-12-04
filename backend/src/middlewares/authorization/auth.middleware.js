@@ -13,7 +13,9 @@ import userService from "../../services/user.service.js";
 export const auth = (authData) => {
     return async (req, res, next) => {
         try {
+            // CHECK authorization
             const token = req.headers.authorization?.split(" ")[1];
+            // console.log(token);
             if (hasNoToken(token)) throw new HttpError("Unauthenticated", 401);
             // console.log("Token: ", token);
             const userData = jwt.verify(token, JWT_SECRET);
@@ -21,6 +23,9 @@ export const auth = (authData) => {
             // console.log("UserData from token: ", userData);
             const verifyById = await userService.verifyById(userData.id);
             if (!verifyById) throw new HttpError("Invalid user!", 404);
+            if (!authData) return next();
+            // CHECK authentication
+
             // console.log("Verified user: ", verifyById);
             const userPermissions = await roleService.getRolePermissions(userData.role);
             // console.log("User permissions: ", userPermissions);

@@ -51,7 +51,7 @@ export default function ReplyList({ commentId, userId, level, replyAmount }) {
                     showedReplies={showedReplies}
                 />
             }
-            <div ref={chunkContainerRef} className="flex flex-col transition-all duration-500">
+            <div ref={chunkContainerRef} className="flex flex-col  gap-1 transition-all duration-500">
                 {chunkAmount > 0 &&
                     data.map((commentData) => (
                         <CommentItem

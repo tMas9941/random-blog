@@ -30,7 +30,7 @@ const PostItem = memo(({ data, onPostPage = false, removeFromList }) => {
     return (
         <PanelContainer className={`p-4 ${loading && "loading pointer-events-none"} peer `} isOwn={isOwn}>
             {loading && <PostLoadingPlaceholder className={"-m-4"} />}
-            <PostContent data={data} onPostPage={onPostPage} userId={data.userId} />
+            <PostContent data={data} onPostPage={onPostPage} isOwn={isOwn} />
             <ButtonContainer>
                 <VoteButton postId={data.id} votes={data.votes} isOwn={isOwn} />
                 {!onPostPage && <CommentButton postId={data.id} count={data._count.comments} />}
@@ -60,7 +60,7 @@ const CommentButton = ({ postId, count }) => (
     </Link>
 );
 
-const PostContent = ({ data, onPostPage, userId }) => {
+const PostContent = ({ data, onPostPage, isOwn }) => {
     const convertedDate = convertTimeStringToDate(data.created);
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
     return (
@@ -69,7 +69,9 @@ const PostContent = ({ data, onPostPage, userId }) => {
                 <div>
                     <Link
                         to={"/posts/" + data.id}
-                        className={`text-2xl font-semibold hover:text-primary ${onPostPage && "pointer-events-none"}`}
+                        className={`text-2xl font-semibold hover:underline ${
+                            (onPostPage && "pointer-events-none", isOwn && "text-primary")
+                        }`}
                     >
                         {data.title}
                     </Link>
@@ -84,8 +86,8 @@ const PostContent = ({ data, onPostPage, userId }) => {
                 </div>
             </div>
             <div className="min-w-30 [&_div]:mb-2 ">
-                <Avatar text={data.user.username} size={80} url={data.user.profile?.avatarUrl} userId={userId} />
-                <h3 className="font-semibold truncate">{data.user.username}</h3>
+                <Avatar text={data.user.username} size={80} url={data.user.profile?.avatarUrl} isOwn={isOwn} />
+                <h3 className={`font-semibold truncate ${isOwn && "text-primary"}`}>{data.user.username}</h3>
                 <p> {convertedDate.date}</p>
                 <p> {convertedDate.time}</p>
             </div>

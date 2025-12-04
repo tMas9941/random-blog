@@ -36,12 +36,12 @@ export default function CommentItem({ data, userId, level = 0, removeFromList })
             <div className={dividerClass}>
                 <Avatar
                     text={data.user.username}
-                    userId={userId}
+                    isOwn={isOwn}
                     size={isReply ? AVATAR_SIZE_REPLY : AVATAR_SIZE_COMMENT}
                     url={data.user?.profile.avatarUrl}
                 />
                 <div className="flex flex-col gap-1 w-full -mt-[5px] ">
-                    <CommentContent data={data} />
+                    <CommentContent data={data} isOwn={isOwn} />
                     <ButtonContainer className={"mt-2"} type={"comment"}>
                         <VoteButton commentId={data.id} votes={data.votes} isOwn={isOwn} />
                         {userId && level < MAX_COMMENT_LEVEL && <ReplyButton commentId={data.id} />}
@@ -84,12 +84,12 @@ const ReplyButton = ({ commentId }) => {
     );
 };
 
-const CommentContent = ({ data }) => {
+const CommentContent = ({ data, isOwn }) => {
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
     return (
         <>
             <div className="flex gap-2">
-                <h3 className="font-semibold">{data.user.username}</h3>
+                <h3 className={`font-semibold ${isOwn && "text-primary"}`}>{data.user.username}</h3>
                 <p className="mt-auto font-italic text-sm text-[gray]/80"> {timePassed}</p>
             </div>
             <p className="break-all">{data.content}</p>

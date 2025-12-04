@@ -13,11 +13,12 @@ import FormStatusMsg from "../components/auth/FormStatusMsg";
 
 import TagField from "../components/posts/TagField";
 import PanelContainer from "../components/PanelContainer";
+import FileInput from "../components/misc/FileInput";
 
 export default function CreatePost() {
     return (
-        <div className="w-fit h-full mx-auto w-fit">
-            <PanelContainer className={"p-3"}>
+        <div className="h-full w-full max-w-[600px] mx-auto">
+            <PanelContainer className={"p-3 hover:bg-transparent"}>
                 <h1>Create Post</h1>
 
                 <CreateForm />
@@ -70,7 +71,7 @@ function CreateForm() {
     }
 
     return (
-        <div className="relative min-h-10 min-w-100 max-w-100 mt-5">
+        <div className="relative min-h-10 min-w-100 w-full mt-5">
             <FormStatusMsg state={state} />
             <Formik
                 initialValues={{ title: "", content: "", tags: "" }}
@@ -94,6 +95,7 @@ function CreateForm() {
                         placeholder={"Share your thoughts..."}
                         className="h-[15em]"
                     />
+                    <FileInput />
                     <TagField
                         name="tags"
                         type="text"

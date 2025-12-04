@@ -24,11 +24,15 @@ export default function FileInput() {
         <div className="p-2 flex gap-3 text-inherit bg-secondary/20 outline-transparent outline-1  rounded ">
             <div className="flex flex-col justify-between min-h-full">
                 <input type="file" id="file-input" className="hidden" onChange={handleInput}></input>
-                <label htmlFor="file-input" className="p-1  w-fit h-fit rounded-md cursor-pointer hover:bg-primary/20">
-                    <SvgComponent name={"plus"} size={ICON_SIZE} className={" fill-accent stroke-accent"} />
+                <label
+                    htmlFor="file-input"
+                    className="p-1  w-fit h-fit rounded-md cursor-pointer hover:bg-primary/20"
+                    title="Add image..."
+                >
+                    <SvgComponent name={"plus"} size={ICON_SIZE} className={"fill-accent stroke-accent"} />
                 </label>
                 {file && (
-                    <button type="button" onClick={handleDelete}>
+                    <button type="button" onClick={handleDelete} title="Remove image!">
                         <SvgComponent
                             name={"trashbin"}
                             size={ICON_SIZE}

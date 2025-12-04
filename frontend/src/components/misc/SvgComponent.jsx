@@ -223,9 +223,8 @@ export default function SvgComponent({ name, size = 50, className, ref, onClick 
                     ref={ref}
                     className={className}
                     xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
                     viewBox="0 0 408.483 408.483"
-                    xml:space="preserve"
+                    xmlSpace="preserve"
                 >
                     <g>
                         <g>

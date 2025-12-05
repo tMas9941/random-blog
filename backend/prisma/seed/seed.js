@@ -44,7 +44,8 @@ const { userNames, getRandParagraph, getRandomWords } = await readDataFromFiles(
 async function main() {
     const mainBench = benchmark("Seed", true);
 
-    const avatars = FetchCloudinaryAvatars();
+    const avatars = fetchCloudinaryAvatars();
+    const postImages = fetchCloudinarypostImages();
     // const roles = permissions.then((permissions) => createRoles(permissions));
 
     await clearTables();
@@ -55,7 +56,7 @@ async function main() {
     const users = await createUsers(userNames, roles);
     const profiles = avatars.then((avatars) => craeteProfiles(users, avatars));
     const tags = await createTags();
-    const posts = await createPosts(users, tags);
+    const posts = await postImages.then((postImages) => createPosts(users, tags, postImages));
     const comments = await getAllComments(posts);
     await createCommentVotes(comments, users);
 
@@ -140,17 +141,17 @@ async function createUsers(userNames, roles) {
     }
 }
 
-async function FetchCloudinaryAvatars() {
+async function fetchCloudinaryAvatars() {
     try {
-        const bench = benchmark("FetchCloudinaryAvatars", true);
+        const bench = benchmark("fetchCloudinaryAvatars", true);
         // get default avatar's data from cloudinary
         const cloudDefaultAvatars = await cloudinaryService.getFolderData("default_avatars");
-        // get avatar folder size ( api limited to 30, so it can give back false total_size )
+        // get avatar folder size ( api is limited to 30, so it can give back false total_size )
         const countAvatar = cloudDefaultAvatars.resources.length;
         bench.stop();
         return { cloudDefaultAvatars, countAvatar };
     } catch (error) {
-        console.log("Fetc cloudinary avatars failed", error);
+        console.log("Fetch cloudinary avatars failed", error);
     }
 }
 
@@ -197,9 +198,24 @@ async function createTags() {
     }
 }
 
-async function createPosts(users, tags) {
+async function fetchCloudinarypostImages() {
+    try {
+        const bench = benchmark("fetchCloudinarypostImages", true);
+        // get default post images's data from cloudinary
+        const cloudDefaultPostImages = await cloudinaryService.getFolderData("posts/default_posts");
+        // get  folder size ( api is limited to 30, so it can give back false total_size )
+        const count = cloudDefaultPostImages.resources.length;
+        bench.stop();
+        return { urls: cloudDefaultPostImages.resources, count };
+    } catch (error) {
+        console.log("Fetch cloudinary post images failed", error);
+    }
+}
+
+async function createPosts(users, tags, postImages) {
     const randTitle = () => getRandomWords(3, 8).slice(0, MAX_TITLE_LENGTH);
     const randCommentContent = () => getRandomWords(2, 20).slice(0, MAX_COMMENT_LENGTH);
+    const getRandomImgUrl = () => postImages.urls[rand(0, postImages.count)].url;
     try {
         const bench = benchmark("createPosts", true);
         const posts = await Promise.all(
@@ -213,6 +229,7 @@ async function createPosts(users, tags) {
                                     content: getRandParagraph(MAX_POST_LENGTH),
                                     created: randCreation(index),
                                     userId: user.id,
+                                    imgUrl: getRandomImgUrl(),
                                     tags: {
                                         createMany: {
                                             data: [

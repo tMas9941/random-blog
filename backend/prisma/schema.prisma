@@ -20,6 +20,7 @@ model Posts {
     title String @db.VarChar(150)
     content String  @db.VarChar(1000)
     created DateTime @default(now())
+    imgUrl String?
 
     userId String
     user Users @relation(fields: [userId], references: [id], onDelete: Cascade)

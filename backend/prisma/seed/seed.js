@@ -215,7 +215,11 @@ async function fetchCloudinarypostImages() {
 async function createPosts(users, tags, postImages) {
     const randTitle = () => getRandomWords(3, 8).slice(0, MAX_TITLE_LENGTH);
     const randCommentContent = () => getRandomWords(2, 20).slice(0, MAX_COMMENT_LENGTH);
-    const getRandomImgUrl = () => postImages.urls[rand(0, postImages.count)].url;
+    const getRandomImgUrl = () => {
+        const IMG_CHANCE = 40;
+        const needUrl = rand(0, 100) < IMG_CHANCE;
+        if (needUrl) return postImages.urls[rand(0, postImages.count)].url;
+    };
     try {
         const bench = benchmark("createPosts", true);
         const posts = await Promise.all(

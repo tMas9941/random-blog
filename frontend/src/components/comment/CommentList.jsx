@@ -42,6 +42,7 @@ export default function CommentList({ where, userId }) {
                         removeFromList={removeFromList}
                     />
                 ))}
+                {data.length === 0 && <p className="mx-auto text-md">Be the first to comment...</p>}
                 {loading && <Loader className="round-loader" />}
             </div>
         </>

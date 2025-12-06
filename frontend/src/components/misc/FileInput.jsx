@@ -3,7 +3,7 @@ import SvgComponent from "./SvgComponent";
 
 const ICON_SIZE = 30;
 
-export default function FileInput() {
+export default function FileInput({ imgRef }) {
     const [file, setFile] = useState("");
 
     const handleInput = (e) => {
@@ -13,6 +13,7 @@ export default function FileInput() {
         reader.readAsDataURL(img);
         reader.onload = function () {
             setFile(reader.result);
+            imgRef.current = img;
         };
     };
 

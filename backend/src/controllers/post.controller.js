@@ -1,3 +1,4 @@
+import cloudinaryService from "../services/cloudinary.service.js";
 import postTagService from "../services/post-tag.service.js";
 
 import postService from "../services/post.service.js";
@@ -7,7 +8,10 @@ import benchmark from "../utils/benchmark.js";
 import calculateVotes from "../utils/calculateVotes.js";
 
 const create = async (req, res, next) => {
-    const { userId, title, content, tags } = req.body;
+    const { userId, title, content } = req.body;
+    const tags = req.body.tags.split(",");
+    const img = req.file;
+
     try {
         const addTag = await tagService.create({ tags });
         if (!addTag) throw new HttpError("Error during tag creation!", 405);
@@ -17,6 +21,15 @@ const create = async (req, res, next) => {
 
         const postTag = await postTagService.create({ postId: newPost.id, tags });
         if (!postTag) throw new HttpError("Error during post creation!", 405);
+
+        if (img) {
+            const cloudinaryResponse = await cloudinaryService.uploadFile({
+                img,
+                publicId: newPost.id,
+                preset: "post_upload",
+            });
+            const dbResponse = await postService.changeImgUrl({ id: newPost.id, url: cloudinaryResponse.url });
+        }
 
         res.status(200).send(newPost);
     } catch (error) {

@@ -14,6 +14,7 @@ import FormStatusMsg from "../components/auth/FormStatusMsg";
 import TagField from "../components/posts/TagField";
 import PanelContainer from "../components/PanelContainer";
 import FileInput from "../components/misc/FileInput";
+import objToFormData from "../utils/objToFormData";
 
 export default function CreatePost() {
     return (
@@ -27,10 +28,11 @@ export default function CreatePost() {
     );
 }
 
-const TIMEOUT = 2000;
+const TIMEOUT = 1500;
 function CreateForm() {
     const [state, dispatch] = useReducer(createPostReducer, CREATE_POST_STATES.INIT);
     const tagsRef = useRef([]);
+    const imgRef = useRef();
     const navigate = useNavigate();
 
     const handleSubmit = async (data) => {
@@ -52,7 +54,13 @@ function CreateForm() {
 
     async function createPost(data) {
         dispatch({ newState: CREATE_POST_STATES.FETCH_START });
-        await postService.create({ ...data, userId: userSignal.value.id, tags: tagsRef.current });
+        const postData = objToFormData({
+            ...data,
+            userId: userSignal.value.id,
+            tags: tagsRef.current,
+            file: imgRef.current,
+        });
+        await postService.create(postData);
         dispatch({ newState: CREATE_POST_STATES.FETCH_SUCCESS });
         setTimeout(() => {
             navigate("/posts");
@@ -95,7 +103,7 @@ function CreateForm() {
                         placeholder={"Share your thoughts..."}
                         className="h-[15em]"
                     />
-                    <FileInput />
+                    <FileInput imgRef={imgRef} />
                     <TagField
                         name="tags"
                         type="text"

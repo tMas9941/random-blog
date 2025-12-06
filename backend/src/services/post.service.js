@@ -1,8 +1,18 @@
 import prisma from "../models/prisma-client.js";
+import HttpError from "../utils/HttpError.js";
 
 const create = async ({ userId, title, content }) => {
     const newPost = await prisma.posts.create({ data: { userId, title, content } });
     return newPost;
+};
+
+const changeImgUrl = async ({ id, url }) => {
+    try {
+        const result = await prisma.posts.update({ where: { id }, data: { imgUrl: url } });
+        return result;
+    } catch (error) {
+        throw new HttpError("Database error! (change post img)" + error, 403);
+    }
 };
 
 const list = async ({ limit, page, where }) => {
@@ -52,4 +62,4 @@ const getPostOwner = async (id) => {
     return userId;
 };
 
-export default { create, list, destroy, getById, getPostOwner };
+export default { create, list, destroy, getById, getPostOwner, changeImgUrl };

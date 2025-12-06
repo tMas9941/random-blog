@@ -1,4 +1,5 @@
 import { changePopupData, popupResults } from "../../global/popupHandler";
+import { removeFromPostList } from "../../global/postSignals";
 import commentService from "../../services/comment.service";
 import postService from "../../services/post.service";
 import delay from "../../utils/delay";
@@ -28,13 +29,13 @@ async function handleOnClick(props) {
     }
 }
 async function deletePost(props) {
-    const { data, removeFromList, setLoading, onSuccess } = props;
+    const { data, setLoading, onSuccess } = props;
     try {
         setLoading(true);
         await postService.destroy(data);
+        removeFromPostList(data.id);
         changePopupData("Post deleted sccessfully!", popupResults.success);
         if (onSuccess) onSuccess();
-        if (removeFromList) removeFromList(data.id);
     } catch {
         changePopupData("Couldn't delete post!", popupResults.error);
     } finally {

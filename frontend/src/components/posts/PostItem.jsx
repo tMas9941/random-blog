@@ -31,12 +31,12 @@ const PostItem = memo(({ data, onPostPage = false }) => {
     return (
         <PanelContainer className={`p-4 ${loading && "loading pointer-events-none"} peer `} isOwn={isOwn}>
             {loading && <PostLoadingPlaceholder className={"-m-4"} />}
-            <PostContent data={data} onPostPage={onPostPage} isOwn={isOwn} />
+            <PostContent data={data} onPostPage={onPostPage} isOwn={isOwn} setLoading={setLoading} />
         </PanelContainer>
     );
 }, areEqual);
 
-const PostContent = ({ data, onPostPage, isOwn }) => {
+const PostContent = ({ data, onPostPage, isOwn, setLoading }) => {
     const convertedDate = convertTimeStringToDate(data.created);
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
     const navigate = useNavigate();
@@ -84,7 +84,6 @@ const PostContent = ({ data, onPostPage, isOwn }) => {
                                 type="post"
                                 className={buttonClass + " ms-auto"}
                                 data={data}
-                                removeFromList={removeFromList}
                                 setLoading={setLoading}
                                 onSuccess={() => onPostPage && navigate("/posts")}
                             />

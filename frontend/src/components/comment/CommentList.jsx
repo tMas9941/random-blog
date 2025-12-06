@@ -1,11 +1,12 @@
 import { useRef } from "react";
 
 import useScrollDetect from "../../hooks/useScrollDetect";
-import { commentListChanged } from "../../constants/exports";
+
 import useChunkLoader from "../../hooks/useChunkLoader";
 import CommentItem from "./CommentItem";
 import commentService from "../../services/comment.service";
 import Loader from "../misc/loader/Loader";
+import { commentListChanged } from "../../global/commentSignals";
 
 const CHUNK_SIZE = 5;
 

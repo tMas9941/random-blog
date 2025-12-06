@@ -1,11 +1,16 @@
 import { useRef, useState } from "react";
+
+// Components
 import SvgComponent from "../../misc/SvgComponent";
 import useChunkLoader from "../../../hooks/useChunkLoader";
 import CommentItem from "../CommentItem";
 import Loader from "../../misc/loader/Loader";
-import commentService from "../../../services/comment.service";
-import { replyListChanged } from "./replyHandler";
+
+// Signals
+import { replyListChanged } from "../../../global/commentSignals";
 import useSignal from "../../../hooks/useSignal";
+
+import commentService from "../../../services/comment.service";
 
 const CHUNK_SIZE = 5;
 

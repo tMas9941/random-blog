@@ -5,8 +5,8 @@ import { userSignal } from "../../../global/userData";
 import commentService from "../../../services/comment.service";
 import { changePopupData, popupResults } from "../../../global/popupHandler";
 import useSignalState from "../../../hooks/useSignalState.js";
-import { addToReplyList, commentIdOfActiveReply, setActiveReply } from "./replyHandler";
-import { supplementComment } from "../../../constants/exports.js";
+
+import { addToReplyList, commentIdOfActiveReply, setActiveReply } from "../../../global/commentSignals.js";
 
 const focusClass = "focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";
 const buttonContainerClass =
@@ -43,7 +43,7 @@ export default function ReplyPanel({ commentId }) {
         };
 
         try {
-            let response = supplementComment(await commentService.create(data));
+            let response = await commentService.create(data);
             addToReplyList({ commentId, newReply: response });
             closePanel();
             changePopupData("Successfull replying!", popupResults.success);

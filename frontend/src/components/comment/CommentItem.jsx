@@ -11,11 +11,12 @@ import DeleteButton from "../buttons/DeleteButton";
 import ReplyPanel from "./reply/ReplyPanel";
 import ReplyList from "./reply/ReplyList";
 import PostLoadingPlaceholder from "../posts/PostLoadingPlaceholder";
-
-import { userSignal } from "../../global/userData";
 import calculateElapsedTime from "../../utils/calculateEllapsedTime";
 import PanelContainer from "../PanelContainer";
-import { commentIdOfActiveReply, setActiveReply } from "./reply/replyHandler";
+
+// Signals
+import { commentIdOfActiveReply, setActiveReply } from "../../global/commentSignals";
+import { userSignal } from "../../global/userData";
 
 const MAX_COMMENT_LEVEL = 2;
 const AVATAR_SIZE_COMMENT = 55;

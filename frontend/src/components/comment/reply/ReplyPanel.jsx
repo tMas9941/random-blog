@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
+// Components
 import ColorButton from "../../buttons/ColorButton";
 import Avatar from "../../misc/Avatar";
-import { userSignal } from "../../../global/userData";
 import commentService from "../../../services/comment.service";
+
+// Signals
+import { userSignal } from "../../../global/userData";
 import { changePopupData, popupResults } from "../../../global/popupHandler";
 import useSignalState from "../../../hooks/useSignalState.js";
-
 import { addToReplyList, commentIdOfActiveReply, setActiveReply } from "../../../global/commentSignals.js";
 
 const focusClass = "focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";

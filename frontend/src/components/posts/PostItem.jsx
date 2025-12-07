@@ -29,7 +29,10 @@ const PostItem = memo(({ data, onPostPage = false }) => {
 
     if (!data) return <></>;
     return (
-        <PanelContainer className={`p-4 ${loading && "loading pointer-events-none"} peer `} isOwn={isOwn}>
+        <PanelContainer
+            className={`p-4 ${loading && "loading pointer-events-none"} peer animate-fade-in `}
+            isOwn={isOwn}
+        >
             {loading && <PostLoadingPlaceholder className={"-m-4"} />}
             <PostContent data={data} onPostPage={onPostPage} isOwn={isOwn} setLoading={setLoading} />
         </PanelContainer>
@@ -48,7 +51,7 @@ const PostContent = ({ data, onPostPage, isOwn, setLoading }) => {
                 <p> {convertedDate.date}</p>
                 <p> {convertedDate.time}</p>
             </div>
-            <div className="flex flex-col w-full gap-5 mb-5 [&>p]:min-h-20">
+            <div className="flex flex-col w-full gap-5 [&>p]:min-h-20">
                 <div>
                     <Link
                         to={"/posts/" + data.id}
@@ -60,7 +63,7 @@ const PostContent = ({ data, onPostPage, isOwn, setLoading }) => {
                     </Link>
                     <p className="inline ms-3 mt-auto font-italic text-sm text-[gray]/80"> {timePassed}</p>
                 </div>
-                <p className="break-all">{data.content}</p>
+                <p className="break-all ">{data.content}</p>
                 {data?.imgUrl && (
                     <img
                         src={data.imgUrl}

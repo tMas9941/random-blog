@@ -46,31 +46,36 @@
         }
     }
 
-    --animate-shrink: shrink 0.15s ease-out forwards;
+    --animate-shrink: shrink 0.3s ease-out forwards;
+
     @keyframes shrink {
         0% {
+            max-height: 200px;
             opacity: 1;
-            max-height: 100px;
+            scale: 1 1;
         }
         100% {
+            max-height: 0px;
             opacity: 0;
+            scale: 1 0;
             visibility: hidden;
-            max-height: 0;
-            padding: 0;
         }
     }
 
-    --animate-grow: grow 1s ease-out forwards;
+    --animate-grow: grow 0.3s ease-out forwards;
     @keyframes grow {
         0% {
+            visibility: show;
             opacity: 0;
+            scale: 1 0;
             max-height: 0;
         }
         25% {
+            scale: 1 1;
             opacity: 100;
         }
         100% {
-            max-height: 1000px;
+            max-height: 200px;
         }
     }
 

@@ -16,7 +16,7 @@ function App() {
         <div className={"min-h-screen  " + themes[darkMode]}>
             <Header />
             <MessagePopup />
-            <div className=" py-20 max-w-[1280px] mx-auto [&_h1]:text-4xl [&_h1]:font-semibold ">
+            <div className=" py-20 max-w-[1024px] mx-auto [&_h1]:text-4xl [&_h1]:font-semibold ">
                 <Outlet />
             </div>
         </div>

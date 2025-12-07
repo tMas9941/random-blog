@@ -20,9 +20,13 @@ export default function VoteButton({ postId, commentId, votes, isOwn }) {
         if (newValue === voted) return setVoted(null);
         setVoted(newValue);
     };
+    const resultColor = `color-mix(in srgb, #ff0000 ${100 - voteRatio}%, #4da2c7  ${voteRatio}%)`;
+    const transparentResultColor =
+        totalVotes > 0 ? `color-mix(in srgb, ${resultColor}, transparent 60%)` : "transparent";
+    const pieStyle = `conic-gradient( ${resultColor} ${voteRatio}%, ${transparentResultColor} 0) `;
     return (
         <div
-            className={"flex min-h-full w-fit items-center rounded [&>*]:rounded"}
+            className={"flex min-h-full w-fit items-center rounded [&>*]:rounded "}
             title={buttonDisabled ? "Must login to vote and can't vote on your own stuff!" : ""}
         >
             <ButtonComp
@@ -30,16 +34,16 @@ export default function VoteButton({ postId, commentId, votes, isOwn }) {
                 voteValue={true}
                 changeVoteResult={changeVoteResult}
                 disabled={buttonDisabled}
-                activeClass={"fill-success text-success stroke-success"}
+                activeClass={"fill-primary text-primary stroke-primary"}
                 voted={voted}
             />
 
-            <span
-                style={{ color: `color-mix(in srgb, #ff0000 ${100 - voteRatio}%, #008c17  ${voteRatio}%)` }}
-                className="min-w-17 px-1 text-center text-lg font-bold [&>span]:font-semibold brightness-130"
-            >
-                {totalVotes > 0 ? Math.floor(voteRatio) : ""}
-                {totalVotes > 0 && <span className="text-base"> %</span>}
+            <span className="relative group  min-w-15 text-center text-lg font-bold [&>span]:font-semibold brightness-120 ">
+                <div
+                    style={{ backgroundImage: pieStyle }}
+                    className={` mx-auto h-6 w-6 rounded-full `}
+                    title={Math.round(voteRatio) + "%"}
+                ></div>
             </span>
 
             <ButtonComp
@@ -59,9 +63,9 @@ function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, active
         <button
             title={"Press to vote..."}
             disabled={disabled}
-            className={`flex h-full px-1 text-lg items-center brightness-130 stroke-accent  ${
+            className={`peer flex h-full text-lg items-center brightness-120 stroke-accent  ${
                 !disabled && voted === voteValue ? activeClass + " stroke-1  " : " stroke-2 fill-none "
-            } [&>span]:me-1 [&>span]:min-w-3 [&>span]:font-bold ${
+            } [&>span]:px-1 [&>span]:min-w-3 [&>span]:font-bold ${
                 disabled ? " pointer-events-none " : "cursor-pointer hover:bg-inherit "
             }`}
             onClick={() => changeVoteResult(voteValue)}

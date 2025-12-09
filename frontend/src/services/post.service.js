@@ -18,9 +18,9 @@ const create = async (data) => {
     }
 };
 
-const destroy = async (data) => {
+const destroy = async (id) => {
     try {
-        const response = await axiosInstance.delete("/post/delete/" + data.id);
+        const response = await axiosInstance.delete("/post/delete/" + id);
         return response.data;
     } catch (error) {
         throw error.response ? error.response.data : error;

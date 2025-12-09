@@ -17,17 +17,17 @@ async function loadUserData() {
     const token = localStorage.getItem("token");
     let userdata;
     if (hasToken(token)) {
-        userdata = await checkTokenValidity(token);
+        userdata = await checkTokenValidity();
     }
     return userdata;
 }
 
-async function checkTokenValidity(token) {
+async function checkTokenValidity() {
     try {
         const newToken = await authService.refreshToken();
         localStorage.setItem("token", newToken);
         return jwtDecode(newToken);
-    } catch (error) {
+    } catch {
         changePopupData("Invalid token!", popupResults.warning);
         localStorage.setItem("token", undefined);
     }

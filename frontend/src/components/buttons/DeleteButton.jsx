@@ -4,9 +4,27 @@ import { removeFromPostList } from "../../global/postSignals";
 import commentService from "../../services/comment.service";
 import postService from "../../services/post.service";
 import capitalize from "../../utils/capitalize";
-import delay from "../../utils/delay";
 import SvgComponent from "../misc/SvgComponent";
 import Button from "./Button";
+
+const deleteFunctions = {
+    post: async (data) => {
+        await postService.destroy(data.id);
+        removeFromPostList(data.containerRef.current, data.id);
+    },
+    comment: async (data) => {
+        await commentService.destroy(data.id);
+        removeFromCommentList(data.containerRef.current, data.id);
+    },
+    reply: async (data) => {
+        await commentService.destroy(data.id);
+        removeFromReplyList(data.containerRef.current, data.commentId, data.id);
+    },
+    find: (type) => {
+        if (type in deleteFunctions) return deleteFunctions[type];
+        throw ("Delete function not found!", type);
+    },
+};
 
 export default function DeleteButton(props) {
     return (
@@ -16,39 +34,15 @@ export default function DeleteButton(props) {
     );
 }
 async function handleOnClick(props) {
-    const { setLoading, onSuccess, type } = props;
+    const { setLoading, data } = props;
+    const { type } = data;
     try {
         setLoading(true);
-        await selectItemType(props);
+        await deleteFunctions.find(type)(data);
         changePopupData(`${capitalize(type)} deleted sccessfully!`, popupResults.success);
-        if (onSuccess) onSuccess();
-    } catch {
+    } catch (error) {
         changePopupData(`Couldn't delete ${capitalize(type)}!`, popupResults.error);
     } finally {
         setLoading(false);
-    }
-}
-async function selectItemType(props) {
-    const { type, containerRef, data } = props;
-    // await delay(1500);
-    switch (true) {
-        case type === "post": {
-            await postService.destroy(data.id);
-            removeFromPostList(containerRef.current, data.id);
-            break;
-        }
-        case type === "comment" || type === "reply": {
-            await commentService.destroy(data.id);
-            if (type === "reply") {
-                removeFromReplyList(containerRef.current, data.commentId, data.id);
-            } else {
-                removeFromCommentList(containerRef.current, data.id);
-            }
-
-            break;
-        }
-        default: {
-            throw new Error();
-        }
     }
 }

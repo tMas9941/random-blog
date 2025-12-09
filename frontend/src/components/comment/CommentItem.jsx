@@ -49,9 +49,12 @@ const CommentItem = memo(({ data, userId, level = 0 }) => {
                             <DeleteButton
                                 title={"Delete comment!"}
                                 className={"!pe-3 ms-auto"}
-                                containerRef={containerRef}
-                                type={isReply ? "reply" : "comment"}
-                                data={{ id: data.id, commentId: data.commentId }}
+                                data={{
+                                    id: data.id,
+                                    commentId: data.commentId,
+                                    containerRef,
+                                    type: isReply ? "reply" : "comment",
+                                }}
                                 setLoading={setLoading}
                             />
                         )}

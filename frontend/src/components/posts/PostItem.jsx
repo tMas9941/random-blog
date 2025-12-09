@@ -85,10 +85,8 @@ const PostContent = ({ data, onPostPage, isOwn, setLoading, containerRef }) => {
                     {isOwn && (
                         <>
                             <DeleteButton
-                                containerRef={containerRef}
-                                type="post"
                                 className={buttonClass + " ms-auto"}
-                                data={data}
+                                data={{ id: data.id, type: "post", containerRef }}
                                 setLoading={setLoading}
                             />
                         </>

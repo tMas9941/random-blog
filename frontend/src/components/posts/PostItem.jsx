@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // Utils
@@ -16,35 +16,41 @@ import PanelContainer from "../PanelContainer";
 import VoteButton from "../vote/VoteButton";
 import ButtonContainer from "../buttons/ButtonContainer";
 import DeleteButton from "../buttons/DeleteButton";
-import PostLoadingPlaceholder from "./PostLoadingPlaceholder";
+import LoaderWithBlur from "./LoaderWithBlur";
 import ShareButton from "./ShareButton";
-import Loader from "../misc/loader/Loader";
 
 const buttonClass = "flex items-center gap-2 fill-accent text-xl !px-4";
 
 const PostItem = memo(({ data, onPostPage = false }) => {
     const [loading, setLoading] = useState(false);
-
+    const containerRef = useRef();
     const isOwn = data.userId === userSignal.value?.id;
-
     if (!data) return <></>;
     return (
         <PanelContainer
-            className={`p-4 ${loading && "loading pointer-events-none"} peer animate-fade-in `}
+            ref={containerRef}
+            className={` ${loading && "loading pointer-events-none"} peer animate-fade-in origin-top`}
             isOwn={isOwn}
         >
-            {loading && <PostLoadingPlaceholder className={"-m-4"} />}
-            <PostContent data={data} onPostPage={onPostPage} isOwn={isOwn} setLoading={setLoading} />
+            {loading && <LoaderWithBlur />}
+            <PostContent
+                data={data}
+                onPostPage={onPostPage}
+                isOwn={isOwn}
+                setLoading={setLoading}
+                containerRef={containerRef}
+            />
         </PanelContainer>
     );
 }, areEqual);
 
-const PostContent = ({ data, onPostPage, isOwn, setLoading }) => {
+const PostContent = ({ data, onPostPage, isOwn, setLoading, containerRef }) => {
     const convertedDate = convertTimeStringToDate(data.created);
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
     const navigate = useNavigate();
+
     return (
-        <div className="flex gap-4 ">
+        <div className="flex m-4 gap-4 ">
             <div className="min-w-30 [&_div]:mb-2 ">
                 <Avatar text={data.user.username} size={80} url={data.user.profile?.avatarUrl} isOwn={isOwn} />
                 <h3 className={`font-semibold truncate ${isOwn && "text-primary"}`}>{data.user.username}</h3>
@@ -65,12 +71,7 @@ const PostContent = ({ data, onPostPage, isOwn, setLoading }) => {
                 </div>
                 <p className="break-all ">{data.content}</p>
                 {data?.imgUrl && (
-                    <img
-                        src={data.imgUrl}
-                        loading={"lazy"}
-                        alt={<Loader className={"line-loader"} />}
-                        className="w-full"
-                    ></img>
+                    <img src={data.imgUrl} loading={"lazy"} alt={"Loading picture..."} className="w-full"></img>
                 )}
                 <div className="flex gap-2 mt-auto ">
                     {data.tags.map((tag) => (
@@ -84,11 +85,11 @@ const PostContent = ({ data, onPostPage, isOwn, setLoading }) => {
                     {isOwn && (
                         <>
                             <DeleteButton
+                                containerRef={containerRef}
                                 type="post"
                                 className={buttonClass + " ms-auto"}
                                 data={data}
                                 setLoading={setLoading}
-                                onSuccess={() => onPostPage && navigate("/posts")}
                             />
                         </>
                     )}

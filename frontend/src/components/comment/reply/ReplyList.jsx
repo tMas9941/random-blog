@@ -42,7 +42,6 @@ export default function ReplyList({ commentId, userId, level, replyAmount = 0 })
 
     function addToReplyList() {
         if (replyAdded.value.commentId === commentId) {
-            // tempReplyAmount.current++;
             setChunkAmount((value) => Math.max(value, 1));
             addToList(replyAdded.value.newReply);
         }
@@ -65,7 +64,7 @@ export default function ReplyList({ commentId, userId, level, replyAmount = 0 })
                     data.map((commentData) => (
                         <CommentItem key={commentData.id} data={commentData} userId={userId} level={level} />
                     ))}
-                {loading && chunkAmount > 0 && <Loader className="round-loader" />}
+                {loading && chunkAmount > 0 && <Loader className="line-loader scale-70" />}
             </div>
             <LoadMoreRepliesLink
                 setChunkAmount={setChunkAmount}

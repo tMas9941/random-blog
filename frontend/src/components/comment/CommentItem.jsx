@@ -10,19 +10,17 @@ import DeleteButton from "../buttons/DeleteButton";
 // Components
 import ReplyPanel from "./reply/ReplyPanel";
 import ReplyList from "./reply/ReplyList";
-import PostLoadingPlaceholder from "../posts/PostLoadingPlaceholder";
+import LoaderWithBlur from "../posts/LoaderWithBlur";
 import calculateElapsedTime from "../../utils/calculateEllapsedTime";
 import PanelContainer from "../PanelContainer";
 
 // Signals
-import { commentIdOfActiveReply, removeFromReplyList, setActiveReply } from "../../global/commentSignals";
+import { commentIdOfActiveReply, setActiveReply } from "../../global/commentSignals";
 import { userSignal } from "../../global/userData";
 
 const MAX_COMMENT_LEVEL = 2;
 const AVATAR_SIZE_COMMENT = 55;
 const AVATAR_SIZE_REPLY = 45;
-
-// const PostItem = memo(({ data, onPostPage = false }) => {
 
 const CommentItem = memo(({ data, userId, level = 0 }) => {
     const containerRef = useRef();
@@ -31,13 +29,10 @@ const CommentItem = memo(({ data, userId, level = 0 }) => {
     const isOwn = data.userId === userSignal.value?.id;
 
     const dividerClass = `flex py-1.5 px-3 rounded-md ${isReply ? " -ps-6  gap-3" : " gap-4"} `;
-    // console.log("RENDER ", data);
-    const removeSelfFromList = () => {
-        if (isReply) removeFromReplyList("replyList_" + data.commentId, data.id);
-    };
+
     return (
-        <PanelContainer ref={containerRef} isOwn={isOwn} className={"animate-fade-in "}>
-            {loading && <PostLoadingPlaceholder className={"h-full -m-1"} />}
+        <PanelContainer ref={containerRef} isOwn={isOwn} id={"comment_" + data.id} className={"animate-fade-in "}>
+            {loading && <LoaderWithBlur className={"h-full"} type={"line-loader"} />}
             <div className={dividerClass}>
                 <Avatar
                     text={data.user.username}
@@ -47,24 +42,22 @@ const CommentItem = memo(({ data, userId, level = 0 }) => {
                 />
                 <div className="flex flex-col gap-1 w-full -mt-[5px] ">
                     <CommentContent data={data} isOwn={isOwn} />
-                    <ButtonContainer type={"comment"}>
+                    <ButtonContainer type={"comment"} className={"mt-2"}>
                         <VoteButton commentId={data.id} votes={data.votes} isOwn={isOwn} />
                         {userId && level < MAX_COMMENT_LEVEL && <ReplyButton commentId={data.id} />}
                         {isOwn && (
                             <DeleteButton
-                                containerRef={containerRef}
-                                type={isReply ? "reply" : "comment"}
                                 title={"Delete comment!"}
                                 className={"!pe-3 ms-auto"}
-                                id={data.id}
-                                onSuccess={removeSelfFromList}
+                                containerRef={containerRef}
+                                type={isReply ? "reply" : "comment"}
+                                data={{ id: data.id, commentId: data.commentId }}
                                 setLoading={setLoading}
                             />
                         )}
                     </ButtonContainer>
 
                     <ReplyPanel commentId={data.id} />
-
                     <ReplyList commentId={data.id} userId={userId} level={level} replyAmount={data._count.comments} />
                 </div>
             </div>

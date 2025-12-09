@@ -32,7 +32,7 @@ export default function PostsList({ where, user }) {
     if (!data) return <></>;
     return (
         <>
-            <div ref={chunkContainerRef} className="flex flex-col gap-5">
+            <div ref={chunkContainerRef} className="flex flex-col gap-3 transition-all duration-300">
                 {data.map((postData) => (
                     <PostItem data={postData} key={postData.id} userId={user?.id} />
                 ))}

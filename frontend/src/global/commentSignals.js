@@ -1,22 +1,33 @@
 import { userSignal } from "../global/userData";
+import { aimateShrink } from "../utils/animations.js";
 import Signal from "../utils/signal";
+import SignalGroup from "../utils/signalGroup.js";
 
-export const commentListChanged = new Signal(0);
+export const commentAdded = new Signal(null);
 export function addToCommentList(newComment) {
-    commentListChanged.changeValue(supplementComment(newComment));
+    commentAdded.changeValue(supplementComment(newComment));
+}
+
+export const commentRemoved = new Signal(null);
+export function removeFromCommentList(element, commentId) {
+    aimateShrink(element, () => commentRemoved.changeValue(commentId));
 }
 
 export const commentIdOfActiveReply = new Signal(null);
-
 export function setActiveReply(commentId) {
     commentIdOfActiveReply.changeValue(commentId);
 }
 
-export const replyListChanged = new Signal(0);
-
+export const replyAdded = new Signal(null);
 export function addToReplyList({ commentId, newReply }) {
-    replyListChanged.changeValue({ commentId, newReply: supplementComment(newReply) });
+    replyAdded.changeValue({ commentId, newReply: supplementComment(newReply) });
 }
+
+export const replyRemoved = new SignalGroup();
+export function removeFromReplyList(element, commentId, replyId) {
+    aimateShrink(element, () => replyRemoved.changeValue("replyList_" + commentId, replyId));
+}
+
 function supplementComment(comment) {
     comment.comments = 0;
     comment.user = { username: userSignal.value.username, profile: userSignal.value.profile };

@@ -17,14 +17,18 @@ const buttonContainerClass =
 export default function ReplyPanel({ commentId }) {
     const container = useRef();
     const textRef = useRef();
+    const prevToggled = useRef(false);
     const avatarURL = userSignal.value?.profile.avatarUrl;
     const [inputToggled, setInputToggled] = useState(false);
     useSignal(commentIdOfActiveReply, "ReplyPanel_" + commentId, toggleContainer);
 
     function toggleContainer() {
         const newInputToggled = commentIdOfActiveReply.value === commentId;
-        const toggled = container.current.className.split(" ").includes("animate-grow");
-        if (newInputToggled !== toggled) setInputToggled(newInputToggled);
+        const toggled = prevToggled.current;
+        if (newInputToggled !== toggled) {
+            prevToggled.current = newInputToggled;
+            setInputToggled(newInputToggled);
+        }
     }
 
     function closePanel() {
@@ -70,7 +74,7 @@ export default function ReplyPanel({ commentId }) {
         <div
             ref={container}
             className={`flex origin-top overflow-hidden gap-5 w-full  mx-2 ${
-                inputToggled ? "animate-grow " : textRef.current ? "animate-shrink " : "max-h-0 hidden"
+                inputToggled ? "animate-grow " : prevToggled.current ? "animate-shrink " : "hidden"
             }
             } `}
         >

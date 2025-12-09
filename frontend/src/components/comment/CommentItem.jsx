@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 
 // Buttons
 import Avatar from "../misc/Avatar";
@@ -15,24 +15,28 @@ import calculateElapsedTime from "../../utils/calculateEllapsedTime";
 import PanelContainer from "../PanelContainer";
 
 // Signals
-import { commentIdOfActiveReply, setActiveReply } from "../../global/commentSignals";
+import { commentIdOfActiveReply, removeFromReplyList, setActiveReply } from "../../global/commentSignals";
 import { userSignal } from "../../global/userData";
 
 const MAX_COMMENT_LEVEL = 2;
 const AVATAR_SIZE_COMMENT = 55;
 const AVATAR_SIZE_REPLY = 45;
 
-export default function CommentItem({ data, userId, level = 0, removeFromList }) {
+// const PostItem = memo(({ data, onPostPage = false }) => {
+
+const CommentItem = memo(({ data, userId, level = 0 }) => {
     const containerRef = useRef();
     const [loading, setLoading] = useState(false);
     const isReply = !data.postId;
     const isOwn = data.userId === userSignal.value?.id;
 
-    const dividerClass = `flex py-2 px-3 rounded-md animate-fade-in 
-    ${isReply ? " -ps-6  gap-3" : " gap-4"} `;
-
+    const dividerClass = `flex py-1.5 px-3 rounded-md ${isReply ? " -ps-6  gap-3" : " gap-4"} `;
+    // console.log("RENDER ", data);
+    const removeSelfFromList = () => {
+        if (isReply) removeFromReplyList("replyList_" + data.commentId, data.id);
+    };
     return (
-        <PanelContainer className=" p-1" ref={containerRef} isOwn={isOwn}>
+        <PanelContainer ref={containerRef} isOwn={isOwn} className={"animate-fade-in "}>
             {loading && <PostLoadingPlaceholder className={"h-full -m-1"} />}
             <div className={dividerClass}>
                 <Avatar
@@ -43,17 +47,17 @@ export default function CommentItem({ data, userId, level = 0, removeFromList })
                 />
                 <div className="flex flex-col gap-1 w-full -mt-[5px] ">
                     <CommentContent data={data} isOwn={isOwn} />
-                    <ButtonContainer className={"mt-2"} type={"comment"}>
+                    <ButtonContainer type={"comment"}>
                         <VoteButton commentId={data.id} votes={data.votes} isOwn={isOwn} />
                         {userId && level < MAX_COMMENT_LEVEL && <ReplyButton commentId={data.id} />}
                         {isOwn && (
                             <DeleteButton
                                 containerRef={containerRef}
-                                type={"comment"}
+                                type={isReply ? "reply" : "comment"}
                                 title={"Delete comment!"}
                                 className={"!pe-3 ms-auto"}
                                 id={data.id}
-                                removeFromList={removeFromList}
+                                onSuccess={removeSelfFromList}
                                 setLoading={setLoading}
                             />
                         )}
@@ -66,6 +70,12 @@ export default function CommentItem({ data, userId, level = 0, removeFromList })
             </div>
         </PanelContainer>
     );
+}, areEqual);
+
+function areEqual(prevProps, nextProps) {
+    if (prevProps.data.id !== nextProps.data.id) return false;
+    if (prevProps.userId !== nextProps.userId) return false;
+    return true;
 }
 
 const ReplyButton = ({ commentId }) => {
@@ -78,7 +88,7 @@ const ReplyButton = ({ commentId }) => {
     };
 
     return (
-        <button className="flex gap-3 items-center py-1 !px-3 cursor-pointer" onClick={handleOnClick}>
+        <button className="flex gap-3 items-center  cursor-pointer" onClick={handleOnClick}>
             <SvgComponent name={"comment"} size={25} className={"fill-accent"} />
             <span>Reply</span>
         </button>
@@ -97,3 +107,5 @@ const CommentContent = ({ data, isOwn }) => {
         </>
     );
 };
+
+export default CommentItem;

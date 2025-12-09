@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
+// signal - connect to this signal
+// name - name of the connection (the same names will be overwritten)
 
-export default function useSignalState(signal, stateName) {
+// change state value when signal value changed
+export default function useSignalState(signal, name) {
     const [value, setValue] = useState(signal.value);
 
     useEffect(() => {
-        signal.connect(stateName, (newStatus) => {
+        signal.connect(name, (newStatus) => {
             setValue(newStatus);
         });
-        return () => signal.disconnect(stateName);
+        return () => signal.disconnect(name);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return value;

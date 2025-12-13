@@ -12,7 +12,7 @@ import CommentInput from "../components/comment/CommentInput";
 import CommentList from "../components/comment/CommentList";
 import useSignalState from "../hooks/useSignalState";
 import useFetchData from "../hooks/useFetchData";
-import PostLoadingPlaceholder from "../components/posts/PostLoadingPlaceholder";
+import LoaderWithBlur from "../components/posts/LoaderWithBlur";
 
 export default function PostPage() {
     const location = useLocation();
@@ -29,7 +29,7 @@ export default function PostPage() {
     return (
         <div className="relative overflow-hidden">
             <PostItem data={fetchData.data} onPostPage={true} />
-            <PostLoadingPlaceholder className=" peer-[.loading]:block hidden mt-10 rounded-lg [&~*]:p-4" />
+            <LoaderWithBlur className=" peer-[.loading]:block hidden mt-10 rounded-lg [&~*]:p-4" />
             <CommentInput postId={fetchData.data.id} user={user} />
             <CommentList where={{ postId: fetchData.data.id }} userId={user?.id} />
         </div>

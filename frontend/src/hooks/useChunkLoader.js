@@ -59,10 +59,12 @@ const useChunkLoader = ({ dependencies, fetchFunction, noPreload = false }) => {
     };
 
     function removeFromList(itemId) {
-        const newData = { ...data };
-        delete newData[itemId];
         extraItemCount.current = extraItemCount.current - 1;
-        setdata(newData);
+        setdata((data) => {
+            const newData = { ...data };
+            delete newData[itemId];
+            return newData;
+        });
     }
 
     function addToList(newData) {

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 
 // Buttons
 import Avatar from "../misc/Avatar";
@@ -10,29 +10,29 @@ import DeleteButton from "../buttons/DeleteButton";
 // Components
 import ReplyPanel from "./reply/ReplyPanel";
 import ReplyList from "./reply/ReplyList";
-import PostLoadingPlaceholder from "../posts/PostLoadingPlaceholder";
-
-import { userSignal } from "../../global/userData";
+import LoaderWithBlur from "../posts/LoaderWithBlur";
 import calculateElapsedTime from "../../utils/calculateEllapsedTime";
 import PanelContainer from "../PanelContainer";
-import { commentIdOfActiveReply, setActiveReply } from "./reply/replyHandler";
+
+// Signals
+import { commentIdOfActiveReply, setActiveReply } from "../../global/commentSignals";
+import { userSignal } from "../../global/userData";
 
 const MAX_COMMENT_LEVEL = 2;
 const AVATAR_SIZE_COMMENT = 55;
 const AVATAR_SIZE_REPLY = 45;
 
-export default function CommentItem({ data, userId, level = 0, removeFromList }) {
+const CommentItem = memo(({ data, userId, level = 0 }) => {
     const containerRef = useRef();
     const [loading, setLoading] = useState(false);
     const isReply = !data.postId;
     const isOwn = data.userId === userSignal.value?.id;
 
-    const dividerClass = `flex py-2 px-3 rounded-md animate-fade-in 
-    ${isReply ? " -ps-6  gap-3" : " gap-4"} `;
+    const dividerClass = `flex py-1.5 px-3 rounded-md ${isReply ? " -ps-6  gap-3" : " gap-4"} `;
 
     return (
-        <PanelContainer className=" p-1" ref={containerRef} isOwn={isOwn}>
-            {loading && <PostLoadingPlaceholder className={"h-full -m-1"} />}
+        <PanelContainer ref={containerRef} isOwn={isOwn} id={"comment_" + data.id} className={"animate-fade-in "}>
+            {loading && <LoaderWithBlur className={"h-full"} type={"line-loader"} />}
             <div className={dividerClass}>
                 <Avatar
                     text={data.user.username}
@@ -42,29 +42,33 @@ export default function CommentItem({ data, userId, level = 0, removeFromList })
                 />
                 <div className="flex flex-col gap-1 w-full -mt-[5px] ">
                     <CommentContent data={data} isOwn={isOwn} />
-                    <ButtonContainer className={"mt-2"} type={"comment"}>
+                    <ButtonContainer type={"comment"} className={"mt-2"}>
                         <VoteButton commentId={data.id} votes={data.votes} isOwn={isOwn} />
                         {userId && level < MAX_COMMENT_LEVEL && <ReplyButton commentId={data.id} />}
                         {isOwn && (
                             <DeleteButton
-                                containerRef={containerRef}
-                                type={"comment"}
                                 title={"Delete comment!"}
                                 className={"!pe-3 ms-auto"}
-                                id={data.id}
-                                removeFromList={removeFromList}
+                                containerRef={containerRef}
+                                type={isReply ? "reply" : "comment"}
+                                data={{ id: data.id, commentId: data.commentId }}
                                 setLoading={setLoading}
                             />
                         )}
                     </ButtonContainer>
 
                     <ReplyPanel commentId={data.id} />
-
                     <ReplyList commentId={data.id} userId={userId} level={level} replyAmount={data._count.comments} />
                 </div>
             </div>
         </PanelContainer>
     );
+}, areEqual);
+
+function areEqual(prevProps, nextProps) {
+    if (prevProps.data.id !== nextProps.data.id) return false;
+    if (prevProps.userId !== nextProps.userId) return false;
+    return true;
 }
 
 const ReplyButton = ({ commentId }) => {
@@ -77,7 +81,7 @@ const ReplyButton = ({ commentId }) => {
     };
 
     return (
-        <button className="flex gap-3 items-center py-1 !px-3 cursor-pointer" onClick={handleOnClick}>
+        <button className="flex gap-3 items-center  cursor-pointer" onClick={handleOnClick}>
             <SvgComponent name={"comment"} size={25} className={"fill-accent"} />
             <span>Reply</span>
         </button>
@@ -96,3 +100,5 @@ const CommentContent = ({ data, isOwn }) => {
         </>
     );
 };
+
+export default CommentItem;

@@ -1,27 +1,35 @@
 import { useRef, useState } from "react";
+
+// Components
 import SvgComponent from "../../misc/SvgComponent";
 import useChunkLoader from "../../../hooks/useChunkLoader";
 import CommentItem from "../CommentItem";
 import Loader from "../../misc/loader/Loader";
-import commentService from "../../../services/comment.service";
-import { replyListChanged } from "./replyHandler";
+
+// Signals
+import { replyAdded, replyRemoved } from "../../../global/commentSignals";
 import useSignal from "../../../hooks/useSignal";
+
+import commentService from "../../../services/comment.service";
 
 const CHUNK_SIZE = 5;
 
-export default function ReplyList({ commentId, userId, level, replyAmount }) {
+export default function ReplyList({ commentId, userId, level, replyAmount = 0 }) {
     level++;
     const whereString = JSON.stringify({ commentId });
     const chunkContainerRef = useRef();
     const [chunkAmount, setChunkAmount] = useState(0);
-    const tempReplyAmount = useRef(0);
     const { data, loading, removeFromList, addToList, clearList, extraItemCount } = useChunkLoader({
         dependencies: [whereString, chunkAmount],
         noPreload: chunkAmount < 1,
         fetchFunction,
     });
     const showedReplies = data.length || 0;
-    useSignal(replyListChanged, "replyList" + commentId, addToReplyList);
+    const signalName = "replyList_" + commentId;
+    useSignal(replyAdded, signalName, addToReplyList);
+    replyRemoved.connect(signalName, "remove_" + commentId, () => {
+        removeFromList(replyRemoved.getValue(signalName));
+    });
 
     async function fetchFunction() {
         return await commentService.list({
@@ -33,10 +41,9 @@ export default function ReplyList({ commentId, userId, level, replyAmount }) {
     }
 
     function addToReplyList() {
-        if (replyListChanged.value.commentId === commentId) {
-            tempReplyAmount.current++;
+        if (replyAdded.value.commentId === commentId) {
             setChunkAmount((value) => Math.max(value, 1));
-            addToList(replyListChanged.value.newReply);
+            addToList(replyAdded.value.newReply);
         }
     }
 
@@ -46,7 +53,8 @@ export default function ReplyList({ commentId, userId, level, replyAmount }) {
                 <OpenRepliesLink
                     clearList={clearList}
                     setChunkAmount={setChunkAmount}
-                    replyAmount={replyAmount + extraItemCount || 0}
+                    replyAmount={replyAmount}
+                    extraItemCount={extraItemCount}
                     chunkAmount={chunkAmount}
                     showedReplies={showedReplies}
                 />
@@ -54,31 +62,29 @@ export default function ReplyList({ commentId, userId, level, replyAmount }) {
             <div ref={chunkContainerRef} className="flex flex-col  gap-1 transition-all duration-500">
                 {chunkAmount > 0 &&
                     data.map((commentData) => (
-                        <CommentItem
-                            key={commentData.id}
-                            data={commentData}
-                            userId={userId}
-                            removeFromList={removeFromList}
-                            level={level}
-                        />
+                        <CommentItem key={commentData.id} data={commentData} userId={userId} level={level} />
                     ))}
-                {loading && chunkAmount > 0 && <Loader className="round-loader" />}
+                {loading && chunkAmount > 0 && <Loader className="line-loader scale-70" />}
             </div>
             <LoadMoreRepliesLink
                 setChunkAmount={setChunkAmount}
                 showedReplies={showedReplies}
-                replyAmount={replyAmount + extraItemCount - showedReplies || 0}
+                replyAmount={replyAmount}
+                extraItemCount={extraItemCount}
                 chunkContainerRef={chunkContainerRef}
                 level={level}
             />
         </>
     );
 }
-
-function OpenRepliesLink({ setChunkAmount, replyAmount, clearList, showedReplies }) {
-    if (replyAmount === 0) {
+const arrowClass = "stroke-primary inline-block me-1 stroke-2 -mt-[2px]";
+const textClass = "text-primary hover:underline cursor-pointer select-none w-fit ";
+function OpenRepliesLink({ setChunkAmount, replyAmount, clearList, showedReplies, extraItemCount }) {
+    const value = replyAmount - showedReplies + extraItemCount;
+    if (replyAmount + extraItemCount === 0) {
         return <></>;
     }
+
     const toggled = showedReplies > 0;
     const handleClick = () => {
         setChunkAmount(Number(!toggled));
@@ -86,33 +92,28 @@ function OpenRepliesLink({ setChunkAmount, replyAmount, clearList, showedReplies
     };
 
     return (
-        <a className="mb-2 text-primary hover:underline cursor-pointer select-none w-fit " onClick={handleClick}>
+        <a className={textClass} onClick={handleClick}>
             <SvgComponent
                 name={"singleArrow"}
                 size={17}
-                className={`${
-                    toggled ? "rotate-90 " : "-rotate-90 "
-                }fill-primary stroke-primary inline-block me-1 stroke-2 -mt-[2px]`}
+                className={`${toggled ? "rotate-90 " : "-rotate-90 "} ${arrowClass} `}
             />
-            {` ${toggled ? "Hide " + showedReplies : "Show " + replyAmount} replies`}
+            {`${toggled ? "Hide " + showedReplies : "Show " + value} replies`}
         </a>
     );
 }
 
-function LoadMoreRepliesLink({ setChunkAmount, replyAmount, showedReplies }) {
-    if (replyAmount <= 0 || !showedReplies) return <></>;
+function LoadMoreRepliesLink({ setChunkAmount, replyAmount, showedReplies, extraItemCount }) {
+    const value = replyAmount - showedReplies + extraItemCount;
+    if (value <= 0 || !showedReplies) return <></>;
     const handleClick = () => {
         setChunkAmount((amount) => amount + 1);
     };
 
     return (
-        <a className="mb-2 text-primary hover:underline cursor-pointer select-none w-fit " onClick={handleClick}>
-            <SvgComponent
-                name={"singleArrow"}
-                size={17}
-                className={`-rotate-90 fill-primary stroke-primary inline-block me-1 stroke-2 -mt-[2px]`}
-            />
-            {` Show ${replyAmount} more replies`}
+        <a className={textClass} onClick={handleClick}>
+            <SvgComponent name={"singleArrow"} size={17} className={`-rotate-90 ${arrowClass}`} />
+            {`Show ${value} more replies`}
         </a>
     );
 }

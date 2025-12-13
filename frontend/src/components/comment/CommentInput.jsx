@@ -4,10 +4,11 @@ import { useRef } from "react";
 import ColorButton from "../buttons/ColorButton";
 import commentService from "../../services/comment.service";
 import NoUser from "./NoUser";
-
-import { addToCommentList } from "../../constants/exports";
-import { changePopupData, popupResults } from "../../global/popupHandler";
 import Avatar from "../misc/Avatar";
+
+// Signals
+import { changePopupData, popupResults } from "../../global/popupHandler";
+import { addToCommentList } from "../../global/commentSignals";
 
 const focusClass =
     "focus-within:[&>textarea]:h-24 focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";

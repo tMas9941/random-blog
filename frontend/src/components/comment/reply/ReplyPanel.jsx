@@ -1,12 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+// Components
 import ColorButton from "../../buttons/ColorButton";
 import Avatar from "../../misc/Avatar";
-import { userSignal } from "../../../global/userData";
 import commentService from "../../../services/comment.service";
+
+// Signals
+import { userSignal } from "../../../global/userData";
 import { changePopupData, popupResults } from "../../../global/popupHandler";
-import useSignalState from "../../../hooks/useSignalState.js";
-import { addToReplyList, commentIdOfActiveReply, setActiveReply } from "./replyHandler";
-import { supplementComment } from "../../../constants/exports.js";
+import { addToReplyList, commentIdOfActiveReply, setActiveReply } from "../../../global/commentSignals.js";
+import useSignal from "../../../hooks/useSignal.js";
 
 const focusClass = "focus-within:[&>textarea]:outline-primary focus-within:[&>textarea]:outline-1 ";
 const buttonContainerClass =
@@ -15,24 +17,40 @@ const buttonContainerClass =
 export default function ReplyPanel({ commentId }) {
     const container = useRef();
     const textRef = useRef();
-    const activeReplyId = useSignalState(commentIdOfActiveReply, "ReplyPanel_" + commentId);
+    const prevToggled = useRef(false);
+    const avatarURL = userSignal.value?.profile.avatarUrl;
+    const [inputToggled, setInputToggled] = useState(false);
+    useSignal(commentIdOfActiveReply, "ReplyPanel_" + commentId, toggleContainer);
 
-    const closePanel = () => {
+    function toggleContainer() {
+        const newInputToggled = commentIdOfActiveReply.value === commentId;
+        const toggled = prevToggled.current;
+        if (newInputToggled !== toggled) {
+            prevToggled.current = newInputToggled;
+            setInputToggled(newInputToggled);
+        }
+    }
+
+    function closePanel() {
         document.activeElement.blur();
         setActiveReply(null);
-    };
+    }
 
     useEffect(() => {
-        if (textRef.current) textRef.current.focus(); // grab focus - autoFocus is not working because why not
-    });
-
-    if (activeReplyId !== commentId) return <div className={`w-full h-20 animate-shrink`}></div>;
-    const avatarURL = userSignal.value?.profile.avatarUrl;
+        textRef.current.value = "";
+        textRef.current.style.height = "auto";
+        if (inputToggled) textRef.current.focus(); // grab focus
+    }, [inputToggled]);
 
     // workaround of field-sizing is not supported by Firefox and Safari
-    const fieldSizingContent = (ref, newHeight) => {
-        if (isNaN(newHeight)) newHeight = ref.current.scrollHeight;
-        ref.current.style.height = newHeight + "px";
+    const fieldSizingContent = (ref) => {
+        ref.current.style.height = "auto";
+        const scrolHeight = ref.current.scrollHeight + "px";
+        if (scrolHeight == ref.current.style.height) {
+            return;
+        }
+
+        ref.current.style.height = scrolHeight;
     };
 
     const handleComment = async () => {
@@ -43,36 +61,40 @@ export default function ReplyPanel({ commentId }) {
         };
 
         try {
-            let response = supplementComment(await commentService.create(data));
+            let response = await commentService.create(data);
             addToReplyList({ commentId, newReply: response });
             closePanel();
-            changePopupData("Successfull replying!", popupResults.success);
+            changePopupData("Successfull commenting!", popupResults.success);
         } catch {
             changePopupData("Error during commenting!", popupResults.error);
         }
     };
 
     return (
-        activeReplyId && (
-            <div ref={container} className={`flex gap-5 w-full my-2 mx-2 animate-grow`}>
-                <Avatar text={"text"} size={70} url={avatarURL} isOwn={true} />
-                <div className={"flex flex-col w-full " + focusClass}>
-                    <textarea
-                        ref={textRef}
-                        id="commentInput"
-                        name="comment"
-                        rows="2"
-                        maxLength="1250"
-                        className="peer w-full min-h-12 max-w-[450px] bg-secondary/20 p-3 resize-none rounded transition-[height] ease-out duration-150 overflow-y-hidden"
-                        placeholder="Add a comment..."
-                        onInput={() => fieldSizingContent(textRef)}
-                    ></textarea>
-                    <div className={"flex gap-5 items-center " + buttonContainerClass}>
-                        <ColorButton text={"Comment"} onClick={handleComment}></ColorButton>
-                        <ColorButton theme="secondary" className=" " text={"Cancel"} onClick={closePanel}></ColorButton>
-                    </div>
+        <div
+            ref={container}
+            className={`flex origin-top overflow-hidden gap-5 w-full  mx-2 ${
+                inputToggled ? "animate-grow " : prevToggled.current ? "animate-shrink " : "hidden"
+            }
+            } `}
+        >
+            <Avatar text={"text"} size={70} url={avatarURL} isOwn={true} />
+            <div className={"flex flex-col w-full py-1 " + focusClass}>
+                <textarea
+                    ref={textRef}
+                    id="commentInput"
+                    name="comment"
+                    maxLength="1250"
+                    className="peer w-full max-w-[450px]  bg-secondary/20 p-3 resize-none rounded overflow-hidden"
+                    placeholder="Add a comment..."
+                    onInput={() => fieldSizingContent(textRef)}
+                ></textarea>
+
+                <div className={"flex gap-5 items-center " + buttonContainerClass}>
+                    <ColorButton text={"Comment"} onClick={handleComment}></ColorButton>
+                    <ColorButton theme="secondary" className=" " text={"Cancel"} onClick={closePanel}></ColorButton>
                 </div>
             </div>
-        )
+        </div>
     );
 }

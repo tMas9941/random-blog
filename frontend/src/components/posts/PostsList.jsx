@@ -5,6 +5,8 @@ import postService from "../../services/post.service";
 import PostItem from "./PostItem";
 import useChunkLoader from "../../hooks/useChunkLoader";
 import Loader from "../misc/loader/Loader";
+import { postListChanged } from "../../global/postSignals";
+import useSignal from "../../hooks/useSignal";
 
 const CHUNK_SIZE = 5;
 
@@ -23,12 +25,16 @@ export default function PostsList({ where, user }) {
                 userId: user?.id,
             }),
     });
+
+    useSignal(postListChanged, "postList", () => {
+        removeFromList(postListChanged.value.postId);
+    });
     if (!data) return <></>;
     return (
         <>
-            <div ref={chunkContainerRef} className="flex flex-col gap-5">
+            <div ref={chunkContainerRef} className="flex flex-col gap-3 transition-all duration-300">
                 {data.map((postData) => (
-                    <PostItem data={postData} key={postData.id} userId={user?.id} removeFromList={removeFromList} />
+                    <PostItem data={postData} key={postData.id} userId={user?.id} />
                 ))}
             </div>
             {loading && <Loader className="round-loader" />}

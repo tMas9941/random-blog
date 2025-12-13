@@ -1,11 +1,17 @@
 import { useRef } from "react";
 
-import useScrollDetect from "../../hooks/useScrollDetect";
-import { commentListChanged } from "../../constants/exports";
-import useChunkLoader from "../../hooks/useChunkLoader";
+// Components
 import CommentItem from "./CommentItem";
-import commentService from "../../services/comment.service";
 import Loader from "../misc/loader/Loader";
+
+// Hooks
+import useChunkLoader from "../../hooks/useChunkLoader";
+import useScrollDetect from "../../hooks/useScrollDetect";
+import useSignal from "../../hooks/useSignal";
+
+// Signals
+import commentService from "../../services/comment.service";
+import { commentAdded, commentRemoved } from "../../global/commentSignals";
 
 const CHUNK_SIZE = 5;
 
@@ -23,7 +29,8 @@ export default function CommentList({ where, userId }) {
                 userId,
             }),
     });
-    commentListChanged.connect("renderNewComment", () => addToList(commentListChanged.value));
+    useSignal(commentAdded, "CommentList", () => addToList(commentAdded.value));
+    useSignal(commentRemoved, "CommentList", () => removeFromList(commentRemoved.value));
 
     if (!data) return <></>;
     return (
@@ -31,17 +38,17 @@ export default function CommentList({ where, userId }) {
             <div
                 ref={chunkContainerRef}
                 id={"commentList"}
-                className="flex flex-col border-y border-secondary/60 transition-all duration-500 gap-1"
+                className="flex flex-col  border-y border-secondary/60 transition-all duration-500 gap-1"
             >
                 {data.map((commentData) => (
-                    <CommentItem
-                        data={commentData}
-                        key={commentData.id}
-                        userId={userId}
-                        removeFromList={removeFromList}
-                    />
+                    <CommentItem data={commentData} key={commentData.id} userId={userId} />
                 ))}
-                {loading && <Loader className="round-loader" />}
+                {}
+                {loading ? (
+                    <Loader className="line-loader scale-70" />
+                ) : (
+                    data.length === 0 && <p className="mx-auto text-md">Be the first to comment...</p>
+                )}
             </div>
         </>
     );

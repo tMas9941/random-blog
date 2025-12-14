@@ -87,7 +87,6 @@ function CreateForm() {
                 onKeydown={(e) => {
                     return e.preventDefault();
                 }}
-                onSubmit={handleSubmit}
             >
                 <Form
                     className={
@@ -123,9 +122,6 @@ function CreateForm() {
                             className="mt-5"
                             text={"Publish"}
                             type={"submit"}
-                            onKeydown={(e) => {
-                                return e.preventDefault();
-                            }}
                         ></ColorButton>
                     </div>
                 </Form>

@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.get("/list", userController.list);
 router.get("/:id", userController.getById);
+router.patch("/:id/password", userController.changePassword);
 
 export default router;

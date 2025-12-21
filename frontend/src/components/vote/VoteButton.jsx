@@ -38,7 +38,7 @@ export default function VoteButton({ postId, commentId, votes, isOwn }) {
                 voted={voted}
             />
 
-            <span className="relative group  min-w-15 text-center text-lg font-bold [&>span]:font-semibold brightness-120 ">
+            <span className="relative group  min-w-10 text-center text-lg font-bold [&>span]:font-semibold brightness-120 ">
                 <div
                     style={{ backgroundImage: pieStyle }}
                     className={` mx-auto h-6 w-6 rounded-full `}
@@ -71,7 +71,7 @@ function ButtonComp({ text, voteValue, changeVoteResult, disabled, voted, active
             onClick={() => changeVoteResult(voteValue)}
         >
             {voteValue && <span>{`${text}`}</span>}
-            <SvgComponent name={"nextArrow"} size={25} className={voteValue ? "" : "rotate-180"} />
+            <SvgComponent name={"nextArrow"} size={22} className={voteValue ? "" : "rotate-180"} />
             {!voteValue && <span>{`${text}`}</span>}
         </button>
     );

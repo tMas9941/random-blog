@@ -28,8 +28,13 @@ const deleteFunctions = {
 
 export default function DeleteButton(props) {
     return (
-        <Button title={props.title} text={"Delete"} className={props.className} onClick={() => handleOnClick(props)}>
-            <SvgComponent size={30} name={"close"} className={"fill-accent"} />
+        <Button
+            title={props.title}
+            text={"Delete"}
+            className={"!pe-2 " + props.className}
+            onClick={() => handleOnClick(props)}
+        >
+            <SvgComponent size={25} name={"close"} className={"fill-accent mx-0.5"} />
         </Button>
     );
 }

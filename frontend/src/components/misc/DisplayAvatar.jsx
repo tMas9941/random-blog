@@ -40,7 +40,7 @@ const DisplayAvatar = ({ url, profileId }) => {
 
     return (
         <div className="flex flex-col  ">
-            <div className="relative group w-[200px] h-[200px] overflow-hidden max-w-[200px] max-h-[200px] rounded-[15%] border-6 border-primary  [&>*]:transition-all [&>*]:duration-150 [&>*]:ease-out">
+            <div className="relative group w-[170px] h-[170px] overflow-hidden max-w-[200px] max-h-[200px] rounded-[15%] border-6 border-primary ">
                 {selectedImage && (
                     <img className="z-2 absolute w-full h-full scale-105 pointer-events-none" src={selectedImage} />
                 )}

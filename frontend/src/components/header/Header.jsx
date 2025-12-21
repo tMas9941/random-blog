@@ -15,7 +15,7 @@ import DropDownButton, { DropDownItem } from "../buttons/dropdown/DropDownButton
 
 export default function Header() {
     return (
-        <nav className="z-20 fixed h-13 bg-text text-n-text w-full border-b border-background/40">
+        <nav className="z-20 fixed h-11 bg-text text-n-text w-full border-b border-background/40">
             <div className="flex h-full max-w-[1500px] px-10 mx-auto flex justify-between items-center gap-1 ">
                 <LeftSide />
                 <RightSide />
@@ -55,7 +55,7 @@ function RightSide() {
             {user && (
                 <ColorButton onClick={() => navigate("/posts/create")} className="rounded-full">
                     Post
-                    <SvgComponent name={"pen"} size={20} className={"ms-3 fill-white"} />
+                    <SvgComponent name={"pen"} size={18} className={"ms-3 fill-white"} />
                 </ColorButton>
             )}
             <DarkModeSwitch />

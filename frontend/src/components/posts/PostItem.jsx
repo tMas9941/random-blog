@@ -19,8 +19,8 @@ import DeleteButton from "../buttons/DeleteButton";
 import LoaderWithBlur from "./LoaderWithBlur";
 import ShareButton from "./ShareButton";
 
-const buttonClass = "flex items-center gap-2 fill-accent text-xl !px-4";
-
+// const buttonClass = "flex items-center gap-2 fill-accent text-md !px-3";
+const buttonClass = "";
 const PostItem = memo(({ data, onPostPage = false }) => {
     const [loading, setLoading] = useState(false);
     const containerRef = useRef();
@@ -50,18 +50,18 @@ const PostContent = ({ data, onPostPage, isOwn, setLoading, containerRef }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="flex m-4 gap-4 ">
-            <div className="min-w-30 [&_div]:mb-2 ">
-                <Avatar text={data.user.username} size={80} url={data.user.profile?.avatarUrl} isOwn={isOwn} />
+        <div className="flex m-4">
+            <div className="w-25  me-5">
+                <Avatar text={data.user.username} size={60} url={data.user.profile?.avatarUrl} isOwn={isOwn} />
                 <h3 className={`font-semibold truncate ${isOwn && "text-primary"}`}>{data.user.username}</h3>
                 <p> {convertedDate.date}</p>
                 <p> {convertedDate.time}</p>
             </div>
-            <div className="flex flex-col w-full gap-5 [&>p]:min-h-20">
+            <div className="flex flex-col w-full gap-3 [&>p]:min-h-10">
                 <div>
                     <Link
                         to={"/posts/" + data.id}
-                        className={`text-2xl font-semibold hover:underline ${
+                        className={`text-xl font-semibold hover:underline ${
                             (onPostPage && "pointer-events-none", isOwn && "text-primary")
                         }`}
                     >
@@ -73,7 +73,7 @@ const PostContent = ({ data, onPostPage, isOwn, setLoading, containerRef }) => {
                 {data?.imgUrl && (
                     <img src={data.imgUrl} loading={"lazy"} alt={"Loading picture..."} className="w-full"></img>
                 )}
-                <div className="flex gap-2 mt-auto ">
+                <div className="flex flex-wrap gap-2 mt-auto ">
                     {data.tags.map((tag) => (
                         <TagBlock key={tag.tagName} name={tag.tagName} />
                     ))}
@@ -105,8 +105,8 @@ function areEqual(prevProps, nextProps) {
 }
 function CommentButton({ postId, count }) {
     return (
-        <Link to={"/posts/" + postId + "#comment"} className={buttonClass + " font-semibold"}>
-            <SvgComponent name={"comment"} size={25} />
+        <Link to={"/posts/" + postId + "#comment"} className={buttonClass + " !pe-2 font-semibold flex items-center"}>
+            <SvgComponent name={"comment"} size={20} className={"fill-accent mx-1"} />
             <span className="mx-1 text-accent font-bold stroke-1">{count}</span>
             Comments
         </Link>

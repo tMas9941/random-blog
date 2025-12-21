@@ -6,7 +6,7 @@ import MessagePopup from "./components/popup/MessagePopup";
 
 const themes = {
     true: "bg-n-background text-n-text fill-n-text stroke-n-text",
-    false: "bg-background text-text fill-text stroke-text",
+    false: "bg-background text-text fill-text stroke-text ",
 };
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
         <div className={"min-h-screen  " + themes[darkMode]}>
             <Header />
             <MessagePopup />
-            <div className=" py-20 max-w-[1024px] mx-auto [&_h1]:text-4xl [&_h1]:font-semibold ">
+            <div className="py-20 max-w-[800px] mx-auto [&_h1]:text-3xl [&_h1]:font-semibold text-sm">
                 <Outlet />
             </div>
         </div>

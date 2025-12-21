@@ -1,4 +1,4 @@
-import React, { useReducer, useRef } from "react";
+import { useReducer, useRef } from "react";
 import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 
@@ -87,6 +87,7 @@ function CreateForm() {
                 onKeydown={(e) => {
                     return e.preventDefault();
                 }}
+                onSubmit={handleSubmit}
             >
                 <Form
                     className={

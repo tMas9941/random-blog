@@ -19,8 +19,8 @@ import { commentIdOfActiveReply, setActiveReply } from "../../global/commentSign
 import { userSignal } from "../../global/userData";
 
 const MAX_COMMENT_LEVEL = 2;
-const AVATAR_SIZE_COMMENT = 55;
-const AVATAR_SIZE_REPLY = 45;
+const AVATAR_SIZE_COMMENT = 50;
+const AVATAR_SIZE_REPLY = 40;
 
 const CommentItem = memo(({ data, userId, level = 0 }) => {
     const containerRef = useRef();
@@ -48,7 +48,7 @@ const CommentItem = memo(({ data, userId, level = 0 }) => {
                         {isOwn && (
                             <DeleteButton
                                 title={"Delete comment!"}
-                                className={"!pe-3 ms-auto"}
+                                className={"ms-auto"}
                                 data={{
                                     id: data.id,
                                     commentId: data.commentId,
@@ -84,8 +84,8 @@ const ReplyButton = ({ commentId }) => {
     };
 
     return (
-        <button className="flex gap-3 items-center  cursor-pointer" onClick={handleOnClick}>
-            <SvgComponent name={"comment"} size={25} className={"fill-accent"} />
+        <button className="flex items-center cursor-pointer " onClick={handleOnClick}>
+            <SvgComponent name={"comment"} size={18} className={"fill-accent mx-1.5"} />
             <span>Reply</span>
         </button>
     );

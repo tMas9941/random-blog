@@ -6,10 +6,11 @@ import tagService from "../services/tag.service.js";
 import HttpError from "../utils/HttpError.js";
 import benchmark from "../utils/benchmark.js";
 import calculateVotes from "../utils/calculateVotes.js";
+import textLimiter, { textLimiterData } from "../utils/textLimiter.js";
 
 const create = async (req, res, next) => {
     const { userId, title, content } = req.body;
-    const tags = req.body.tags.split(",");
+    const tags = textLimiter(req.body.tags.split(","), textLimiterData.Tags.name);
     const img = req.file;
 
     try {

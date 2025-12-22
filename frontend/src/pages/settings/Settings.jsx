@@ -2,9 +2,6 @@ import ProfileMenuButton from "../../components/profile/ProfileMenuButton";
 
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-const formClass = "flex flex-col gap-2 w-[50%] min-w-[300px] ";
-const buttonClass = "mt-5 min-h-10 bg-primary text-n-text rounded w-fit ";
-
 export default function Settings() {
     const location = useLocation();
     const navigate = useNavigate();

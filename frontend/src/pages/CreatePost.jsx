@@ -3,7 +3,7 @@ import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 
 // Components
-import FormField from "../components/misc/FormField";
+import FormField from "../components/forms/FormField";
 import ColorButton from "../components/buttons/ColorButton";
 import postValidation from "../validations/postValidation";
 import postService from "../services/post.service";

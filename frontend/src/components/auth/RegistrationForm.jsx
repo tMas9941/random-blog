@@ -6,9 +6,10 @@ import { Form, Formik } from "formik";
 // Components
 import Button from "../buttons/Button";
 import FormStatusMsg from "./FormStatusMsg.jsx";
-import FormField from "../misc/FormField.jsx";
+
 import registrationValidation from "../../validations/registrationValidation.js";
 import { useNavigate } from "react-router-dom";
+import FormField from "../forms/FormField.jsx";
 
 const MSG_TIMEOUT = 1200;
 

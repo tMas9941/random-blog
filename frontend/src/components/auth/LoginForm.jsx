@@ -8,7 +8,7 @@ import Button from "../buttons/Button.jsx";
 import { login } from "../../global/userData.js";
 import FormStatusMsg from "./FormStatusMsg.jsx";
 import loginValidation from "../../validations/loginValidation.js";
-import FormField from "../misc/FormField.jsx";
+import FormField from "../forms/FormField.jsx";
 import { useNavigate } from "react-router-dom";
 
 const MSG_TIMEOUT = 2000;

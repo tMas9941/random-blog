@@ -2,6 +2,7 @@ import { BCRYPT_COST } from "../constants/constants.js";
 import userService from "../services/user.service.js";
 import HttpError from "../utils/HttpError.js";
 import bcrypt from "bcrypt";
+import textLimiter from "../utils/textLimiter.js";
 
 const list = async (req, res, next) => {
     try {
@@ -38,13 +39,26 @@ const changePassword = async (req, res, next) => {
 
         const passwordsMatch = await bcrypt.compare(newPassword, hashedDbPassword);
         if (passwordsMatch) throw new HttpError("New password can't be the same!", 403);
-        console.log({ passwordsMatch });
+
         const newHashedPassword = await bcrypt.hash(newPassword, BCRYPT_COST);
         const response = await userService.changePassword(id, newHashedPassword);
-        console.log({ hashedDbPassword, response });
+
         res.status(200).send("Password cahnged!");
     } catch (error) {
         next(error);
     }
 };
-export default { list, getById, changePassword };
+
+const updateUserData = async (req, res, next) => {
+    const data = textLimiter(req.body, null, "Users");
+    const id = req.userId;
+
+    try {
+        const response = await userService.updateUserData(id, data);
+        res.status(200).send(response);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export default { list, getById, changePassword, updateUserData };

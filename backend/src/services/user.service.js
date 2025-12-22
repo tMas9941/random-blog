@@ -25,4 +25,17 @@ const changePassword = async (id, password) => await prisma.users.update({ where
 
 const getHashedPassword = async (id) => await prisma.users.findUnique({ where: { id }, select: { password: true } });
 
-export default { list, create, findByEmail, findByUsername, getById, verifyById, changePassword, getHashedPassword };
+const updateUserData = async (id, { username, email }) =>
+    await prisma.users.update({ where: { id }, data: { username, email } });
+
+export default {
+    list,
+    create,
+    findByEmail,
+    findByUsername,
+    getById,
+    verifyById,
+    changePassword,
+    getHashedPassword,
+    updateUserData,
+};

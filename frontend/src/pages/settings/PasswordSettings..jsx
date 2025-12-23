@@ -8,7 +8,7 @@ import userService from "../../services/user.service";
 import CustomFormikForm from "../../components/forms/CustomFormikForm";
 
 export default function PasswordSettings() {
-    const handleSubmit = async (data) => {
+    const handleSubmit = async (data, e) => {
         try {
             await userService.changePassword(userSignal.value.id, data);
             e.resetForm();

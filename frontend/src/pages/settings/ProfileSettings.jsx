@@ -31,7 +31,7 @@ export default function ProfileSettings() {
                 e.resetForm({ values: { ...values, file: undefined } });
                 changePopupData("Settings changed successfully!", popupResults.success);
             }
-        } catch (error) {
+        } catch {
             changePopupData("Couldn't change settings!", popupResults.error);
         }
     };

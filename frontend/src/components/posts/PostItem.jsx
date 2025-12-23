@@ -1,5 +1,5 @@
 import { memo, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Utils
 import convertTimeStringToDate from "../../utils/convertTimeStringToDate";
@@ -47,7 +47,6 @@ const PostItem = memo(({ data, onPostPage = false }) => {
 const PostContent = ({ data, onPostPage, isOwn, setLoading, containerRef }) => {
     const convertedDate = convertTimeStringToDate(data.created);
     const timePassed = calculateElapsedTime(new Date() - new Date(data.created));
-    const navigate = useNavigate();
 
     return (
         <div className="flex m-4">

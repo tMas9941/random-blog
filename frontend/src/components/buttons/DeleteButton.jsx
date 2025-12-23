@@ -45,7 +45,7 @@ async function handleOnClick(props) {
         setLoading(true);
         await deleteFunctions.find(type)(data);
         changePopupData(`${capitalize(type)} deleted sccessfully!`, popupResults.success);
-    } catch (error) {
+    } catch {
         changePopupData(`Couldn't delete ${capitalize(type)}!`, popupResults.error);
     } finally {
         setLoading(false);

@@ -14,7 +14,7 @@ import { changePopupData, popupResults } from "../../global/popupHandler";
 
 export default function ProfileSettings() {
     const user = userSignal.value;
-
+    console.log("render");
     const handleSubmit = async (values, e) => {
         try {
             const changes = detectObjDiff({ ...user.profile }, values);
@@ -28,7 +28,7 @@ export default function ProfileSettings() {
                     profile: newProfile,
                 });
 
-                e.resetForm({ ...values, file: undefined });
+                e.resetForm({ values: { ...values, file: undefined } });
                 changePopupData("Settings changed successfully!", popupResults.success);
             }
         } catch (error) {

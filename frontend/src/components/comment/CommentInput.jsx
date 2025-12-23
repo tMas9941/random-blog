@@ -44,7 +44,7 @@ export default function CommentInput({ postId, user }) {
     autoFocusCommentInput();
     return (
         <div ref={container} id={"inputContainer"} className="flex gap-5 my-5 mx-[min(150px,5%)]">
-            <Avatar text={user.username} size={70} url={user?.profile.avatarUrl} isOwn={true} />
+            <Avatar text={user.username} size={60} url={user?.profile.avatarUrl} isOwn={true} />
             <div className={"flex flex-col  w-full " + focusClass}>
                 <textarea
                     ref={textRef}

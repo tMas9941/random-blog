@@ -1,10 +1,9 @@
 import * as yup from "yup";
 
-const MIN_USER = 6;
+const MAX_INTRODUCTION = 300;
 
 const profileValidation = yup.object({
-	username: yup.string().min(MIN_USER, `Minimum ${MIN_USER} characters!`).required(`Minimum ${MIN_USER} characters!`),
-	email: yup.string().email("E-mail is not valid!").required(`Required!`),
+    introduction: yup.string().max(MAX_INTRODUCTION, `Maximum ${MAX_INTRODUCTION} characters!`),
 });
 
 export default profileValidation;

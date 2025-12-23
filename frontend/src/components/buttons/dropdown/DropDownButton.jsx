@@ -5,35 +5,35 @@ import Avatar from "../../misc/Avatar";
 import ClickDetector from "../../misc/ClickDetector";
 
 export default function DropDownButton({ children, text, avatar = false, url }) {
-	const [toggled, setToggled] = useState(false);
+    const [toggled, setToggled] = useState(false);
 
-	const toggleDropDownMenu = (e) => {
-		e.preventDefault();
-		setToggled(!toggled);
-	};
+    const toggleDropDownMenu = (e) => {
+        e.preventDefault();
+        setToggled(!toggled);
+    };
 
-	return (
-		<div className={"w-fit h-full z-18"}>
-			<Button
-				className={`h-full flex gap-2 hover:bg-secondary/30 `}
-				text={!avatar && text}
-				onClick={toggleDropDownMenu}
-			>
-				<Avatar text={text} size={40} url={url} />
-			</Button>
-			<div
-				className={"absolute z-20 w-50 h-fit rounded-sm border-1 border-white/30 bg-n-background"}
-				hidden={!toggled}
-				onClick={toggleDropDownMenu}
-			>
-				{children}
-			</div>
-			<ClickDetector onClick={toggleDropDownMenu} hidden={!toggled} />
-		</div>
-	);
+    return (
+        <div className={"w-fit h-full z-18"}>
+            <Button
+                className={`h-full flex gap-2 hover:bg-secondary/30 `}
+                text={!avatar && text}
+                onClick={toggleDropDownMenu}
+            >
+                <Avatar text={text} size={35} url={url} />
+            </Button>
+            <div
+                className={"absolute z-20 w-50 h-fit rounded-sm border-1 border-white/30 bg-n-background"}
+                hidden={!toggled}
+                onClick={toggleDropDownMenu}
+            >
+                {children}
+            </div>
+            <ClickDetector onClick={toggleDropDownMenu} hidden={!toggled} />
+        </div>
+    );
 }
 
 export function DropDownItem({ text, className = "", onClick }) {
-	const newClassname = "hover:bg-secondary/30 px-5 min-h-10 w-full left-0 justify-start " + className;
-	return <Button text={text} className={newClassname} onClick={onClick} />;
+    const newClassname = "hover:bg-secondary/30 px-5 min-h-10 w-full left-0 justify-start " + className;
+    return <Button text={text} className={newClassname} onClick={onClick} />;
 }

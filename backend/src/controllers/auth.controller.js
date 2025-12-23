@@ -4,10 +4,9 @@ import HttpError from "../utils/HttpError.js";
 // security
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../constants/constants.js";
+import { BCRYPT_COST, JWT_SECRET } from "../constants/constants.js";
 import profileService from "../services/profile.service.js";
 
-const BCRYPT_COST = 12;
 const DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dq8pa0opv/image/upload/v1755891085/jmlg25spfwlyxqop3ubm.jpg";
 
 const registration = async (req, res, next) => {
@@ -36,18 +35,6 @@ const registration = async (req, res, next) => {
         next(error);
     }
 };
-
-// const profiles = await prisma.profiles.createManyAndReturn({
-// 	data: users.map((user) => {
-// 		const randomNumber = rand(0, countAvatar - 1);
-
-// 		return {
-// 			userId: user.id,
-// 			avatarUrl: cloudDefaultAvatars.resources[randomNumber].secure_url,
-// 			introduction: paragraphs[rand(0, paragraphs.length - 1)].slice(0, MAX_COMMENT_LENGTH),
-// 		};
-// 	}),
-// });
 
 const login = async (req, res, next) => {
     const { username, password } = req.body;

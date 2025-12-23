@@ -4,7 +4,7 @@ import capitalize from "../../utils/capitalize";
 export default function FormField({ name, type = "text", as, text, placeholder, className = "" }) {
     return (
         <div>
-            <label className="peer text-md font-semibold flex items-center gap-3 my-1">
+            <label className="peer text-md font-semibold flex items-center gap-3 my-1 w-fit">
                 {capitalize(text ? text : name) + ":"}
 
                 <ErrorMessage name={name} component="div" className="text-error text-sm font-normal" />

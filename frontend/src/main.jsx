@@ -8,7 +8,7 @@ import Home from "./pages/Home.jsx";
 import Forum from "./pages/Posts.jsx";
 import Profile from "./pages/Profile.jsx";
 import CreatePost from "./pages/CreatePost.jsx";
-import Settings from "./pages/Settings.jsx";
+import Settings from "./pages/settings/Settings.jsx";
 import Authenticate from "./pages/Authenticate.jsx";
 
 // Router Profile
@@ -16,7 +16,12 @@ import ProfilePosts from "./components/profile/ProfilePosts.jsx";
 import ProfileUpvotes from "./components/profile/ProfileUpvotes.jsx";
 import ProfileComments from "./components/profile/ProfileComments.jsx";
 
-// components
+// Router Settings
+import AccountSettings from "./pages/settings/AccountSettings..jsx";
+import PasswordSettings from "./pages/settings/PasswordSettings..jsx";
+import ProfileSettings from "./pages/settings/ProfileSettings.jsx";
+
+// Components
 import AuthUser from "./components/auth/AuthUser.jsx";
 import PostPage from "./pages/PostPage.jsx";
 import LoginForm from "./components/auth/LoginForm.jsx";
@@ -53,6 +58,12 @@ const router = createBrowserRouter([
             {
                 path: "/settings",
                 element: <AuthUser component={<Settings />} />,
+                children: [
+                    { path: "/settings/account", element: <AccountSettings /> },
+                    { path: "/settings/password", element: <PasswordSettings /> },
+                    { path: "/settings/profile", element: <ProfileSettings /> },
+                    { path: "/settings/", element: <Navigate to={`/settings/account`} /> },
+                ],
             },
             { path: "/", element: <Navigate to={`/home`} /> },
         ],

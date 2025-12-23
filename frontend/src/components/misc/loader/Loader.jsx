@@ -1,5 +1,3 @@
-import React from "react";
-
 import "./round-loader.css";
 import "./line-loader.css";
 

@@ -3,7 +3,7 @@ import { CLOUD_NAME } from "../../constants/environment";
 const defaultUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v1755695929/default_avatar.jpg`;
 
 export default function Avatar({ size = 80, url = defaultUrl, isOwn = false }) {
-    const borderSize = Math.max(2, size * 0.05);
+    const borderSize = Math.max(1.5, size * 0.03);
     return (
         <div
             style={{

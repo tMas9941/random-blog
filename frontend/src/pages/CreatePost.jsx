@@ -1,9 +1,9 @@
-import React, { useReducer, useRef } from "react";
+import { useReducer, useRef } from "react";
 import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 
 // Components
-import FormField from "../components/misc/FormField";
+import FormField from "../components/forms/FormField";
 import ColorButton from "../components/buttons/ColorButton";
 import postValidation from "../validations/postValidation";
 import postService from "../services/post.service";
@@ -123,9 +123,6 @@ function CreateForm() {
                             className="mt-5"
                             text={"Publish"}
                             type={"submit"}
-                            onKeydown={(e) => {
-                                return e.preventDefault();
-                            }}
                         ></ColorButton>
                     </div>
                 </Form>

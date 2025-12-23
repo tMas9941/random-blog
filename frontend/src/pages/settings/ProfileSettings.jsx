@@ -16,12 +16,11 @@ export default function ProfileSettings() {
     const user = userSignal.value;
 
     const handleSubmit = async (values, e) => {
-        const profileId = user.profile.id;
         try {
             const changes = detectObjDiff({ ...user.profile }, values);
             if (Object.keys(changes).length) {
                 const formData = objToFormData(changes);
-                const response = await profileService.updateProfile(formData, profileId);
+                const response = await profileService.updateProfile(formData, user.id);
 
                 const newProfile = { ...userSignal.value.profile, ...response }; // merge profiles - in the future resposne may be changed
                 userSignal.changeValue({
@@ -29,7 +28,7 @@ export default function ProfileSettings() {
                     profile: newProfile,
                 });
 
-                e.resetForm({ values: updateObj(values, response) });
+                e.resetForm({ ...values, file: undefined });
                 changePopupData("Settings changed successfully!", popupResults.success);
             }
         } catch (error) {
@@ -61,12 +60,4 @@ export default function ProfileSettings() {
             </div>
         </>
     );
-}
-
-function updateObj(oldObj, newObj) {
-    const result = { ...oldObj };
-    for (let key of Object.keys(oldObj)) {
-        if (key in newObj) result[key] = newObj[key];
-    }
-    return result;
 }

@@ -53,7 +53,7 @@ const PostContent = ({ data, onPostPage, isOwn, setLoading, containerRef }) => {
         <div className="flex m-4">
             <div className="w-25  me-5">
                 <Avatar text={data.user.username} size={60} url={data.user.profile?.avatarUrl} isOwn={isOwn} />
-                <h3 className={`font-semibold truncate ${isOwn && "text-primary"}`}>{data.user.username}</h3>
+                <h3 className={`font-semibold truncate ${isOwn && "text-primary"} mt-2`}>{data.user.username}</h3>
                 <p> {convertedDate.date}</p>
                 <p> {convertedDate.time}</p>
             </div>

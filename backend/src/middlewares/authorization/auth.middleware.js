@@ -12,6 +12,7 @@ import userService from "../../services/user.service.js";
 
 export const auth = (authData) => {
     return async (req, res, next) => {
+        // console.log("start auth");
         try {
             // CHECK authorization
             const token = req.headers.authorization?.split(" ")[1];
@@ -23,13 +24,15 @@ export const auth = (authData) => {
             // console.log("UserData from token: ", userData);
             const verifyById = await userService.verifyById(userData.id);
             if (!verifyById) throw new HttpError("Invalid user!", 404);
+            req.userId = userData.id;
             if (!authData) return next();
             // CHECK authentication
 
             // console.log("Verified user: ", verifyById);
             const userPermissions = await roleService.getRolePermissions(userData.role);
             // console.log("User permissions: ", userPermissions);
-            const ownerId = await getTargetUserId(authData.subject, req.params.id);
+            const ownerId = await getTargetUserId(authData.subject, req);
+            // console.log("userData.id:", userData.id, "\n    ownerId:", ownerId);
             // console.log("OwnerId: ", ownerId, "\nreq.body ", req.body, " req.params", req.params);
             const authorized = comparePermissions({
                 userPermissions: userPermissions.permissions,
@@ -40,7 +43,6 @@ export const auth = (authData) => {
             // console.log("Authorized: ", authorized);
             if (!authorized) throw new HttpError("Unauthorized!", 403);
 
-            req.userId = userData.id;
             // console.log("Authorized userId: ", req.userId);
             next();
         } catch (error) {
@@ -49,18 +51,25 @@ export const auth = (authData) => {
     };
 };
 
-async function getTargetUserId(subject, subjectId) {
+async function getTargetUserId(subject, req) {
+    const targetId = req.params?.id;
+    // console.log("targetId ", targetId, req.params);
     switch (subject) {
         case "POSTS":
-            if (subjectId) {
-                const owner = await postService.getPostOwner(subjectId);
+            if (targetId) {
+                const owner = await postService.getPostOwner(targetId);
                 return owner?.userId;
             }
 
         case "COMMENTS":
-            if (subjectId) {
-                const owner = await commentService.getCommentOwner(subjectId);
+            if (targetId) {
+                const owner = await commentService.getCommentOwner(targetId);
                 return owner?.userId;
+            }
+            break;
+        case "SETTINGS":
+            if (targetId) {
+                return targetId;
             }
             break;
         default:
@@ -74,6 +83,17 @@ function comparePermissions({ userPermissions, neededPermissions, ownerId, userI
             return true;
         }
     }
+    // console.log(
+    //     "no premission : ",
+    //     { userPermissions },
+    //     { neededPermissions },
+    //     "ownerId:",
+    //     ownerId,
+    //     "\nuserId:",
+    //     userId,
+    //     "\n result:",
+    //     userId === ownerId
+    // );
     return false;
 }
 

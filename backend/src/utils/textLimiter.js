@@ -23,6 +23,6 @@ export default function textLimiter(data, maxLength = 0, model) {
     } else if (Array.isArray(data)) {
         limitedData = data.map((item) => item.substr(0, maxLength));
     }
-    console.log({ limitedData });
+
     return limitedData;
 }

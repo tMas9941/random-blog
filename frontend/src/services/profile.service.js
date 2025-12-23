@@ -18,9 +18,9 @@ const updateIntroduction = async (data) => {
     }
 };
 
-const updateProfile = async (data, profileId) => {
+const updateProfile = async (data, userId) => {
     try {
-        const response = await axiosInstance.patch(`/profile/${profileId}`, data);
+        const response = await axiosInstance.patch(`/profile/${userId}`, data);
         return response.data;
     } catch (error) {
         throw error.response ? error.response.data : error;

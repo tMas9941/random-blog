@@ -4,7 +4,6 @@ import accountValidation from "../../validations/accountValidation.js";
 import detectObjDiff from "../../utils/detectObjDiff";
 import userService from "../../services/user.service.js";
 import { changePopupData, popupResults } from "../../global/popupHandler.js";
-import delay from "../../utils/delay.js";
 import CustomFormikForm from "../../components/forms/CustomFormikForm.jsx";
 
 export default function AccountSettings() {
@@ -12,13 +11,12 @@ export default function AccountSettings() {
 
     const handleSubmit = async (values, e) => {
         try {
-            await delay(2000);
             const changes = detectObjDiff({ username: user.username, email: user.email }, values);
             if (Object.keys(changes).length) {
                 const response = await userService.updateUserData(user.id, changes);
                 userSignal.value = { ...userSignal.value, ...response };
-                changePopupData("Settings changed successfully!", popupResults.success);
                 e.resetForm({ values });
+                changePopupData("Settings changed successfully!", popupResults.success);
             }
         } catch {
             changePopupData("Couldn't change settings!", popupResults.error);

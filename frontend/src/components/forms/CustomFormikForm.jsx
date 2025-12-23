@@ -7,10 +7,10 @@ const pulseAnimation = " [&>:not(button)]:animate-pulse [&>:not(button)]:pointer
 export default function CustomFormikForm({ initialValues, validationSchema, onSubmit, children }) {
     return (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-            {({ dirty, isSubmitting }) => (
+            {({ dirty, isSubmitting, isValid }) => (
                 <Form className={`${formClass} ${isSubmitting && pulseAnimation}`}>
                     {children}
-                    <SubmitButton loading={isSubmitting} dirty={dirty} />
+                    <SubmitButton loading={isSubmitting} dirty={dirty && isValid} />
                 </Form>
             )}
         </Formik>
